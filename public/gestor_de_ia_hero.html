@@ -89,10 +89,24 @@
 
     <style>
       html, body.hero-embed { width:100%; height:100%; min-height:0; margin:0; padding:0; background:#070707 !important; }
-      body.hero-embed { overflow:hidden; }
+      body.hero-embed { overflow:hidden; padding:0 !important; }
       body.hero-embed > div:nth-of-type(1), body.hero-embed > div:nth-of-type(2), body.hero-embed > div:nth-of-type(3) { display:none !important; }
-      body.hero-embed > div:nth-of-type(4) { width:100%; max-width:390px; }
-      body.hero-embed > div:nth-of-type(4) > div.w-full { height:675px !important; }
+      body.hero-embed > div.hero-laptop { width:100%; max-width:560px; height:675px; margin:0 !important; padding:0 0 30px; box-sizing:border-box; position:relative; }
+      body.hero-embed .hero-laptop-screen { width:100%; height:645px !important; border-radius:14px; border-color:#363735; background:#111210; box-shadow:0 24px 55px #0008; }
+      body.hero-embed .hero-laptop-browser { background:#1b1c1a; padding-left:12px; padding-right:12px; }
+      body.hero-embed .hero-laptop-browser .hero-mac-lights { display:flex; flex:0 0 auto; align-items:center; gap:5px; margin-right:10px; }
+      body.hero-embed .hero-mac-lights i { width:8px; height:8px; border-radius:50%; background:#777873; }
+      body.hero-embed .hero-mac-lights i:first-child { background:#c36d68; }
+      body.hero-embed .hero-mac-lights i:nth-child(2) { background:#c5a568; }
+      body.hero-embed .hero-mac-lights i:nth-child(3) { background:#7f9d78; }
+      body.hero-embed .hero-laptop-browser > div:nth-child(2) { max-width:none; }
+      body.hero-embed .hero-laptop-browser > div:nth-child(3) { display:none; }
+      body.hero-embed .hero-laptop::after { content:''; position:absolute; z-index:3; bottom:10px; left:-4%; width:108%; height:15px; border-radius:0 0 12px 12px; background:linear-gradient(180deg,#777873 0%,#424340 20%,#222321 66%,#10110f 100%); box-shadow:0 8px 12px #0006; clip-path:polygon(0 0,100% 0,97% 80%,92% 100%,8% 100%,3% 80%); }
+      body.hero-embed .hero-laptop::before { content:''; position:absolute; z-index:4; bottom:19px; left:43%; width:14%; height:3px; border-radius:0 0 4px 4px; background:#5c5d59; }
+      body.hero-embed .hero-laptop-os-nav { display:none !important; }
+      body.hero-embed .hero-laptop-appbar { justify-content:flex-start; }
+      body.hero-embed .hero-laptop-appbar > div:first-child { display:none; }
+      body.hero-embed .hero-laptop-appbar > div:last-child { margin-left:auto; }
       .hero-embed .hero-frame-glow { display:none !important; }
     </style>
 </head>
@@ -118,13 +132,14 @@
         </button>
     </div>
 
-    <div class="relative z-10 w-full max-w-[390px]">
+    <div class="relative z-10 w-full max-w-[560px] hero-laptop">
         <!-- Outer Glow Frame -->
         <div class="hero-frame-glow absolute -inset-1 rounded-[36px] bg-gradient-to-b from-emerald-500/20 via-zinc-800/30 to-emerald-500/10 blur-xl opacity-70 pointer-events-none"></div>
 
-        <div class="w-full h-[675px] bg-darkBg border border-zinc-800/90 rounded-[32px] shadow-2xl flex flex-col overflow-hidden relative select-none glass-card">
+        <div class="w-full h-[645px] bg-darkBg border border-zinc-800/90 rounded-[14px] shadow-2xl flex flex-col overflow-hidden relative select-none glass-card hero-laptop-screen">
 
-            <div class="bg-[#18181c]/90 px-4 py-2.5 flex items-center justify-between border-b border-zinc-800/80 text-xs text-zinc-400 shrink-0">
+            <div class="bg-[#18181c]/90 px-4 py-2.5 flex items-center justify-between border-b border-zinc-800/80 text-xs text-zinc-400 shrink-0 hero-laptop-browser">
+                <span class="hero-mac-lights" aria-hidden="true"><i></i><i></i><i></i></span>
                 <div class="flex items-center gap-2 bg-zinc-900/90 px-3 py-1.5 rounded-full w-full max-w-[270px] border border-zinc-800/80 truncate shadow-inner">
                     <i class="fa-solid fa-lock text-[10px] text-emerald-500"></i>
                     <span class="text-zinc-200 truncate tracking-tight font-mono text-[11px]">kliphub.com.br/?tab=gestor-ia</span>
@@ -135,7 +150,7 @@
                 </div>
             </div>
 
-            <div class="bg-darkBg/90 px-4 py-3 flex items-center justify-between border-b border-zinc-800/60 shrink-0">
+            <div class="bg-darkBg/90 px-4 py-3 flex items-center justify-between border-b border-zinc-800/60 shrink-0 hero-laptop-appbar">
                 <div class="flex items-center gap-3">
                     <button class="text-zinc-300 hover:text-white transition p-1">
                         <i class="fa-solid fa-bars text-lg"></i>
@@ -180,7 +195,7 @@
                 </div>
             </div>
 
-            <div class="bg-[#101014] py-2 flex items-center justify-around border-t border-zinc-900 text-zinc-500 text-xs shrink-0">
+            <div class="bg-[#101014] py-2 flex items-center justify-around border-t border-zinc-900 text-zinc-500 text-xs shrink-0 hero-laptop-os-nav">
                 <i class="fa-solid fa-square hover:text-zinc-400 transition cursor-pointer"></i>
                 <i class="fa-solid fa-circle text-[10px] hover:text-zinc-400 transition cursor-pointer"></i>
                 <i class="fa-solid fa-play rotate-180 text-[10px] hover:text-zinc-400 transition cursor-pointer"></i>
