@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './kliphub-site.css';
+import CustomerStorefrontPreview from './CustomerStorefrontPreview';
 
 export default function KlipHubSitePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -131,34 +132,7 @@ export default function KlipHubSitePage() {
           </div>
 
           <div className="hero-visual">
-            <div className="agenda-float">
-              <div className="float-header">
-                <span><svg><use href="/icons.svg#calendar"></use></svg>Agenda organizada</span>
-                <span className="demo-badge">DEMONSTRAÇÃO</span>
-              </div>
-              <div className="appointment-row">
-                <span className="appointment-time">10:00</span>
-                <span className="avatar avatar-orange">RM</span>
-                <div>
-                  <strong>Rafael Martins</strong>
-                  <span>Corte + barba</span>
-                </div>
-                <span className="confirmed">Confirmado <svg><use href="/icons.svg#check"></use></svg></span>
-              </div>
-              <div className="appointment-row">
-                <span className="appointment-time">10:45</span>
-                <span className="avatar avatar-green">LC</span>
-                <div>
-                  <strong>Lucas Costa</strong>
-                  <span>Corte masculino</span>
-                </div>
-                <span className="confirmed">Confirmado <svg><use href="/icons.svg#check"></use></svg></span>
-              </div>
-              <div className="float-footer">
-                <span className="status-dot"></span>Exemplo ilustrativo de agenda. Dados de demonstração.
-                <svg><use href="/icons.svg#arrow"></use></svg>
-              </div>
-            </div>
+            <CustomerStorefrontPreview />
           </div>
         </section>
 
