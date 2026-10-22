@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './kliphub-site.css';
-import CustomerStorefrontPreview from './CustomerStorefrontPreview';
+import ChatbotConversationPreview from './ChatbotConversationPreview';
 
 const PUBLIC_BASE = import.meta.env.BASE_URL;
 
@@ -134,7 +134,7 @@ export default function KlipHubSitePage() {
           </div>
 
           <div className="hero-visual">
-            <CustomerStorefrontPreview />
+            <ChatbotConversationPreview />
           </div>
         </section>
 
