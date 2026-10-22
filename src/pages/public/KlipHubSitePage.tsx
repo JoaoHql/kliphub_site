@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './kliphub-site.css';
-import ChatbotConversationPreview from './ChatbotConversationPreview';
 
 const PUBLIC_BASE = import.meta.env.BASE_URL;
 
@@ -134,7 +133,15 @@ export default function KlipHubSitePage() {
           </div>
 
           <div className="hero-visual">
-            <ChatbotConversationPreview />
+            <div className="hero-animation-frame">
+              <iframe
+                aria-label="Animação original de conversa do Gestor de IA"
+                className="hero-animation-iframe"
+                loading="eager"
+                src={`${import.meta.env.BASE_URL}gestor_de_ia_animation.html`}
+                title="Demonstração animada do Gestor de IA"
+              />
+            </div>
           </div>
         </section>
 

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de IA - Simulação de Animação</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#121216',
+                        browserBar: '#18181c',
+                        chatBg: '#141418',
+                        userBubble: '#064e3b',
+                        aiBox: '#222226',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(12px) scale(0.98)' },
+                            '100%': { opacity: '1', transform: 'translateY(0) scale(1)' }
+                        },
+                        typingPulse: {
+                            '0%, 100%': { opacity: '0.3', transform: 'scale(0.8)' },
+                            '50%': { opacity: '1', transform: 'scale(1.2)' }
+                        },
+                        glow: {
+                            '0%, 100%': { opacity: '0.4', transform: 'scale(1)' },
+                            '50%': { opacity: '0.7', transform: 'scale(1.03)' }
+                        }
+                    },
+                    animation: {
+                        fadeInUp: 'fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        dot1: 'typingPulse 1.4s infinite 0s',
+                        dot2: 'typingPulse 1.4s infinite 0.2s',
+                        dot3: 'typingPulse 1.4s infinite 0.4s',
+                        ambientGlow: 'glow 8s ease-in-out infinite'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #050508;
+            color: #f4f4f5;
+        }
+        /* Custom scrollbar for chat feed */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3f3f46;
+            border-radius: 4px;
+        }
+
+        /* Glassmorphism subtle highlight */
+        .glass-card {
+            background: rgba(24, 24, 27, 0.85);
+            backdrop-filter: blur(16px);
+        }
+
+        /* Shimmer effect on user bubble */
+        .user-glow {
+            box-shadow: 0 4px 20px -2px rgba(16, 185, 129, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+        }
+
+        /* Subtle glow for AI box */
+        .ai-glow {
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+        }
+
+        /* Ambient background spots */
+        .bg-spot-1 {
+            background: radial-gradient(circle, rgba(16,185,129,0.15) 0%, rgba(0,0,0,0) 70%);
+        }
+        .bg-spot-2 {
+            background: radial-gradient(circle, rgba(99,102,241,0.12) 0%, rgba(0,0,0,0) 70%);
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-2 sm:p-4 relative overflow-hidden">
+
+    <div class="absolute -top-40 -left-40 w-96 h-96 bg-spot-1 rounded-full pointer-events-none animate-ambientGlow"></div>
+    <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-spot-2 rounded-full pointer-events-none animate-ambientGlow" style="animation-delay: 4s;"></div>
+
+    <div class="mb-4 flex items-center gap-3 bg-zinc-900/90 border border-zinc-800 px-4 py-2 rounded-xl text-sm shadow-xl backdrop-blur-md z-10">
+        <span class="flex items-center gap-2 text-emerald-400 font-medium text-xs sm:text-sm">
+            <span class="relative flex h-2.5 w-2.5">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+            </span>
+            Simulação Ativa
+        </span>
+        <div class="h-4 w-[1px] bg-zinc-800"></div>
+        <button id="replayBtn" onclick="restartSimulation()" class="bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 px-3 py-1 rounded-lg transition flex items-center gap-1.5 text-xs font-medium cursor-pointer hover:text-white active:scale-95">
+            <i class="fa-solid fa-rotate-right text-emerald-400"></i> Reiniciar
+        </button>
+        <button id="pauseBtn" onclick="togglePause()" class="bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 px-3 py-1 rounded-lg transition flex items-center gap-1.5 text-xs font-medium cursor-pointer hover:text-white active:scale-95">
+            <i class="fa-solid fa-pause text-emerald-400" id="pauseIcon"></i> <span id="pauseText">Pausar</span>
+        </button>
+    </div>
+
+    <div class="relative z-10 w-full max-w-[390px]">
+        <!-- Outer Glow Frame -->
+        <div class="absolute -inset-1 rounded-[36px] bg-gradient-to-b from-emerald-500/20 via-zinc-800/30 to-emerald-500/10 blur-xl opacity-70 pointer-events-none"></div>
+
+        <div class="w-full h-[820px] bg-darkBg border border-zinc-800/90 rounded-[32px] shadow-2xl flex flex-col overflow-hidden relative select-none glass-card">
+
+            <div class="bg-[#18181c]/90 px-4 py-2.5 flex items-center justify-between border-b border-zinc-800/80 text-xs text-zinc-400 shrink-0">
+                <div class="flex items-center gap-2 bg-zinc-900/90 px-3 py-1.5 rounded-full w-full max-w-[270px] border border-zinc-800/80 truncate shadow-inner">
+                    <i class="fa-solid fa-lock text-[10px] text-emerald-500"></i>
+                    <span class="text-zinc-200 truncate tracking-tight font-mono text-[11px]">kliphub.com.br/?tab=gestor-ia</span>
+                </div>
+                <div class="flex items-center gap-3 ml-2 text-zinc-300">
+                    <span class="bg-zinc-800 px-1.5 py-0.5 rounded text-[10px] font-bold border border-zinc-700/80 text-zinc-300">8</span>
+                    <i class="fa-solid fa-ellipsis-vertical text-xs hover:text-white cursor-pointer"></i>
+                </div>
+            </div>
+
+            <div class="bg-darkBg/90 px-4 py-3 flex items-center justify-between border-b border-zinc-800/60 shrink-0">
+                <div class="flex items-center gap-3">
+                    <button class="text-zinc-300 hover:text-white transition p-1">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                </div>
+                <div class="flex items-center gap-2.5">
+                    <button class="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-300 hover:text-white hover:border-zinc-700 transition">
+                        <i class="fa-regular fa-bell text-xs"></i>
+                    </button>
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-900 to-emerald-950 border border-emerald-700/80 flex items-center justify-center text-emerald-300 font-bold text-xs tracking-wider shadow-sm">
+                        JO
+                    </div>
+                    <button class="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-300 hover:text-white hover:border-zinc-700 transition">
+                        <i class="fa-solid fa-arrow-right-from-bracket text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="px-4 py-2.5 flex items-center justify-between border-b border-zinc-800/40 bg-zinc-950/40 shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <h1 class="font-bold text-sm text-white tracking-wide">Gestor de IA</h1>
+                    <div class="flex items-center gap-1.5 bg-emerald-950/90 border border-emerald-800/60 px-2.5 py-0.5 rounded-full shadow-sm">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span class="text-[10px] font-semibold text-emerald-300 tracking-wider uppercase">Pronto</span>
+                    </div>
+                </div>
+                <button class="w-7 h-7 rounded-lg bg-zinc-900/80 border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-zinc-200 transition">
+                    <i class="fa-solid fa-sliders text-[11px]"></i>
+                </button>
+            </div>
+
+            <div id="chatFeed" class="flex-1 overflow-y-auto p-4 space-y-4 flex flex-col scroll-smooth">
+                <!-- Messages and typing indicators will be dynamically inserted here -->
+            </div>
+
+            <div class="p-3 bg-darkBg border-t border-zinc-800/60 shrink-0">
+                <div class="relative flex items-center">
+                    <input type="text" id="userInputMock" disabled placeholder="Como posso melhorar o atendimento?" class="w-full bg-zinc-900/90 border border-zinc-800/90 rounded-xl py-3 pl-4 pr-12 text-xs text-zinc-300 placeholder-zinc-500 focus:outline-none transition">
+                    <button id="sendBtnMock" class="absolute right-2 w-8 h-8 rounded-lg bg-emerald-600/20 text-emerald-400 border border-emerald-700/50 flex items-center justify-center transition">
+                        <i class="fa-solid fa-paper-plane text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-[#101014] py-2 flex items-center justify-around border-t border-zinc-900 text-zinc-500 text-xs shrink-0">
+                <i class="fa-solid fa-square hover:text-zinc-400 transition cursor-pointer"></i>
+                <i class="fa-solid fa-circle text-[10px] hover:text-zinc-400 transition cursor-pointer"></i>
+                <i class="fa-solid fa-play rotate-180 text-[10px] hover:text-zinc-400 transition cursor-pointer"></i>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const chatFeed = document.getElementById('chatFeed');
+        const userInputMock = document.getElementById('userInputMock');
+        const sendBtnMock = document.getElementById('sendBtnMock');
+        let simulationTimer = null;
+        let isPaused = false;
+        let currentStep = 0;
+
+        const timestamp = "22/10/2026, 12:42";
+
+        const steps = [
+            {
+                delay: 400,
+                action: (next) => {
+                    chatFeed.innerHTML = '';
+                    next();
+                }
+            },
+            // --- CONVERSATION 1 ---
+            {
+                delay: 600,
+                action: (next) => {
+                    typeUserPrompt("Quais clientes estão na hora de voltar e ainda não agendaram?", () => {
+                        appendUserMessage("Quais clientes estão na hora de voltar e ainda não agendaram?");
+                        scrollToBottom();
+                        next();
+                    });
+                }
+            },
+            {
+                delay: 500,
+                action: (next) => {
+                    showTypingIndicator();
+                    scrollToBottom();
+                    setTimeout(() => {
+                        removeTypingIndicator();
+                        appendAIMessage("Identifiquei 18 clientes que passaram do intervalo habitual de retorno e ainda não agendaram. Juntos, eles representam R$ 900 em serviços potenciais.");
+                        scrollToBottom();
+                        next();
+                    }, 1200);
+                }
+            },
+            // --- CONVERSATION 2 ---
+            {
+                delay: 1400,
+                action: (next) => {
+                    typeUserPrompt("Onde minha agenda está vazia nesta semana?", () => {
+                        appendUserMessage("Onde minha agenda está vazia nesta semana?");
+                        scrollToBottom();
+                        next();
+                    });
+                }
+            },
+            {
+                delay: 500,
+                action: (next) => {
+                    showTypingIndicator();
+                    scrollToBottom();
+                    setTimeout(() => {
+                        removeTypingIndicator();
+                        appendAIMessage("Sua agenda está com maior ociosidade na quinta-feira à tarde (14h às 17h) e sexta-feira pela manhã. Recomendo disparar lembretes promocionais para estes horários.");
+                        scrollToBottom();
+                        next();
+                    }, 1400);
+                }
+            },
+            // --- CONVERSATION 3 ---
+            {
+                delay: 1600,
+                action: (next) => {
+                    typeUserPrompt("Qual serviço teve maior demanda este mês?", () => {
+                        appendUserMessage("Qual serviço teve maior demanda este mês?");
+                        scrollToBottom();
+                        next();
+                    });
+                }
+            },
+            {
+                delay: 500,
+                action: (next) => {
+                    showTypingIndicator();
+                    scrollToBottom();
+                    setTimeout(() => {
+                        removeTypingIndicator();
+                        appendAIMessage("O serviço mais procurado nos últimos 30 dias foi o Corte & Hidratação, gerando 42 atendimentos concluídos e R$ 4.200 em receita total registrada.");
+                        scrollToBottom();
+                        next();
+                    }, 1400);
+                }
+            }
+        ];
+
+        function typeUserPrompt(text, callback) {
+            userInputMock.value = '';
+            let index = 0;
+            sendBtnMock.classList.replace('bg-emerald-600/20', 'bg-emerald-500');
+            sendBtnMock.classList.replace('text-emerald-400', 'text-black');
+
+            const interval = setInterval(() => {
+                if (isPaused) return;
+                userInputMock.value += text[index];
+                index++;
+                if (index >= text.length) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        userInputMock.value = '';
+                        sendBtnMock.classList.replace('bg-emerald-500', 'bg-emerald-600/20');
+                        sendBtnMock.classList.replace('text-black', 'text-emerald-400');
+                        callback();
+                    }, 300);
+                }
+            }, 25);
+        }
+
+        function appendUserMessage(text) {
+            const div = document.createElement('div');
+            div.className = "flex flex-col items-end self-end max-w-[85%] animate-fadeInUp";
+            div.innerHTML = `
+                <div class="bg-gradient-to-r from-emerald-800 to-emerald-700 text-emerald-50 px-4 py-3 rounded-2xl rounded-tr-sm text-xs leading-relaxed border border-emerald-500/30 font-medium user-glow">
+                    ${text}
+                </div>
+                <span class="text-[10px] text-zinc-500 mt-1 mr-1 flex items-center gap-1 font-mono">
+                    ${timestamp} <i class="fa-solid fa-check-double text-[9px] text-emerald-400"></i>
+                </span>
+            `;
+            chatFeed.appendChild(div);
+        }
+
+        function appendAIMessage(text) {
+            const div = document.createElement('div');
+            div.className = "flex flex-col items-start self-start max-w-[92%] animate-fadeInUp";
+            div.innerHTML = `
+                <div class="bg-gradient-to-b from-[#25252a] to-[#1c1c20] text-zinc-100 px-4 py-3.5 rounded-2xl rounded-tl-sm text-xs leading-relaxed border border-zinc-700/60 ai-glow">
+                    ${text}
+                </div>
+                <span class="text-[10px] text-zinc-500 mt-1 ml-1 font-mono">${timestamp}</span>
+            `;
+            chatFeed.appendChild(div);
+        }
+
+        function showTypingIndicator() {
+            const div = document.createElement('div');
+            div.id = 'typingIndicator';
+            div.className = "flex flex-col items-start self-start animate-fadeInUp";
+            div.innerHTML = `
+                <div class="bg-zinc-800/70 border border-zinc-700/40 px-4 py-3 rounded-2xl rounded-tl-sm flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-dot1"></span>
+                    <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-dot2"></span>
+                    <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-dot3"></span>
+                </div>
+            `;
+            chatFeed.appendChild(div);
+        }
+
+        function removeTypingIndicator() {
+            const el = document.getElementById('typingIndicator');
+            if (el) el.remove();
+        }
+
+        function scrollToBottom() {
+            chatFeed.scrollTo({
+                top: chatFeed.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+
+        function runStep(stepIndex) {
+            if (isPaused || stepIndex >= steps.length) return;
+            currentStep = stepIndex;
+
+            simulationTimer = setTimeout(() => {
+                if (!isPaused) {
+                    steps[stepIndex].action(() => {
+                        runStep(stepIndex + 1);
+                    });
+                }
+            }, steps[stepIndex].delay);
+        }
+
+        function restartSimulation() {
+            clearTimeout(simulationTimer);
+            isPaused = false;
+            document.getElementById('pauseIcon').className = "fa-solid fa-pause text-emerald-400";
+            document.getElementById('pauseText').textContent = "Pausar";
+            chatFeed.innerHTML = '';
+            runStep(0);
+        }
+
+        function togglePause() {
+            isPaused = !isPaused;
+            const icon = document.getElementById('pauseIcon');
+            const text = document.getElementById('pauseText');
+            if (isPaused) {
+                icon.className = "fa-solid fa-play text-emerald-400";
+                text.textContent = "Continuar";
+                clearTimeout(simulationTimer);
+            } else {
+                icon.className = "fa-solid fa-pause text-emerald-400";
+                text.textContent = "Pausar";
+                runStep(currentStep + 1);
+            }
+        }
+
+        // Start simulation on load
+        window.onload = function() {
+            runStep(0);
+        };
+    </script>
+</body>
+</html>
