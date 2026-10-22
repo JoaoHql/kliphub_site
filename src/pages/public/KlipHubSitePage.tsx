@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './kliphub-site.css';
 import CustomerStorefrontPreview from './CustomerStorefrontPreview';
 
+const PUBLIC_BASE = import.meta.env.BASE_URL;
+
 export default function KlipHubSitePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -44,7 +46,7 @@ export default function KlipHubSitePage() {
             onClick={(e) => { e.preventDefault(); scrollToSection('inicio'); }}
           >
             <div className="brand-logo-badge">
-              <img src="/barbershop_brancO64px.png" alt="KlipHub Logo" width="22" height="22" />
+              <img src={`${PUBLIC_BASE}barbershop_brancO64px.png`} alt="KlipHub Logo" width="22" height="22" />
             </div>
             <div className="brand-logo-text">
               <div className="brand-logo-title-row">
@@ -65,11 +67,11 @@ export default function KlipHubSitePage() {
           <div className="header-actions">
             <a className="login-link" href="https://kliphub.com.br/">
               Acessar sistema
-              <svg><use href="/icons.svg#external"></use></svg>
+              <svg><use href={`${PUBLIC_BASE}icons.svg#external`}></use></svg>
             </a>
             <button className="button button-small" onClick={() => setDialogOpen(true)}>
               Conhecer o KlipHub
-              <svg><use href="/icons.svg#arrow"></use></svg>
+              <svg><use href={`${PUBLIC_BASE}icons.svg#arrow`}></use></svg>
             </button>
             <button
               aria-controls="mobile-nav"
@@ -78,7 +80,7 @@ export default function KlipHubSitePage() {
               className="menu-toggle"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              <svg><use href={`/icons.svg#${mobileMenuOpen ? 'close' : 'menu'}`}></use></svg>
+              <svg><use href={`${PUBLIC_BASE}icons.svg#${mobileMenuOpen ? 'close' : 'menu'}`}></use></svg>
             </button>
           </div>
         </div>
@@ -114,19 +116,19 @@ export default function KlipHubSitePage() {
             </p>
             <div className="hero-buttons">
               <a className="button" href="https://kliphub.com.br/">
-                Começar agora <svg><use href="/icons.svg#arrow"></use></svg>
+                Começar agora <svg><use href={`${PUBLIC_BASE}icons.svg#arrow`}></use></svg>
               </a>
               <a className="text-button" href="#demonstracao" onClick={(e) => { e.preventDefault(); scrollToSection('demonstracao'); }}>
-                <span className="play-circle"><svg><use href="/icons.svg#play"></use></svg></span>
+                <span className="play-circle"><svg><use href={`${PUBLIC_BASE}icons.svg#play`}></use></svg></span>
                 Veja como funciona
               </a>
             </div>
             <div className="hero-reassurance">
-              <span><svg><use href="/icons.svg#check-circle"></use></svg>100% online</span>
-              <span><svg><use href="/icons.svg#check-circle"></use></svg>Da agenda ao financeiro</span>
+              <span><svg><use href={`${PUBLIC_BASE}icons.svg#check-circle`}></use></svg>100% online</span>
+              <span><svg><use href={`${PUBLIC_BASE}icons.svg#check-circle`}></use></svg>Da agenda ao financeiro</span>
             </div>
             <div className="hero-line">
-              <span className="mini-scissors"><svg><use href="/icons.svg#scissors"></use></svg></span>
+              <span className="mini-scissors"><svg><use href={`${PUBLIC_BASE}icons.svg#scissors`}></use></svg></span>
               <p>Feito para quem entende de corte.<br /><strong>E quer ter o controle do negócio.</strong></p>
             </div>
           </div>
@@ -139,11 +141,11 @@ export default function KlipHubSitePage() {
         {/* BENEFIT RIBBON */}
         <section aria-label="Principais recursos" className="benefit-ribbon">
           <div className="container ribbon-inner">
-            <span><svg><use href="/icons.svg#calendar"></use></svg>Agenda online</span>
-            <span><svg><use href="/icons.svg#wallet"></use></svg>Caixa e comissões</span>
-            <span><svg><use href="/icons.svg#users"></use></svg>Clientes e equipe</span>
-            <span><svg><use href="/icons.svg#message"></use></svg>WhatsApp com IA</span>
-            <span><svg><use href="/icons.svg#chart"></use></svg>Financeiro claro</span>
+            <span><svg><use href={`${PUBLIC_BASE}icons.svg#calendar`}></use></svg>Agenda online</span>
+            <span><svg><use href={`${PUBLIC_BASE}icons.svg#wallet`}></use></svg>Caixa e comissões</span>
+            <span><svg><use href={`${PUBLIC_BASE}icons.svg#users`}></use></svg>Clientes e equipe</span>
+            <span><svg><use href={`${PUBLIC_BASE}icons.svg#message`}></use></svg>WhatsApp com IA</span>
+            <span><svg><use href={`${PUBLIC_BASE}icons.svg#chart`}></use></svg>Financeiro claro</span>
           </div>
         </section>
 
@@ -160,7 +162,7 @@ export default function KlipHubSitePage() {
           <div className="feature-grid">
             <article className="feature-card feature-agenda">
               <div className="feature-card-top">
-                <span className="feature-icon"><svg><use href="/icons.svg#calendar"></use></svg></span>
+                <span className="feature-icon"><svg><use href={`${PUBLIC_BASE}icons.svg#calendar`}></use></svg></span>
                 <span className="feature-number">01 / AGENDA</span>
               </div>
               <h3>Cadeira ocupada.<br />Agenda organizada.</h3>
@@ -175,13 +177,13 @@ export default function KlipHubSitePage() {
                 <small>Prévia ilustrativa</small>
               </div>
               <a className="card-link" href="#demonstracao" onClick={(e) => { e.preventDefault(); scrollToSection('demonstracao'); }}>
-                Explorar a agenda <svg><use href="/icons.svg#arrow"></use></svg>
+                Explorar a agenda <svg><use href={`${PUBLIC_BASE}icons.svg#arrow`}></use></svg>
               </a>
             </article>
 
             <article className="feature-card">
               <div className="feature-card-top">
-                <span className="feature-icon"><svg><use href="/icons.svg#wallet"></use></svg></span>
+                <span className="feature-icon"><svg><use href={`${PUBLIC_BASE}icons.svg#wallet`}></use></svg></span>
                 <span className="feature-number">02 / CAIXA</span>
               </div>
               <h3>Feche a conta.<br />Não a sua visão.</h3>
@@ -190,14 +192,14 @@ export default function KlipHubSitePage() {
                 <span>PDV e comanda</span><span>Formas de pagamento</span><span>Comissões</span>
               </div>
               <details className="feature-detail">
-                <summary>O que está incluído <svg><use href="/icons.svg#plus"></use></svg></summary>
+                <summary>O que está incluído <svg><use href={`${PUBLIC_BASE}icons.svg#plus`}></use></svg></summary>
                 <p>Registre o recebimento pela forma de pagamento escolhida. Configure os métodos aceitos no balcão e no agendamento online. Consulte as reservas de produtos para retirada e os valores de comissão ligados aos atendimentos realizados.</p>
               </details>
             </article>
 
             <article className="feature-card">
               <div className="feature-card-top">
-                <span className="feature-icon"><svg><use href="/icons.svg#chart"></use></svg></span>
+                <span className="feature-icon"><svg><use href={`${PUBLIC_BASE}icons.svg#chart`}></use></svg></span>
                 <span className="feature-number">03 / FINANCEIRO</span>
               </div>
               <h3>Saiba o que entra.<br />E o que faz crescer.</h3>
@@ -206,14 +208,14 @@ export default function KlipHubSitePage() {
                 <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
               </div>
               <details className="feature-detail">
-                <summary>O que está incluído <svg><use href="/icons.svg#plus"></use></svg></summary>
+                <summary>O que está incluído <svg><use href={`${PUBLIC_BASE}icons.svg#plus`}></use></svg></summary>
                 <p>Cadastre despesas com descrição, categoria, valor, vencimento e observações. Marque como pagas ou pendentes, filtre por período e categoria e consulte receitas e transações por período, profissional e método de pagamento.</p>
               </details>
             </article>
 
             <article className="feature-card">
               <div className="feature-card-top">
-                <span className="feature-icon"><svg><use href="/icons.svg#users"></use></svg></span>
+                <span className="feature-icon"><svg><use href={`${PUBLIC_BASE}icons.svg#users`}></use></svg></span>
                 <span className="feature-number">04 / OPERAÇÃO</span>
               </div>
               <h3>Seu negócio inteiro.<br />Sem pontas soltas.</h3>
@@ -222,42 +224,42 @@ export default function KlipHubSitePage() {
                 <span>Histórico de clientes</span><span>Equipe e acessos</span><span>Estoque</span>
               </div>
               <details className="feature-detail">
-                <summary>O que está incluído <svg><use href="/icons.svg#plus"></use></svg></summary>
+                <summary>O que está incluído <svg><use href={`${PUBLIC_BASE}icons.svg#plus`}></use></svg></summary>
                 <p>Cadastre e busque clientes com histórico de atendimentos. Organize os profissionais, seus acessos e configurações. Defina preço, duração e disponibilidade dos serviços, além de preço, custo e estoque dos produtos. Acompanhe receita e atendimentos do dia, clientes cadastrados e cancelamentos no painel.</p>
               </details>
             </article>
 
             <article className="feature-card">
               <div className="feature-card-top">
-                <span className="feature-icon"><svg><use href="/icons.svg#heart"></use></svg></span>
+                <span className="feature-icon"><svg><use href={`${PUBLIC_BASE}icons.svg#heart`}></use></svg></span>
                 <span className="feature-number">05 / RELACIONAMENTO</span>
               </div>
               <h3>Um bom corte traz.<br />Uma boa relação mantém.</h3>
               <p>Fidelidade, avaliações e radar de retenção para identificar quem está há mais tempo sem agendar.</p>
               <div className="retention-note">
-                <svg><use href="/icons.svg#heart"></use></svg>
+                <svg><use href={`${PUBLIC_BASE}icons.svg#heart`}></use></svg>
                 <span>Crie mais motivos para o cliente voltar.</span>
               </div>
               <details className="feature-detail">
-                <summary>O que está incluído <svg><use href="/icons.svg#plus"></use></svg></summary>
+                <summary>O que está incluído <svg><use href={`${PUBLIC_BASE}icons.svg#plus`}></use></svg></summary>
                 <p>Incentive a frequência com recursos de fidelidade, acompanhe satisfação e reputação nas avaliações e use campanhas e lembretes para manter o contato com seus clientes.</p>
               </details>
             </article>
 
             <article className="feature-card feature-whatsapp">
               <div className="feature-card-top">
-                <span className="feature-icon"><svg><use href="/icons.svg#message"></use></svg></span>
+                <span className="feature-icon"><svg><use href={`${PUBLIC_BASE}icons.svg#message`}></use></svg></span>
                 <span className="feature-number">06 / WHATSAPP + IA</span>
               </div>
               <h3>Você atende na cadeira.<br />A IA ajuda na conversa.</h3>
               <p>Conecte seu WhatsApp, acompanhe as conversas e use um agente de IA para dúvidas e ações de agenda.</p>
               <div className="chat-preview">
                 <span>Tem horário para corte?</span>
-                <span>Vamos encontrar um horário para você.<svg><use href="/icons.svg#check-double"></use></svg></span>
+                <span>Vamos encontrar um horário para você.<svg><use href={`${PUBLIC_BASE}icons.svg#check-double`}></use></svg></span>
                 <small>Exemplo ilustrativo de conversa</small>
               </div>
               <details className="feature-detail">
-                <summary>Conheça as duas IAs <svg><use href="/icons.svg#plus"></use></svg></summary>
+                <summary>Conheça as duas IAs <svg><use href={`${PUBLIC_BASE}icons.svg#plus`}></use></svg></summary>
                 <p>O Agente de IA responde dúvidas e auxilia em ações de agenda dentro das regras que você configurar. A caixa de atendimento reúne as conversas e os lembretes. O Gestor de IA entrega resumos e orientações operacionais para apoiar decisões do dia a dia.</p>
               </details>
             </article>
@@ -276,7 +278,7 @@ export default function KlipHubSitePage() {
               <a
                 aria-label="Abrir a captura da agenda do KlipHub em tamanho original"
                 className="agenda-product-image-link"
-                href="/agenda-kliphub.webp"
+                href={`${PUBLIC_BASE}agenda-kliphub.webp`}
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -286,7 +288,7 @@ export default function KlipHubSitePage() {
                   decoding="async"
                   height="1152"
                   loading="lazy"
-                  src="/agenda-kliphub.webp"
+                  src={`${PUBLIC_BASE}agenda-kliphub.webp`}
                   width="2048"
                 />
                 <span className="image-zoom-hint">Abrir imagem em tamanho original <span aria-hidden="true">↗</span></span>
@@ -303,12 +305,12 @@ export default function KlipHubSitePage() {
         {/* AGENDAMENTO ONLINE / VITRINE */}
         <section className="section container booking-section" id="agendamento">
           <div className="booking-visual">
-            <span className="floating-caption"><svg><use href="/icons.svg#globe"></use></svg>Sua barbearia, aberta para agendar.</span>
+            <span className="floating-caption"><svg><use href={`${PUBLIC_BASE}icons.svg#globe`}></use></svg>Sua barbearia, aberta para agendar.</span>
             <div className="phone-frame">
               <div className="phone-camera"></div>
-              <div className="phone-browser"><svg><use href="/icons.svg#lock"></use></svg>Vitrine da sua barbearia</div>
+              <div className="phone-browser"><svg><use href={`${PUBLIC_BASE}icons.svg#lock`}></use></svg>Vitrine da sua barbearia</div>
               <div className="shop-cover">
-                <svg><use href="/icons.svg#scissors"></use></svg>
+                <svg><use href={`${PUBLIC_BASE}icons.svg#scissors`}></use></svg>
                 <span>STUDIO DO CORTE</span>
                 <small>Seu estilo. Seu momento.</small>
               </div>
@@ -316,15 +318,15 @@ export default function KlipHubSitePage() {
                 <span className="tiny-label">AGENDE SEU PRÓXIMO CORTE</span>
                 <h4>Como você quer<br />cuidar do seu estilo?</h4>
                 <div className="service-preview selected">
-                  <svg><use href="/icons.svg#scissors"></use></svg>
+                  <svg><use href={`${PUBLIC_BASE}icons.svg#scissors`}></use></svg>
                   <div>
                     <strong>Corte masculino</strong>
                     <span>Serviço da barbearia</span>
                   </div>
-                  <svg><use href="/icons.svg#check-circle"></use></svg>
+                  <svg><use href={`${PUBLIC_BASE}icons.svg#check-circle`}></use></svg>
                 </div>
                 <div className="service-preview">
-                  <svg><use href="/icons.svg#scissors"></use></svg>
+                  <svg><use href={`${PUBLIC_BASE}icons.svg#scissors`}></use></svg>
                   <div>
                     <strong>Corte + barba</strong>
                     <span>Serviço da barbearia</span>
@@ -334,12 +336,12 @@ export default function KlipHubSitePage() {
                 <div className="phone-steps">
                   <span>1. Serviço</span><span>2. Profissional</span><span>3. Horário</span>
                 </div>
-                <span className="phone-cta">Escolher profissional <svg><use href="/icons.svg#arrow"></use></svg></span>
+                <span className="phone-cta">Escolher profissional <svg><use href={`${PUBLIC_BASE}icons.svg#arrow`}></use></svg></span>
                 <small className="phone-disclaimer">Exemplo ilustrativo de vitrine</small>
               </div>
             </div>
             <span className="floating-note">
-              <svg><use href="/icons.svg#check-circle"></use></svg>
+              <svg><use href={`${PUBLIC_BASE}icons.svg#check-circle`}></use></svg>
               O cliente escolhe.<br /><strong>Você recebe o agendamento.</strong>
             </span>
           </div>
@@ -372,7 +374,7 @@ export default function KlipHubSitePage() {
               </li>
             </ol>
             <button className="text-button" onClick={() => setDialogOpen(true)}>
-              Quero conhecer a vitrine <svg><use href="/icons.svg#arrow"></use></svg>
+              Quero conhecer a vitrine <svg><use href={`${PUBLIC_BASE}icons.svg#arrow`}></use></svg>
             </button>
           </div>
         </section>
@@ -393,24 +395,24 @@ export default function KlipHubSitePage() {
                 <span className="plan-tag">PARA SUA BARBEARIA</span>
                 <h3>Assinatura KlipHub</h3>
                 <p>É o plano que você contrata para usar o sistema e organizar sua operação.</p>
-                <span className="plan-footer"><svg><use href="/icons.svg#monitor"></use></svg>Você contrata o software</span>
+                <span className="plan-footer"><svg><use href={`${PUBLIC_BASE}icons.svg#monitor`}></use></svg>Você contrata o software</span>
               </article>
               <article>
                 <span className="plan-tag">PARA SEUS CLIENTES</span>
                 <h3>Seu clube de benefícios</h3>
                 <p>São os planos e pacotes que você cria e oferece aos clientes da sua barbearia.</p>
-                <span className="plan-footer"><svg><use href="/icons.svg#heart"></use></svg>Seu cliente contrata seu clube</span>
+                <span className="plan-footer"><svg><use href={`${PUBLIC_BASE}icons.svg#heart`}></use></svg>Seu cliente contrata seu clube</span>
               </article>
               <article>
                 <span className="plan-tag">PARA A COMUNICAÇÃO</span>
                 <h3>Créditos de mensagens</h3>
                 <p>São pacotes ligados ao uso de recursos de comunicação da plataforma.</p>
-                <span className="plan-footer"><svg><use href="/icons.svg#message"></use></svg>Independentes do clube</span>
+                <span className="plan-footer"><svg><use href={`${PUBLIC_BASE}icons.svg#message`}></use></svg>Independentes do clube</span>
               </article>
             </div>
 
             <div className="plan-note">
-              <svg><use href="/icons.svg#info"></use></svg>
+              <svg><use href={`${PUBLIC_BASE}icons.svg#info`}></use></svg>
               <p>A assinatura do sistema, o clube da barbearia e os créditos de mensagens são recursos integrados. Consulte as condições e planos no sistema.</p>
             </div>
           </div>
@@ -423,7 +425,7 @@ export default function KlipHubSitePage() {
             <h2>É normal<br />ter perguntas.</h2>
             <p>Vamos deixar a gestão mais simples,<br />começando por aqui.</p>
             <button className="text-button" onClick={() => setDialogOpen(true)}>
-              Conhecer o sistema <svg><use href="/icons.svg#arrow"></use></svg>
+              Conhecer o sistema <svg><use href={`${PUBLIC_BASE}icons.svg#arrow`}></use></svg>
             </button>
           </div>
 
@@ -470,7 +472,7 @@ export default function KlipHubSitePage() {
                 <summary>
                   {faq.q}
                   <svg style={{ transform: openFaq === i ? 'rotate(45deg)' : 'none', transition: 'transform 0.2s' }}>
-                    <use href="/icons.svg#plus"></use>
+                    <use href={`${PUBLIC_BASE}icons.svg#plus`}></use>
                   </svg>
                 </summary>
                 <p>{faq.a}</p>
@@ -487,17 +489,17 @@ export default function KlipHubSitePage() {
             <p>Conheça o KlipHub e descubra uma nova rotina para sua barbearia.</p>
             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginTop: '1.5rem' }}>
               <a className="button" href="https://kliphub.com.br/">
-                Criar conta da barbearia <svg><use href="/icons.svg#arrow"></use></svg>
+                Criar conta da barbearia <svg><use href={`${PUBLIC_BASE}icons.svg#arrow`}></use></svg>
               </a>
               <a className="text-button" href="https://kliphub.com.br/" style={{ color: '#fff' }}>
-                Já sou cliente / Entrar <svg><use href="/icons.svg#arrow"></use></svg>
+                Já sou cliente / Entrar <svg><use href={`${PUBLIC_BASE}icons.svg#arrow`}></use></svg>
               </a>
             </div>
           </div>
 
           <div aria-hidden="true" className="cta-art">
             <div className="large-brand-mark">
-              <img src="/icon-white-512.png" alt="KlipHub" width="48" height="48" />
+              <img src={`${PUBLIC_BASE}icon-white-512.png`} alt="KlipHub" width="48" height="48" />
             </div>
             <span className="cta-status-badge">SISTEMA ATIVO</span>
             <div className="cta-caption">
@@ -518,7 +520,7 @@ export default function KlipHubSitePage() {
               onClick={(e) => { e.preventDefault(); scrollToSection('inicio'); }}
             >
               <div className="brand-logo-badge">
-                <img src="/barbershop_brancO64px.png" alt="KlipHub Logo" width="22" height="22" />
+                <img src={`${PUBLIC_BASE}barbershop_brancO64px.png`} alt="KlipHub Logo" width="22" height="22" />
               </div>
               <div className="brand-logo-text">
                 <div className="brand-logo-title-row">
@@ -547,7 +549,7 @@ export default function KlipHubSitePage() {
             <div>
               <strong>Já usa o KlipHub?</strong>
               <a className="footer-external" href="https://kliphub.com.br/">
-                Acessar sistema <svg><use href="/icons.svg#external"></use></svg>
+                Acessar sistema <svg><use href={`${PUBLIC_BASE}icons.svg#external`}></use></svg>
               </a>
               <p>Acesso rápido ao seu painel.</p>
             </div>
@@ -558,7 +560,7 @@ export default function KlipHubSitePage() {
           <span>© {new Date().getFullYear()} KlipHub. Todos os direitos reservados.</span>
           <span>Feito para quem faz acontecer.</span>
           <a href="#inicio" onClick={(e) => { e.preventDefault(); scrollToSection('inicio'); }}>
-            Voltar ao topo <svg><use href="/icons.svg#arrow-up"></use></svg>
+            Voltar ao topo <svg><use href={`${PUBLIC_BASE}icons.svg#arrow-up`}></use></svg>
           </a>
         </div>
       </footer>
@@ -580,12 +582,12 @@ export default function KlipHubSitePage() {
               className="dialog-close"
               onClick={() => setDialogOpen(false)}
             >
-              <svg><use href="/icons.svg#close"></use></svg>
+              <svg><use href={`${PUBLIC_BASE}icons.svg#close`}></use></svg>
             </button>
 
             <div className="dialog-brand-header" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '18px' }}>
               <div className="brand-logo-badge" style={{ width: '34px', height: '34px', borderRadius: '10px' }}>
-                <img src="/barbershop_brancO64px.png" alt="KlipHub" width="18" height="18" />
+                <img src={`${PUBLIC_BASE}barbershop_brancO64px.png`} alt="KlipHub" width="18" height="18" />
               </div>
               <span style={{ fontFamily: 'var(--font-display)', fontSize: '18px', fontWeight: 700, color: '#fff' }}>
                 Klip<span style={{ color: '#14b8a6' }}>Hub</span>
@@ -600,10 +602,10 @@ export default function KlipHubSitePage() {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '24px' }}>
               <a className="button" href="https://kliphub.com.br/" onClick={() => setDialogOpen(false)}>
-                Criar conta da barbearia <svg><use href="/icons.svg#arrow"></use></svg>
+                Criar conta da barbearia <svg><use href={`${PUBLIC_BASE}icons.svg#arrow`}></use></svg>
               </a>
               <a className="button button-dark" href="https://kliphub.com.br/" onClick={() => setDialogOpen(false)}>
-                Já tenho conta / Entrar <svg><use href="/icons.svg#external"></use></svg>
+                Já tenho conta / Entrar <svg><use href={`${PUBLIC_BASE}icons.svg#external`}></use></svg>
               </a>
               <button
                 className="dialog-preview text-button"
@@ -612,7 +614,7 @@ export default function KlipHubSitePage() {
                   scrollToSection('demonstracao');
                 }}
               >
-                Explorar a prévia da agenda <svg><use href="/icons.svg#arrow"></use></svg>
+                Explorar a prévia da agenda <svg><use href={`${PUBLIC_BASE}icons.svg#arrow`}></use></svg>
               </button>
             </div>
           </div>
