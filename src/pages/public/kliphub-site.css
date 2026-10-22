@@ -3631,12 +3631,9 @@ body.kliphub-landing, .kliphub-landing * { box-sizing:border-box; }
 
 /* Encaixe responsivo do HTML original da animação na Hero */
 .kliphub-landing .hero-visual { padding:0; }
-.hero-animation-frame { width:100%; max-width:35rem; height:920px; margin-inline:auto; overflow:hidden; background:#050508; }
+.hero-animation-frame { width:100%; max-width:390px; height:450px; margin-inline:auto; overflow:hidden; background:#070707; }
 .hero-animation-iframe { display:block; width:100%; height:100%; border:0; background:#050508; }
 @media(max-width:760px) {
   .kliphub-landing .hero-visual { width:100%; }
-  .hero-animation-frame { max-width:35rem; height:920px; }
-}
-@media(max-width:420px) {
-  .hero-animation-frame { height:900px; }
+  .hero-animation-frame { max-width:390px; height:450px; }
 }

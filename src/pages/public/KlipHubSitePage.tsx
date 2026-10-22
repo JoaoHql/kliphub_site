@@ -138,7 +138,7 @@ export default function KlipHubSitePage() {
                 aria-label="Animação original de conversa do Gestor de IA"
                 className="hero-animation-iframe"
                 loading="eager"
-                src={`${import.meta.env.BASE_URL}gestor_de_ia_animation.html`}
+                src={`${import.meta.env.BASE_URL}gestor_de_ia_hero.html`}
                 title="Demonstração animada do Gestor de IA"
               />
             </div>
