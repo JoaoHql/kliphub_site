@@ -4,10 +4,20 @@ import { EcosystemSection, FeatureShowcase } from './KlipHubShowcases';
 
 const PUBLIC_BASE = import.meta.env.BASE_URL;
 
+const HERO_ROTATING_WORDS = [
+  'organizar.',
+  'automatizar.',
+  'lotar a agenda.',
+  'gerir o caixa.',
+  'fidelizar.',
+];
+
 export default function KlipHubSitePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [activeWordIdx, setActiveWordIdx] = useState(0);
+  const [wordPhase, setWordPhase] = useState<'enter' | 'active' | 'exit'>('active');
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -18,6 +28,22 @@ export default function KlipHubSitePage() {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const interval = setInterval(() => {
+      setWordPhase('exit');
+      const timer1 = setTimeout(() => {
+        setActiveWordIdx((prev) => (prev + 1) % HERO_ROTATING_WORDS.length);
+        setWordPhase('enter');
+        const timer2 = setTimeout(() => {
+          setWordPhase('active');
+        }, 50);
+      }, 350);
+    }, 3200);
+
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -41,7 +67,7 @@ export default function KlipHubSitePage() {
 
   useEffect(() => {
     const hero = document.querySelector<HTMLElement>('.kliphub-landing .hero');
-    const frame = hero?.querySelector<HTMLIFrameElement>('.hero-animation-iframe');
+    const frame = hero?.querySelector<HTMLIElement | HTMLIFrameElement>('.hero-animation-iframe') as HTMLIFrameElement | null;
     if (!hero || !frame) return;
 
     let conversationComplete = false;
@@ -201,16 +227,31 @@ export default function KlipHubSitePage() {
         {/* HERO SECTION */}
         <section className="hero container" id="inicio">
           <div className="hero-copy">
-            <div className="eyebrow">
+            <div className="eyebrow hero-eyebrow-chip">
               <span className="status-dot pulse"></span> PLATAFORMA INTEGRADA PARA BARBEARIAS
             </div>
             <h1>
               <span className="hero-title-line hero-title-line-first">Seu talento é cortar.</span><br />
-              <span className="hero-title-line hero-title-line-second">O nosso é <span className="highlight-word">organizar.
-                <svg aria-hidden="true" viewBox="0 0 360 20">
-                  <path d="M3 13C97 2 240 3 355 12"></path>
-                </svg>
-              </span></span>
+              <span className="hero-title-line hero-title-line-second">
+                O nosso é{' '}
+                <span className="highlight-word hero-rotating-wrapper">
+                  <span
+                    key={activeWordIdx}
+                    className={`hero-rotating-word ${
+                      wordPhase === 'exit'
+                        ? 'is-exiting'
+                        : wordPhase === 'enter'
+                        ? 'is-entering'
+                        : 'is-active'
+                    }`}
+                  >
+                    {HERO_ROTATING_WORDS[activeWordIdx]}
+                  </span>
+                  <svg aria-hidden="true" viewBox="0 0 360 20" key={`underline-${activeWordIdx}`} className="hero-rotating-underline">
+                    <path d="M3 13C97 2 240 3 355 12"></path>
+                  </svg>
+                </span>
+              </span>
             </h1>
             <p className="hero-description">
               Agenda, caixa e clientes em um só lugar. O KlipHub cuida da gestão para você cuidar do que faz melhor.
