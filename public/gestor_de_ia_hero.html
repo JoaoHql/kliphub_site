@@ -100,7 +100,10 @@
       body.hero-embed .hero-laptop-title { margin:0; color:#f4f4f1; font-size:14px; font-weight:650; letter-spacing:.01em; }
       html, body.hero-embed, body.hero-embed * { scrollbar-width:none !important; }
       html::-webkit-scrollbar, body.hero-embed::-webkit-scrollbar, body.hero-embed *::-webkit-scrollbar { display:none !important; width:0 !important; height:0 !important; }
-      body.hero-embed #chatFeed { overscroll-behavior:contain; }
+      body.hero-embed #chatFeed { overscroll-behavior:contain; scroll-behavior:smooth; }
+      @keyframes hero-chat-appear { from { opacity:0; transform:translateY(7px); } to { opacity:1; transform:translateY(0); } }
+      body.hero-embed .hero-chat-enter { animation:hero-chat-appear 220ms cubic-bezier(.2,.7,.25,1) both; }
+      @media(prefers-reduced-motion:reduce) { body.hero-embed .hero-chat-enter { animation:none; } }
       body.hero-embed .hero-laptop::after { display:none; }
       body.hero-embed .hero-laptop::before { display:none; }
       body.hero-embed .hero-laptop-os-nav { display:none !important; }
@@ -258,7 +261,7 @@
 
         function appendUserMessage(text) {
             const div = document.createElement('div');
-            div.className = "flex flex-col items-end self-end max-w-[85%]";
+            div.className = "flex flex-col items-end self-end max-w-[85%] hero-chat-enter";
             div.innerHTML = `
                 <div class="bg-gradient-to-r from-emerald-800 to-emerald-700 text-emerald-50 px-4 py-3 rounded-2xl rounded-tr-sm text-xs leading-relaxed border border-emerald-500/30 font-medium user-glow">
                     ${text}
@@ -272,7 +275,7 @@
 
         function appendAIMessage(text) {
             const div = document.createElement('div');
-            div.className = "flex flex-col items-start self-start max-w-[92%]";
+            div.className = "flex flex-col items-start self-start max-w-[92%] hero-chat-enter";
             div.innerHTML = `
                 <div class="bg-gradient-to-b from-[#25252a] to-[#1c1c20] text-zinc-100 px-4 py-3.5 rounded-2xl rounded-tl-sm text-xs leading-relaxed border border-zinc-700/60 ai-glow">
                     ${text}
@@ -283,7 +286,7 @@
         }
 
         function scrollToBottom() {
-            chatFeed.scrollTop = chatFeed.scrollHeight;
+            chatFeed.scrollTo({ top: chatFeed.scrollHeight, behavior: 'smooth' });
         }
 
         let waitingForScroll = false;

@@ -21,6 +21,25 @@ export default function KlipHubSitePage() {
 
   useEffect(() => {
     const hero = document.querySelector<HTMLElement>('.kliphub-landing .hero');
+    const lines = Array.from(hero?.querySelectorAll<HTMLElement>('.hero-title-line') ?? []);
+    if (!hero || !lines.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const replayTitleEntrance = () => {
+      lines.forEach((line) => {
+        line.style.animation = 'none';
+        void line.offsetWidth;
+        line.style.removeProperty('animation');
+      });
+    };
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) replayTitleEntrance();
+    }, { threshold: 0.35 });
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const hero = document.querySelector<HTMLElement>('.kliphub-landing .hero');
     const frame = hero?.querySelector<HTMLIFrameElement>('.hero-animation-iframe');
     if (!hero || !frame) return;
 
@@ -41,10 +60,14 @@ export default function KlipHubSitePage() {
     };
 
     const advanceOrContinue = () => {
-      if (wheelGestureLocked) return;
+      if (wheelGestureLocked) {
+        window.clearTimeout(wheelGestureTimer);
+        wheelGestureTimer = window.setTimeout(() => { wheelGestureLocked = false; }, 220);
+        return;
+      }
       wheelGestureLocked = true;
       window.clearTimeout(wheelGestureTimer);
-      wheelGestureTimer = window.setTimeout(() => { wheelGestureLocked = false; }, 180);
+      wheelGestureTimer = window.setTimeout(() => { wheelGestureLocked = false; }, 220);
       if (conversationComplete) {
         scrollToNextSection();
         return;
