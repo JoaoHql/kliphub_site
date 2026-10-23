@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './kliphub-site.css';
+import { EcosystemSection, FeatureShowcase } from './KlipHubShowcases';
 
 const PUBLIC_BASE = import.meta.env.BASE_URL;
 
@@ -257,122 +258,8 @@ export default function KlipHubSitePage() {
           </div>
         </section>
 
-        {/* FUNCIONALIDADES */}
-        <section className="section container" id="funcionalidades">
-          <div className="section-heading split-heading">
-            <div>
-              <div className="eyebrow">MENOS CONTROLE MANUAL. MAIS BARBEARIA.</div>
-              <h2>Tudo conectado.<br />Você no controle.</h2>
-            </div>
-            <p>Horários por mensagem, comissões na calculadora, estoque na cabeça. Sua barbearia merece uma rotina mais simples.</p>
-          </div>
-
-          <div className="feature-grid">
-            <article className="feature-card feature-agenda">
-              <div className="feature-card-top">
-                <span className="feature-icon"><svg><use href={`${PUBLIC_BASE}icons.svg#calendar`}></use></svg></span>
-                <span className="feature-number">01 / AGENDA</span>
-              </div>
-              <h3>Cadeira ocupada.<br />Agenda organizada.</h3>
-              <p>Veja os horários e a disponibilidade da equipe. Crie agendamentos manualmente, confirme, remarque, cancele e conclua atendimentos.</p>
-              <div aria-label="Representação ilustrativa de agenda" className="week-preview">
-                <div className="week-days">
-                  <span>SEG</span><span>TER</span><span className="active">QUA</span><span>QUI</span><span>SEX</span>
-                </div>
-                <div className="week-bars">
-                  <span></span><span></span><span></span><span></span><span></span>
-                </div>
-                <small>Prévia ilustrativa</small>
-              </div>
-              <a className="card-link" href="#demonstracao" onClick={(e) => { e.preventDefault(); scrollToSection('demonstracao'); }}>
-                Explorar a agenda <svg><use href={`${PUBLIC_BASE}icons.svg#arrow`}></use></svg>
-              </a>
-            </article>
-
-            <article className="feature-card">
-              <div className="feature-card-top">
-                <span className="feature-icon"><svg><use href={`${PUBLIC_BASE}icons.svg#wallet`}></use></svg></span>
-                <span className="feature-number">02 / CAIXA</span>
-              </div>
-              <h3>Feche a conta.<br />Não a sua visão.</h3>
-              <p>Serviços e produtos no PDV, baixa automática no estoque e vendas integradas ao caixa e às comissões.</p>
-              <div className="tags">
-                <span>PDV e comanda</span><span>Formas de pagamento</span><span>Comissões</span>
-              </div>
-              <details className="feature-detail">
-                <summary>O que está incluído <svg><use href={`${PUBLIC_BASE}icons.svg#plus`}></use></svg></summary>
-                <p>Registre o recebimento pela forma de pagamento escolhida. Configure os métodos aceitos no balcão e no agendamento online. Consulte as reservas de produtos para retirada e os valores de comissão ligados aos atendimentos realizados.</p>
-              </details>
-            </article>
-
-            <article className="feature-card">
-              <div className="feature-card-top">
-                <span className="feature-icon"><svg><use href={`${PUBLIC_BASE}icons.svg#chart`}></use></svg></span>
-                <span className="feature-number">03 / FINANCEIRO</span>
-              </div>
-              <h3>Saiba o que entra.<br />E o que faz crescer.</h3>
-              <p>Receitas, despesas, comissões e ticket médio. Enxergue os números da sua barbearia sem depender de planilhas.</p>
-              <div aria-hidden="true" className="mini-chart">
-                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-              </div>
-              <details className="feature-detail">
-                <summary>O que está incluído <svg><use href={`${PUBLIC_BASE}icons.svg#plus`}></use></svg></summary>
-                <p>Cadastre despesas com descrição, categoria, valor, vencimento e observações. Marque como pagas ou pendentes, filtre por período e categoria e consulte receitas e transações por período, profissional e método de pagamento.</p>
-              </details>
-            </article>
-
-            <article className="feature-card">
-              <div className="feature-card-top">
-                <span className="feature-icon"><svg><use href={`${PUBLIC_BASE}icons.svg#users`}></use></svg></span>
-                <span className="feature-number">04 / OPERAÇÃO</span>
-              </div>
-              <h3>Seu negócio inteiro.<br />Sem pontas soltas.</h3>
-              <p>Clientes, equipe, serviços e produtos bem organizados. As informações certas para cada atendimento.</p>
-              <div className="tags">
-                <span>Histórico de clientes</span><span>Equipe e acessos</span><span>Estoque</span>
-              </div>
-              <details className="feature-detail">
-                <summary>O que está incluído <svg><use href={`${PUBLIC_BASE}icons.svg#plus`}></use></svg></summary>
-                <p>Cadastre e busque clientes com histórico de atendimentos. Organize os profissionais, seus acessos e configurações. Defina preço, duração e disponibilidade dos serviços, além de preço, custo e estoque dos produtos. Acompanhe receita e atendimentos do dia, clientes cadastrados e cancelamentos no painel.</p>
-              </details>
-            </article>
-
-            <article className="feature-card">
-              <div className="feature-card-top">
-                <span className="feature-icon"><svg><use href={`${PUBLIC_BASE}icons.svg#heart`}></use></svg></span>
-                <span className="feature-number">05 / RELACIONAMENTO</span>
-              </div>
-              <h3>Um bom corte traz.<br />Uma boa relação mantém.</h3>
-              <p>Fidelidade, avaliações e radar de retenção para identificar quem está há mais tempo sem agendar.</p>
-              <div className="retention-note">
-                <svg><use href={`${PUBLIC_BASE}icons.svg#heart`}></use></svg>
-                <span>Crie mais motivos para o cliente voltar.</span>
-              </div>
-              <details className="feature-detail">
-                <summary>O que está incluído <svg><use href={`${PUBLIC_BASE}icons.svg#plus`}></use></svg></summary>
-                <p>Incentive a frequência com recursos de fidelidade, acompanhe satisfação e reputação nas avaliações e use campanhas e lembretes para manter o contato com seus clientes.</p>
-              </details>
-            </article>
-
-            <article className="feature-card feature-whatsapp">
-              <div className="feature-card-top">
-                <span className="feature-icon"><svg><use href={`${PUBLIC_BASE}icons.svg#message`}></use></svg></span>
-                <span className="feature-number">06 / WHATSAPP + IA</span>
-              </div>
-              <h3>Você atende na cadeira.<br />A IA ajuda na conversa.</h3>
-              <p>Conecte seu WhatsApp, acompanhe as conversas e use um agente de IA para dúvidas e ações de agenda.</p>
-              <div className="chat-preview">
-                <span>Tem horário para corte?</span>
-                <span>Vamos encontrar um horário para você.<svg><use href={`${PUBLIC_BASE}icons.svg#check-double`}></use></svg></span>
-                <small>Exemplo ilustrativo de conversa</small>
-              </div>
-              <details className="feature-detail">
-                <summary>Conheça as duas IAs <svg><use href={`${PUBLIC_BASE}icons.svg#plus`}></use></svg></summary>
-                <p>O Agente de IA responde dúvidas e auxilia em ações de agenda dentro das regras que você configurar. A caixa de atendimento reúne as conversas e os lembretes. O Gestor de IA entrega resumos e orientações operacionais para apoiar decisões do dia a dia.</p>
-              </details>
-            </article>
-          </div>
-        </section>
+        {/* FUNCIONALIDADES · FEATURE SHOWCASE INTERATIVO */}
+        <FeatureShowcase onExplore={() => setDialogOpen(true)} />
 
         {/* DEMONSTRAÇÃO COM A AGENDA REAL */}
         <section className="demo-section section" id="demonstracao">
@@ -487,44 +374,8 @@ export default function KlipHubSitePage() {
           </div>
         </section>
 
-        {/* PLANOS E CLUBE */}
-        <section className="club-section" id="planos">
-          <div className="container">
-            <div className="club-intro">
-              <div>
-                <div className="eyebrow">CLIENTE QUE VOLTA. NEGÓCIO QUE CRESCE.</div>
-                <h2>O clube é da sua barbearia.<br />A organização é do KlipHub.</h2>
-              </div>
-              <p>Crie planos e pacotes com preço, descrição, benefícios, serviços ou combos mensais e descontos. Divulgue na vitrine e gerencie as solicitações de adesão.</p>
-            </div>
-
-            <div className="plan-distinction">
-              <article>
-                <span className="plan-tag">PARA SUA BARBEARIA</span>
-                <h3>Assinatura KlipHub</h3>
-                <p>É o plano que você contrata para usar o sistema e organizar sua operação.</p>
-                <span className="plan-footer"><svg><use href={`${PUBLIC_BASE}icons.svg#monitor`}></use></svg>Você contrata o software</span>
-              </article>
-              <article>
-                <span className="plan-tag">PARA SEUS CLIENTES</span>
-                <h3>Seu clube de benefícios</h3>
-                <p>São os planos e pacotes que você cria e oferece aos clientes da sua barbearia.</p>
-                <span className="plan-footer"><svg><use href={`${PUBLIC_BASE}icons.svg#heart`}></use></svg>Seu cliente contrata seu clube</span>
-              </article>
-              <article>
-                <span className="plan-tag">PARA A COMUNICAÇÃO</span>
-                <h3>Créditos de mensagens</h3>
-                <p>São pacotes ligados ao uso de recursos de comunicação da plataforma.</p>
-                <span className="plan-footer"><svg><use href={`${PUBLIC_BASE}icons.svg#message`}></use></svg>Independentes do clube</span>
-              </article>
-            </div>
-
-            <div className="plan-note">
-              <svg><use href={`${PUBLIC_BASE}icons.svg#info`}></use></svg>
-              <p>A assinatura do sistema, o clube da barbearia e os créditos de mensagens são recursos integrados. Consulte as condições e planos no sistema.</p>
-            </div>
-          </div>
-        </section>
+        {/* ECOSSISTEMA · SOFTWARE, CLUBE E WHATSAPP */}
+        <EcosystemSection />
 
         {/* FAQ SECTION */}
         <section className="section container faq-section" id="duvidas">
