@@ -4,13 +4,7 @@ import { EcosystemSection, FeatureShowcase } from './KlipHubShowcases';
 
 const PUBLIC_BASE = import.meta.env.BASE_URL;
 
-const HERO_ROTATING_WORDS = [
-  'organizar.',
-  'automatizar.',
-  'lotar a agenda.',
-  'gerir o caixa.',
-  'fidelizar.',
-];
+const HERO_ROTATING_WORDS = ['organizar.', 'automatizar.', 'lotar a agenda.', 'gerir o caixa.', 'fidelizar.'];
 
 export default function KlipHubSitePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -18,6 +12,24 @@ export default function KlipHubSitePage() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [activeWordIdx, setActiveWordIdx] = useState(0);
   const [wordPhase, setWordPhase] = useState<'enter' | 'active' | 'exit'>('active');
+
+  useEffect(() => {
+    let swapTimer: number | undefined;
+    let settleTimer: number | undefined;
+    const interval = window.setInterval(() => {
+      setWordPhase('exit');
+      swapTimer = window.setTimeout(() => {
+        setActiveWordIdx((prev) => (prev + 1) % HERO_ROTATING_WORDS.length);
+        setWordPhase('enter');
+        settleTimer = window.setTimeout(() => setWordPhase('active'), 60);
+      }, 280);
+    }, 2800);
+    return () => {
+      window.clearInterval(interval);
+      window.clearTimeout(swapTimer);
+      window.clearTimeout(settleTimer);
+    };
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -31,106 +43,22 @@ export default function KlipHubSitePage() {
   }, []);
 
   useEffect(() => {
-    let t1: any;
-    let t2: any;
-    const interval = setInterval(() => {
-      setWordPhase('exit');
-      t1 = setTimeout(() => {
-        setActiveWordIdx((prev) => (prev + 1) % HERO_ROTATING_WORDS.length);
-        setWordPhase('enter');
-        t2 = setTimeout(() => {
-          setWordPhase('active');
-        }, 60);
-      }, 280);
-    }, 2800);
-
-    return () => {
-      clearInterval(interval);
-      clearTimeout(t1);
-      clearTimeout(t2);
-    };
-  }, []);
-
-  useEffect(() => {
     const hero = document.querySelector<HTMLElement>('.kliphub-landing .hero');
-    const frame = hero?.querySelector<HTMLIElement | HTMLIFrameElement>('.hero-animation-iframe') as HTMLIFrameElement | null;
-    if (!hero || !frame) return;
+    const lines = Array.from(hero?.querySelectorAll<HTMLElement>('.hero-title-line') ?? []);
+    if (!hero || !lines.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    let conversationComplete = false;
-    let wheelGestureLocked = false;
-    let wheelGestureTimer: number | undefined;
-    let touchStartY = 0;
-    let touchStartedWhileHeroVisible = false;
-    let touchGestureUsed = false;
-
-    const heroIsVisible = () => {
-      const rect = hero.getBoundingClientRect();
-      return rect.bottom > 0 && rect.top < window.innerHeight;
+    const replayTitleEntrance = () => {
+      lines.forEach((line) => {
+        line.style.animation = 'none';
+        void line.offsetWidth;
+        line.style.removeProperty('animation');
+      });
     };
-
-    const scrollToNextSection = () => {
-      document.querySelector('.kliphub-landing .benefit-ribbon')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    };
-
-    const advanceOrContinue = () => {
-      if (wheelGestureLocked) {
-        window.clearTimeout(wheelGestureTimer);
-        wheelGestureTimer = window.setTimeout(() => { wheelGestureLocked = false; }, 220);
-        return;
-      }
-      wheelGestureLocked = true;
-      window.clearTimeout(wheelGestureTimer);
-      wheelGestureTimer = window.setTimeout(() => { wheelGestureLocked = false; }, 220);
-      if (conversationComplete) {
-        scrollToNextSection();
-        return;
-      }
-      frame.contentWindow?.postMessage({ type: 'kliphub:advance' }, window.location.origin);
-    };
-
-    const handleFrameMessage = (event: MessageEvent) => {
-      if (event.origin !== window.location.origin || event.source !== frame.contentWindow) return;
-      if (event.data?.type === 'kliphub:conversation-complete') {
-        conversationComplete = true;
-      } else if (event.data?.type === 'kliphub:frame-scroll') {
-        if (event.data.direction > 0) advanceOrContinue();
-        else window.scrollBy({ top: event.data.direction, behavior: 'auto' });
-      }
-    };
-
-    const handlePageWheel = (event: WheelEvent) => {
-      if (event.deltaY <= 0 || !heroIsVisible()) return;
-      event.preventDefault();
-      advanceOrContinue();
-    };
-
-    const handleTouchStart = (event: TouchEvent) => {
-      touchStartedWhileHeroVisible = heroIsVisible();
-      touchGestureUsed = false;
-      touchStartY = event.touches[0]?.clientY ?? 0;
-    };
-
-    const handleTouchMove = (event: TouchEvent) => {
-      if (!touchStartedWhileHeroVisible || touchGestureUsed || !event.touches[0]) return;
-      const currentY = event.touches[0].clientY;
-      if (touchStartY - currentY > 36) {
-        event.preventDefault();
-        touchGestureUsed = true;
-        advanceOrContinue();
-      }
-    };
-
-    window.addEventListener('message', handleFrameMessage);
-    window.addEventListener('wheel', handlePageWheel, { capture: true, passive: false });
-    window.addEventListener('touchstart', handleTouchStart, { capture: true, passive: true });
-    window.addEventListener('touchmove', handleTouchMove, { capture: true, passive: false });
-    return () => {
-      window.removeEventListener('message', handleFrameMessage);
-      window.removeEventListener('wheel', handlePageWheel, true);
-      window.removeEventListener('touchstart', handleTouchStart, true);
-      window.removeEventListener('touchmove', handleTouchMove, true);
-      window.clearTimeout(wheelGestureTimer);
-    };
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) replayTitleEntrance();
+    }, { threshold: 0.35 });
+    observer.observe(hero);
+    return () => observer.disconnect();
   }, []);
 
   const scrollToSection = (id: string) => {
@@ -213,31 +141,22 @@ export default function KlipHubSitePage() {
         {/* HERO SECTION */}
         <section className="hero container" id="inicio">
           <div className="hero-copy">
-            <div className="eyebrow hero-eyebrow-chip">
+            <div className="eyebrow">
               <span className="status-dot pulse"></span> PLATAFORMA INTEGRADA PARA BARBEARIAS
             </div>
             <h1>
               <span className="hero-title-line hero-title-line-first">Seu talento é cortar.</span><br />
-              <span className="hero-title-line hero-title-line-second">
-                O nosso é{' '}
-                <span className="highlight-word hero-rotating-wrapper">
-                  <span
-                    key={activeWordIdx}
-                    className={`hero-rotating-word ${
-                      wordPhase === 'exit'
-                        ? 'is-exiting'
-                        : wordPhase === 'enter'
-                        ? 'is-entering'
-                        : 'is-active'
-                    }`}
-                  >
-                    {HERO_ROTATING_WORDS[activeWordIdx]}
-                  </span>
-                  <svg aria-hidden="true" viewBox="0 0 360 20" key={`underline-${activeWordIdx}`} className="hero-rotating-underline">
-                    <path d="M3 13C97 2 240 3 355 12"></path>
-                  </svg>
+              <span className="hero-title-line hero-title-line-second">O nosso é <span className="highlight-word">
+                <span
+                  key={activeWordIdx}
+                  className={`hero-rotating-word is-${wordPhase === 'exit' ? 'exiting' : wordPhase === 'enter' ? 'entering' : 'active'}`}
+                >
+                  {HERO_ROTATING_WORDS[activeWordIdx]}
                 </span>
-              </span>
+                <svg aria-hidden="true" key={`underline-${activeWordIdx}`} viewBox="0 0 360 20">
+                  <path d="M3 13C97 2 240 3 355 12"></path>
+                </svg>
+              </span></span>
             </h1>
             <p className="hero-description">
               Agenda, caixa e clientes em um só lugar. O KlipHub cuida da gestão para você cuidar do que faz melhor.
@@ -267,7 +186,7 @@ export default function KlipHubSitePage() {
                 aria-label="Animação original de conversa do Gestor de IA"
                 className="hero-animation-iframe"
                 loading="eager"
-                src={`${import.meta.env.BASE_URL}gestor_de_ia_hero.html?v=20261023-0005`}
+                src={`${import.meta.env.BASE_URL}gestor_de_ia_hero.html?v=20261023-0010`}
                 title="Demonstração animada do Gestor de IA"
               />
             </div>
