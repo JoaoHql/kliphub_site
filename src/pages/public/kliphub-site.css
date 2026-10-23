@@ -3662,10 +3662,10 @@ body.kliphub-landing, .kliphub-landing * { box-sizing:border-box; }
 .kliphub-landing .hero-title-line-first { animation-delay:.12s; }
 .kliphub-landing .hero-title-line-second { animation-delay:.52s; }
 @keyframes hero-highlight-breathe {
-  0%,100% { text-shadow:0 0 0 rgba(18,199,168,0); }
-  50% { text-shadow:0 0 22px rgba(18,199,168,.52), 0 0 6px rgba(18,199,168,.34); }
+  0%,100% { text-shadow:0 0 6px rgba(18,199,168,.28), 0 0 2px rgba(18,199,168,.2); }
+  50% { text-shadow:0 0 26px rgba(18,199,168,.62), 0 0 8px rgba(18,199,168,.45); }
 }
-.kliphub-landing .hero-title-line-second .highlight-word { animation:hero-highlight-breathe 3.6s 1s ease-in-out infinite; }
+.kliphub-landing .hero-title-line-second .highlight-word { animation:hero-highlight-breathe 3.4s ease-in-out infinite; }
 @keyframes hero-cta-breathe {
   0%, 72%, 100% { opacity:0; transform:scale(1); }
   82% { opacity:.7; transform:scale(1.035); }
