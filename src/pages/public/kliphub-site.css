@@ -3154,10 +3154,6 @@ body.dialog-open {
   html {
     scroll-behavior:auto;
   }
-  *,*:before,*:after {
-    transition:none!important;
-    animation:none!important;
-  }
 }
 
 
@@ -3622,9 +3618,6 @@ body.kliphub-landing, .kliphub-landing * { box-sizing:border-box; }
 @media(pointer:coarse) {
   .kliphub-landing .button,.kliphub-landing .text-button,.kliphub-landing .desktop-nav a,.kliphub-landing .mobile-nav a { min-height:3rem; }
 }
-@media(prefers-reduced-motion:reduce) {
-  .kliphub-landing *, .kliphub-landing *::before, .kliphub-landing *::after { scroll-behavior:auto!important; animation-duration:.01ms!important; transition-duration:.01ms!important; }
-}
 
 
 
@@ -3676,22 +3669,16 @@ body.kliphub-landing, .kliphub-landing * { box-sizing:border-box; }
 @keyframes hero-title-underline { to { stroke-dashoffset:0; } }
 /* Entrada do verbo vindo da esquerda para a posicao original */
 @keyframes hero-word-from-left {
-  0% { opacity:0; transform:translate3d(-48px,0,0); }
-  68% { opacity:1; transform:translate3d(3px,0,0); }
+  0% { opacity:0; transform:translate3d(-72px,0,0); }
+  70% { opacity:1; transform:translate3d(4px,0,0); }
   100% { opacity:1; transform:translate3d(0,0,0); }
 }
-.kliphub-landing .hero-rotating-word { display:inline-block; animation:hero-word-from-left .5s cubic-bezier(.16,1,.3,1) both; will-change:transform, opacity; }
+.kliphub-landing .hero-rotating-word { display:inline-block; animation:hero-word-from-left .55s cubic-bezier(.16,1,.3,1) both !important; will-change:transform, opacity; }
 /* Simulador e apenas demonstrativo: o scroll do mouse/toque passa direto para a pagina */
 .kliphub-landing .hero-animation-iframe { pointer-events:none; }
 @media(max-width:760px) {
   .kliphub-landing .hero-visual { width:100%; height:450px; min-height:450px; }
   .hero-animation-frame { max-width:560px; height:675px; }
-}
-@media(prefers-reduced-motion:reduce) {
-  .kliphub-landing .hero-copy > .eyebrow,.kliphub-landing .hero-copy > .hero-description,.kliphub-landing .hero-copy > .hero-buttons,.kliphub-landing .hero-copy > .hero-reassurance,.kliphub-landing .hero-copy > .hero-line { opacity:1; animation:none; transform:none; }
-  .kliphub-landing .hero-title-line { opacity:1; animation:none; transform:none; filter:none; }
-  .kliphub-landing .hero-title-line-second .highlight-word { animation:none; text-shadow:none; }
-  .kliphub-landing .hero-buttons .button::after,.kliphub-landing .hero h1 .highlight-word svg path { animation:none; stroke-dashoffset:0; }
 }
 
 

@@ -212,8 +212,8 @@
             }
         ];
 
-        // Ritmo da conversa automática: respostas em 1,5s (250ms + 1250ms) e novas perguntas em 2,0s (2000ms).
-        const TIMING = { firstMessage: 150, beforeTyping: 250, typing: 1250, nextQuestion: 2000, restart: 2500, fade: 350 };
+        // Ritmo da conversa automática: respostas em 1,0s (200ms + 800ms) e novas perguntas em 1,5s (1500ms).
+        const TIMING = { firstMessage: 150, beforeTyping: 200, typing: 800, nextQuestion: 1500, restart: 2200, fade: 350 };
 
         let timers = [];
         function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
