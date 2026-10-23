@@ -19,6 +19,70 @@ export default function KlipHubSitePage() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  useEffect(() => {
+    const hero = document.querySelector<HTMLElement>('.kliphub-landing .hero');
+    const frame = hero?.querySelector<HTMLIFrameElement>('.hero-animation-iframe');
+    if (!hero || !frame) return;
+
+    let conversationComplete = false;
+    let lastAdvanceAt = 0;
+    let touchStartY = 0;
+    let touchStartedInHero = false;
+
+    const advanceOrContinue = () => {
+      if (conversationComplete) {
+        document.querySelector('.kliphub-landing .benefit-ribbon')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+      const now = Date.now();
+      if (now - lastAdvanceAt < 700) return;
+      lastAdvanceAt = now;
+      frame.contentWindow?.postMessage({ type: 'kliphub:advance' }, window.location.origin);
+    };
+
+    const handleFrameMessage = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin || event.source !== frame.contentWindow) return;
+      if (event.data?.type === 'kliphub:conversation-complete') {
+        conversationComplete = true;
+      } else if (event.data?.type === 'kliphub:frame-scroll') {
+        if (event.data.direction > 0) advanceOrContinue();
+        else window.scrollBy({ top: event.data.direction, behavior: 'auto' });
+      }
+    };
+
+    const handlePageWheel = (event: WheelEvent) => {
+      if (event.deltaY <= 0 || !hero.contains(event.target as Node) || conversationComplete) return;
+      event.preventDefault();
+      advanceOrContinue();
+    };
+
+    const handleTouchStart = (event: TouchEvent) => {
+      touchStartedInHero = hero.contains(event.target as Node);
+      touchStartY = event.touches[0]?.clientY ?? 0;
+    };
+
+    const handleTouchMove = (event: TouchEvent) => {
+      if (!touchStartedInHero || conversationComplete || !event.touches[0]) return;
+      const currentY = event.touches[0].clientY;
+      if (touchStartY - currentY > 36) {
+        event.preventDefault();
+        touchStartY = currentY;
+        advanceOrContinue();
+      }
+    };
+
+    window.addEventListener('message', handleFrameMessage);
+    window.addEventListener('wheel', handlePageWheel, { capture: true, passive: false });
+    window.addEventListener('touchstart', handleTouchStart, { capture: true, passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { capture: true, passive: false });
+    return () => {
+      window.removeEventListener('message', handleFrameMessage);
+      window.removeEventListener('wheel', handlePageWheel, true);
+      window.removeEventListener('touchstart', handleTouchStart, true);
+      window.removeEventListener('touchmove', handleTouchMove, true);
+    };
+  }, []);
+
   const scrollToSection = (id: string) => {
     setMobileMenuOpen(false);
     const element = document.getElementById(id);
@@ -103,12 +167,12 @@ export default function KlipHubSitePage() {
               <span className="status-dot pulse"></span> PLATAFORMA INTEGRADA PARA BARBEARIAS
             </div>
             <h1>
-              Seu talento é cortar.<br />
-              O nosso é <span className="highlight-word">organizar.
+              <span className="hero-title-line hero-title-line-first">Seu talento é cortar.</span><br />
+              <span className="hero-title-line hero-title-line-second">O nosso é <span className="highlight-word">organizar.
                 <svg aria-hidden="true" viewBox="0 0 360 20">
                   <path d="M3 13C97 2 240 3 355 12"></path>
                 </svg>
-              </span>
+              </span></span>
             </h1>
             <p className="hero-description">
               Agenda, caixa e clientes em um só lugar. O KlipHub cuida da gestão para você cuidar do que faz melhor.

@@ -93,20 +93,17 @@
       body.hero-embed > div:nth-of-type(1), body.hero-embed > div:nth-of-type(2), body.hero-embed > div:nth-of-type(3) { display:none !important; }
       body.hero-embed > div.hero-laptop { width:100%; max-width:560px; height:675px; margin:0 !important; padding:0 0 30px; box-sizing:border-box; position:relative; }
       body.hero-embed .hero-laptop-screen { width:100%; height:645px !important; border-radius:14px; border-color:#363735; background:#111210; box-shadow:0 24px 55px #0008; }
-      body.hero-embed .hero-laptop-browser { background:#1b1c1a; padding-left:12px; padding-right:12px; }
-      body.hero-embed .hero-laptop-browser .hero-mac-lights { display:flex; flex:0 0 auto; align-items:center; gap:5px; margin-right:10px; }
-      body.hero-embed .hero-mac-lights i { width:8px; height:8px; border-radius:50%; background:#777873; }
-      body.hero-embed .hero-mac-lights i:first-child { background:#c36d68; }
-      body.hero-embed .hero-mac-lights i:nth-child(2) { background:#c5a568; }
-      body.hero-embed .hero-mac-lights i:nth-child(3) { background:#7f9d78; }
-      body.hero-embed .hero-laptop-browser > div:nth-child(2) { max-width:none; }
-      body.hero-embed .hero-laptop-browser > div:nth-child(3) { display:none; }
-      body.hero-embed .hero-laptop::after { content:''; position:absolute; z-index:3; bottom:10px; left:-4%; width:108%; height:15px; border-radius:0 0 12px 12px; background:linear-gradient(180deg,#777873 0%,#424340 20%,#222321 66%,#10110f 100%); box-shadow:0 8px 12px #0006; clip-path:polygon(0 0,100% 0,97% 80%,92% 100%,8% 100%,3% 80%); }
-      body.hero-embed .hero-laptop::before { content:''; position:absolute; z-index:4; bottom:19px; left:43%; width:14%; height:3px; border-radius:0 0 4px 4px; background:#5c5d59; }
-      body.hero-embed .hero-laptop-os-nav { display:none !important; }
-      body.hero-embed .hero-laptop-appbar { justify-content:flex-start; }
-      body.hero-embed .hero-laptop-appbar > div:first-child { display:none; }
+      body.hero-embed .hero-laptop-browser { display:none !important; }
+      body.hero-embed .hero-laptop-appbar { min-height:62px; justify-content:space-between; background:#151614; border-bottom-color:#30312e; }
+      body.hero-embed .hero-laptop-appbar > div:first-child { display:flex; }
       body.hero-embed .hero-laptop-appbar > div:last-child { margin-left:auto; }
+      body.hero-embed .hero-laptop-title { margin:0; color:#f4f4f1; font-size:14px; font-weight:650; letter-spacing:.01em; }
+      html, body.hero-embed, body.hero-embed * { scrollbar-width:none !important; }
+      html::-webkit-scrollbar, body.hero-embed::-webkit-scrollbar, body.hero-embed *::-webkit-scrollbar { display:none !important; width:0 !important; height:0 !important; }
+      body.hero-embed #chatFeed { overscroll-behavior:contain; }
+      body.hero-embed .hero-laptop::after { content:''; position:absolute; z-index:3; bottom:10px; left:-4%; width:108%; height:15px; border-radius:0 0 12px 12px; background:linear-gradient(180deg,#343532 0%,#252623 30%,#181917 72%,#10110f 100%); box-shadow:0 5px 8px #0007; clip-path:polygon(0 0,100% 0,97% 80%,92% 100%,8% 100%,3% 80%); }
+      body.hero-embed .hero-laptop::before { display:none; }
+      body.hero-embed .hero-laptop-os-nav { display:none !important; }
       .hero-embed .hero-frame-glow { display:none !important; }
     </style>
 </head>
@@ -152,34 +149,19 @@
 
             <div class="bg-darkBg/90 px-4 py-3 flex items-center justify-between border-b border-zinc-800/60 shrink-0 hero-laptop-appbar">
                 <div class="flex items-center gap-3">
-                    <button class="text-zinc-300 hover:text-white transition p-1">
-                        <i class="fa-solid fa-bars text-lg"></i>
-                    </button>
+                    <h1 class="hero-laptop-title">Gestor de IA</h1>
                 </div>
                 <div class="flex items-center gap-2.5">
-                    <button class="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-300 hover:text-white hover:border-zinc-700 transition">
+                    <button aria-label="Notificações" title="Notificações" class="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-300 hover:text-white hover:border-zinc-700 transition">
                         <i class="fa-regular fa-bell text-xs"></i>
                     </button>
-                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-900 to-emerald-950 border border-emerald-700/80 flex items-center justify-center text-emerald-300 font-bold text-xs tracking-wider shadow-sm">
-                        JO
-                    </div>
-                    <button class="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-300 hover:text-white hover:border-zinc-700 transition">
+                    <button aria-label="Usuário" title="Usuário" class="w-8 h-8 rounded-full bg-emerald-950 border border-emerald-700/80 flex items-center justify-center text-emerald-300 transition">
+                        <i class="fa-regular fa-user text-xs"></i>
+                    </button>
+                    <button aria-label="Sair" title="Sair" class="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-300 hover:text-white hover:border-zinc-700 transition">
                         <i class="fa-solid fa-arrow-right-from-bracket text-xs"></i>
                     </button>
                 </div>
-            </div>
-
-            <div class="px-4 py-2.5 flex items-center justify-between border-b border-zinc-800/40 bg-zinc-950/40 shrink-0">
-                <div class="flex items-center gap-2.5">
-                    <h1 class="font-bold text-sm text-white tracking-wide">Gestor de IA</h1>
-                    <div class="flex items-center gap-1.5 bg-emerald-950/90 border border-emerald-800/60 px-2.5 py-0.5 rounded-full shadow-sm">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                        <span class="text-[10px] font-semibold text-emerald-300 tracking-wider uppercase">Pronto</span>
-                    </div>
-                </div>
-                <button class="w-7 h-7 rounded-lg bg-zinc-900/80 border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-zinc-200 transition">
-                    <i class="fa-solid fa-sliders text-[11px]"></i>
-                </button>
             </div>
 
             <div id="chatFeed" class="flex-1 overflow-y-auto p-4 space-y-4 flex flex-col scroll-smooth">
@@ -216,15 +198,15 @@
 
         const steps = [
             {
-                delay: 400,
+                delay: 350,
                 action: (next) => {
                     chatFeed.innerHTML = '';
                     next();
                 }
             },
-            // --- CONVERSATION 1 ---
+            // Primeira pergunta e resposta entram automaticamente.
             {
-                delay: 600,
+                delay: 500,
                 action: (next) => {
                     typeUserPrompt("Quais clientes estão na hora de voltar e ainda não agendaram?", () => {
                         appendUserMessage("Quais clientes estão na hora de voltar e ainda não agendaram?");
@@ -234,7 +216,7 @@
                 }
             },
             {
-                delay: 500,
+                delay: 450,
                 action: (next) => {
                     showTypingIndicator();
                     scrollToBottom();
@@ -243,12 +225,12 @@
                         appendAIMessage("Identifiquei 18 clientes que passaram do intervalo habitual de retorno e ainda não agendaram. Juntos, eles representam R$ 900 em serviços potenciais.");
                         scrollToBottom();
                         next();
-                    }, 1200);
+                    }, 1100);
                 }
             },
-            // --- CONVERSATION 2 ---
+            // Cada passo seguinte exige uma rolagem para baixo.
             {
-                delay: 1400,
+                delay: 120,
                 action: (next) => {
                     typeUserPrompt("Onde minha agenda está vazia nesta semana?", () => {
                         appendUserMessage("Onde minha agenda está vazia nesta semana?");
@@ -258,7 +240,7 @@
                 }
             },
             {
-                delay: 500,
+                delay: 180,
                 action: (next) => {
                     showTypingIndicator();
                     scrollToBottom();
@@ -267,12 +249,11 @@
                         appendAIMessage("Sua agenda está com maior ociosidade na quinta-feira à tarde (14h às 17h) e sexta-feira pela manhã. Recomendo disparar lembretes promocionais para estes horários.");
                         scrollToBottom();
                         next();
-                    }, 1400);
+                    }, 1100);
                 }
             },
-            // --- CONVERSATION 3 ---
             {
-                delay: 1600,
+                delay: 120,
                 action: (next) => {
                     typeUserPrompt("Qual serviço teve maior demanda este mês?", () => {
                         appendUserMessage("Qual serviço teve maior demanda este mês?");
@@ -282,7 +263,7 @@
                 }
             },
             {
-                delay: 500,
+                delay: 180,
                 action: (next) => {
                     showTypingIndicator();
                     scrollToBottom();
@@ -291,7 +272,7 @@
                         appendAIMessage("O serviço mais procurado nos últimos 30 dias foi o Corte & Hidratação, gerando 42 atendimentos concluídos e R$ 4.200 em receita total registrada.");
                         scrollToBottom();
                         next();
-                    }, 1400);
+                    }, 1100);
                 }
             }
         ];
@@ -370,42 +351,67 @@
             });
         }
 
+        let waitingForScroll = false;
+        let conversationComplete = false;
+        let stepInProgress = false;
+
         function runStep(stepIndex) {
             if (isPaused || stepIndex >= steps.length) return;
             currentStep = stepIndex;
+            stepInProgress = true;
 
             simulationTimer = setTimeout(() => {
                 if (!isPaused) {
                     steps[stepIndex].action(() => {
-                        runStep(stepIndex + 1);
+                        stepInProgress = false;
+                        if (stepIndex < 2) {
+                            runStep(stepIndex + 1);
+                            return;
+                        }
+                        currentStep = stepIndex + 1;
+                        if (currentStep >= steps.length) {
+                            conversationComplete = true;
+                            waitingForScroll = false;
+                            parent.postMessage({ type: 'kliphub:conversation-complete' }, location.origin);
+                        } else {
+                            waitingForScroll = true;
+                        }
                     });
                 }
             }, steps[stepIndex].delay);
         }
 
-        function restartSimulation() {
-            clearTimeout(simulationTimer);
-            isPaused = false;
-            document.getElementById('pauseIcon').className = "fa-solid fa-pause text-emerald-400";
-            document.getElementById('pauseText').textContent = "Pausar";
-            chatFeed.innerHTML = '';
-            runStep(0);
-        }
-
-        function togglePause() {
-            isPaused = !isPaused;
-            const icon = document.getElementById('pauseIcon');
-            const text = document.getElementById('pauseText');
-            if (isPaused) {
-                icon.className = "fa-solid fa-play text-emerald-400";
-                text.textContent = "Continuar";
-                clearTimeout(simulationTimer);
-            } else {
-                icon.className = "fa-solid fa-pause text-emerald-400";
-                text.textContent = "Pausar";
-                runStep(currentStep + 1);
+        window.addEventListener('message', (event) => {
+            if (event.origin !== location.origin || event.source !== parent) return;
+            if (event.data?.type === 'kliphub:advance' && waitingForScroll && !stepInProgress) {
+                waitingForScroll = false;
+                runStep(currentStep);
             }
-        }
+        });
+
+        // A wheel or swipe over the embedded laptop is forwarded to the page,
+        // which advances one message at a time and then releases normal scrolling.
+        window.addEventListener('wheel', (event) => {
+            event.preventDefault();
+            if (event.deltaY !== 0) {
+                parent.postMessage({ type: 'kliphub:frame-scroll', direction: event.deltaY > 0 ? 1 : event.deltaY }, location.origin);
+            }
+        }, { passive: false });
+
+        let touchStartY = 0;
+        window.addEventListener('touchstart', (event) => {
+            touchStartY = event.touches[0]?.clientY ?? 0;
+        }, { passive: true });
+        window.addEventListener('touchmove', (event) => {
+            event.preventDefault();
+        }, { passive: false });
+        window.addEventListener('touchend', (event) => {
+            const endY = event.changedTouches[0]?.clientY ?? touchStartY;
+            const delta = touchStartY - endY;
+            if (Math.abs(delta) > 30) {
+                parent.postMessage({ type: 'kliphub:frame-scroll', direction: delta > 0 ? 1 : delta }, location.origin);
+            }
+        }, { passive: true });
 
         // Start simulation on load
         window.onload = function() {
