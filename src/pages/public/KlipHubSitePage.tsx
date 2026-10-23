@@ -31,7 +31,7 @@ export default function KlipHubSitePage() {
   }, []);
 
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    
     const interval = setInterval(() => {
       setWordPhase('exit');
       const timer1 = setTimeout(() => {
@@ -49,7 +49,7 @@ export default function KlipHubSitePage() {
   useEffect(() => {
     const hero = document.querySelector<HTMLElement>('.kliphub-landing .hero');
     const lines = Array.from(hero?.querySelectorAll<HTMLElement>('.hero-title-line') ?? []);
-    if (!hero || !lines.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!hero || !lines.length) return;
 
     const replayTitleEntrance = () => {
       lines.forEach((line) => {
@@ -281,7 +281,7 @@ export default function KlipHubSitePage() {
                 aria-label="Animação original de conversa do Gestor de IA"
                 className="hero-animation-iframe"
                 loading="eager"
-                src={`${import.meta.env.BASE_URL}gestor_de_ia_hero.html?v=20261023-0002`}
+                src={`${import.meta.env.BASE_URL}gestor_de_ia_hero.html?v=20261023-0005`}
                 title="Demonstração animada do Gestor de IA"
               />
             </div>

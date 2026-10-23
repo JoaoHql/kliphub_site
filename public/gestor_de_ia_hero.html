@@ -19,8 +19,8 @@
                     },
                     keyframes: {
                         fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(12px) scale(0.98)' },
-                            '100%': { opacity: '1', transform: 'translateY(0) scale(1)' }
+                            '0%': { opacity: '0', transform: 'translateY(16px) scale(0.96)', filter: 'blur(4px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0) scale(1)', filter: 'blur(0)' }
                         },
                         typingPulse: {
                             '0%, 100%': { opacity: '0.3', transform: 'scale(0.8)' },
@@ -32,10 +32,10 @@
                         }
                     },
                     animation: {
-                        fadeInUp: 'fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                        dot1: 'typingPulse 1.4s infinite 0s',
-                        dot2: 'typingPulse 1.4s infinite 0.2s',
-                        dot3: 'typingPulse 1.4s infinite 0.4s',
+                        fadeInUp: 'fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        dot1: 'typingPulse 1.2s infinite 0s',
+                        dot2: 'typingPulse 1.2s infinite 0.2s',
+                        dot3: 'typingPulse 1.2s infinite 0.4s',
                         ambientGlow: 'glow 8s ease-in-out infinite'
                     }
                 }
@@ -50,7 +50,6 @@
             background-color: #050508;
             color: #f4f4f5;
         }
-        /* Custom scrollbar for chat feed */
         ::-webkit-scrollbar {
             width: 4px;
         }
@@ -62,23 +61,19 @@
             border-radius: 4px;
         }
 
-        /* Glassmorphism subtle highlight */
         .glass-card {
             background: rgba(24, 24, 27, 0.85);
             backdrop-filter: blur(16px);
         }
 
-        /* Shimmer effect on user bubble */
         .user-glow {
             box-shadow: 0 4px 20px -2px rgba(16, 185, 129, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
         }
 
-        /* Subtle glow for AI box */
         .ai-glow {
             box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
         }
 
-        /* Ambient background spots */
         .bg-spot-1 {
             background: radial-gradient(circle, rgba(16,185,129,0.15) 0%, rgba(0,0,0,0) 70%);
         }
@@ -101,9 +96,30 @@
       html, body.hero-embed, body.hero-embed * { scrollbar-width:none !important; }
       html::-webkit-scrollbar, body.hero-embed::-webkit-scrollbar, body.hero-embed *::-webkit-scrollbar { display:none !important; width:0 !important; height:0 !important; }
       body.hero-embed #chatFeed { overscroll-behavior:contain; scroll-behavior:smooth; }
-      @keyframes hero-chat-appear { from { opacity:.35; transform:translateY(13px) scale(.99); } to { opacity:1; transform:translateY(0) scale(1); } }
-      body.hero-embed .hero-chat-enter { animation:hero-chat-appear 520ms cubic-bezier(.16,1,.3,1) both; }
-      @media(prefers-reduced-motion:reduce) { body.hero-embed .hero-chat-enter { animation:none; } }
+
+      /* ANIMAÇÃO SUAVE DE CHEGADA DA MENSAGEM */
+      @keyframes hero-chat-appear {
+        0% {
+          opacity: 0;
+          transform: translateY(22px) scale(0.95);
+          filter: blur(6px);
+        }
+        65% {
+          opacity: 1;
+          transform: translateY(-2px) scale(1.012);
+          filter: blur(0);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+          filter: blur(0);
+        }
+      }
+      body.hero-embed .hero-chat-enter {
+        animation: hero-chat-appear 540ms cubic-bezier(0.16, 1, 0.3, 1) both !important;
+        will-change: transform, opacity, filter;
+      }
+
       body.hero-embed .hero-laptop::after { display:none; }
       body.hero-embed .hero-laptop::before { display:none; }
       body.hero-embed .hero-laptop-os-nav { display:none !important; }
@@ -133,7 +149,6 @@
     </div>
 
     <div class="relative z-10 w-full max-w-[560px] hero-laptop">
-        <!-- Outer Glow Frame -->
         <div class="hero-frame-glow absolute -inset-1 rounded-[36px] bg-gradient-to-b from-emerald-500/20 via-zinc-800/30 to-emerald-500/10 blur-xl opacity-70 pointer-events-none"></div>
 
         <div class="w-full h-[645px] bg-darkBg border border-zinc-800/90 rounded-[14px] shadow-2xl flex flex-col overflow-hidden relative select-none glass-card hero-laptop-screen">
@@ -168,12 +183,12 @@
             </div>
 
             <div id="chatFeed" class="flex-1 overflow-y-auto p-4 space-y-4 flex flex-col">
-                <!-- Messages and typing indicators will be dynamically inserted here -->
+                <!-- Messages and typing indicators dynamically inserted here -->
             </div>
 
             <div class="p-3 bg-darkBg border-t border-zinc-800/60 shrink-0">
                 <div class="relative flex items-center">
-                    <input type="text" id="userInputMock" disabled placeholder="Como posso melhorar o atendimento?" class="w-full bg-zinc-900/90 border border-zinc-800/90 rounded-xl py-3 pl-4 pr-12 text-xs text-zinc-300 placeholder-zinc-500 focus:outline-none transition">
+                    <input type="text" id="userInputMock" disabled placeholder="Pergunte ao Gestor de IA..." class="w-full bg-zinc-900/90 border border-zinc-800/90 rounded-xl py-3 pl-4 pr-12 text-xs text-zinc-300 placeholder-zinc-500 focus:outline-none transition">
                     <button id="sendBtnMock" class="absolute right-2 w-8 h-8 rounded-lg bg-emerald-600/20 text-emerald-400 border border-emerald-700/50 flex items-center justify-center transition">
                         <i class="fa-solid fa-paper-plane text-xs"></i>
                     </button>
@@ -194,72 +209,102 @@
         const userInputMock = document.getElementById('userInputMock');
         const sendBtnMock = document.getElementById('sendBtnMock');
         let simulationTimer = null;
+        let autoAdvanceTimer = null;
         let isPaused = false;
         let currentStep = 0;
+        let waitingForScroll = false;
+        let conversationComplete = false;
+        let stepInProgress = false;
 
-        const timestamp = "22/10/2026, 12:42";
+        const timestamp = "Hoje, 12:42";
 
         const steps = [
             {
-                delay: 100,
+                delay: 200,
                 action: (next) => {
                     chatFeed.innerHTML = '';
                     next();
                 }
             },
-            // A primeira pergunta e sua resposta entram automaticamente, sem efeito de digitação.
+            // Pergunta 1
             {
-                delay: 180,
+                delay: 500,
                 action: (next) => {
                     appendUserMessage("Quais clientes estão na hora de voltar e ainda não agendaram?");
-                    scrollToBottom();
                     next();
                 }
             },
             {
-                delay: 220,
+                delay: 500,
                 action: (next) => {
-                    appendAIMessage("Identifiquei 18 clientes que passaram do intervalo habitual de retorno e ainda não agendaram. Juntos, eles representam R$ 900 em serviços potenciais.");
-                    scrollToBottom();
-                    next();
+                    appendAIMessageWithTyping(
+                        "Identifiquei 18 clientes que passaram do intervalo habitual de retorno e ainda não agendaram. Juntos, eles representam R$ 900 em serviços potenciais.",
+                        next
+                    );
                 }
             },
-            // Cada scroll subsequente apresenta imediatamente um único balão.
+            // Pergunta 2
             {
-                delay: 0,
+                delay: 700,
                 action: (next) => {
                     appendUserMessage("Onde minha agenda está vazia nesta semana?");
-                    scrollToBottom();
                     next();
                 }
             },
             {
-                delay: 0,
+                delay: 500,
                 action: (next) => {
-                    appendAIMessage("Sua agenda está com maior ociosidade na quinta-feira à tarde (14h às 17h) e sexta-feira pela manhã. Recomendo disparar lembretes promocionais para estes horários.");
-                    scrollToBottom();
-                    next();
+                    appendAIMessageWithTyping(
+                        "Sua agenda está com maior ociosidade na quinta-feira à tarde (14h às 17h) e sexta-feira pela manhã. Recomendo disparar lembretes promocionais para estes horários.",
+                        next
+                    );
                 }
             },
+            // Pergunta 3
             {
-                delay: 0,
+                delay: 700,
                 action: (next) => {
                     appendUserMessage("Qual serviço teve maior demanda este mês?");
-                    scrollToBottom();
                     next();
                 }
             },
             {
-                delay: 0,
+                delay: 500,
                 action: (next) => {
-                    appendAIMessage("O serviço mais procurado nos últimos 30 dias foi o Corte & Hidratação, gerando 42 atendimentos concluídos e R$ 4.200 em receita total registrada.");
-                    scrollToBottom();
-                    next();
+                    appendAIMessageWithTyping(
+                        "O serviço mais procurado nos últimos 30 dias foi o Corte & Hidratação, gerando 42 atendimentos concluídos e R$ 4.200 em receita total registrada.",
+                        next
+                    );
                 }
             }
         ];
 
+        function showTypingIndicator() {
+            removeTypingIndicator();
+            const div = document.createElement('div');
+            div.id = 'typingIndicator';
+            div.className = "flex flex-col items-start self-start max-w-[92%] hero-chat-enter";
+            div.innerHTML = `
+                <div class="bg-gradient-to-b from-[#242429] to-[#1c1c20] text-zinc-300 px-4 py-3 rounded-2xl rounded-tl-sm text-xs border border-zinc-700/60 shadow-lg flex items-center gap-2.5">
+                    <span class="text-[11px] text-emerald-400 font-semibold tracking-wide">Gestor de IA</span>
+                    <div class="flex items-center gap-1.5 ml-0.5 py-0.5">
+                        <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-dot1"></span>
+                        <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-dot2"></span>
+                        <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-dot3"></span>
+                    </div>
+                </div>
+            `;
+            chatFeed.appendChild(div);
+            scrollToBottom();
+        }
+
+        function removeTypingIndicator() {
+            const el = document.getElementById('typingIndicator');
+            if (el) el.remove();
+        }
+
         function appendUserMessage(text) {
+            removeTypingIndicator();
             const div = document.createElement('div');
             div.className = "flex flex-col items-end self-end max-w-[85%] hero-chat-enter";
             div.innerHTML = `
@@ -271,9 +316,20 @@
                 </span>
             `;
             chatFeed.appendChild(div);
+            scrollToBottom();
+        }
+
+        function appendAIMessageWithTyping(text, next) {
+            showTypingIndicator();
+            setTimeout(() => {
+                removeTypingIndicator();
+                appendAIMessage(text);
+                if (next) next();
+            }, 950);
         }
 
         function appendAIMessage(text) {
+            removeTypingIndicator();
             const div = document.createElement('div');
             div.className = "flex flex-col items-start self-start max-w-[92%] hero-chat-enter";
             div.innerHTML = `
@@ -283,55 +339,98 @@
                 <span class="text-[10px] text-zinc-500 mt-1 ml-1 font-mono">${timestamp}</span>
             `;
             chatFeed.appendChild(div);
+            scrollToBottom();
         }
 
         function scrollToBottom() {
-            chatFeed.scrollTo({ top: chatFeed.scrollHeight, behavior: 'smooth' });
+            setTimeout(() => {
+                chatFeed.scrollTo({ top: chatFeed.scrollHeight + 100, behavior: 'smooth' });
+            }, 30);
         }
 
-        let waitingForScroll = false;
-        let conversationComplete = false;
-        let stepInProgress = false;
+        function scheduleAutoAdvance() {
+            clearTimeout(autoAdvanceTimer);
+            autoAdvanceTimer = setTimeout(() => {
+                if (!isPaused && waitingForScroll && !stepInProgress) {
+                    waitingForScroll = false;
+                    runStep(currentStep);
+                }
+            }, 3600);
+        }
 
         function runStep(stepIndex) {
             if (isPaused || stepIndex >= steps.length) return;
             currentStep = stepIndex;
             stepInProgress = true;
+            clearTimeout(autoAdvanceTimer);
 
             simulationTimer = setTimeout(() => {
                 if (!isPaused) {
                     steps[stepIndex].action(() => {
                         stepInProgress = false;
-                        if (stepIndex < 2) {
-                            runStep(stepIndex + 1);
-                            return;
-                        }
                         currentStep = stepIndex + 1;
+
                         if (currentStep >= steps.length) {
                             conversationComplete = true;
                             waitingForScroll = false;
-                            parent.postMessage({ type: 'kliphub:conversation-complete' }, location.origin);
+                            try {
+                                parent.postMessage({ type: 'kliphub:conversation-complete' }, location.origin);
+                            } catch(e) {}
+                            setTimeout(() => {
+                                if (!isPaused) restartSimulation();
+                            }, 6000);
                         } else {
                             waitingForScroll = true;
+                            scheduleAutoAdvance();
                         }
                     });
                 }
             }, steps[stepIndex].delay);
         }
 
+        function restartSimulation() {
+            clearTimeout(simulationTimer);
+            clearTimeout(autoAdvanceTimer);
+            waitingForScroll = false;
+            conversationComplete = false;
+            stepInProgress = false;
+            currentStep = 0;
+            runStep(0);
+        }
+
+        function togglePause() {
+            isPaused = !isPaused;
+            const pauseIcon = document.getElementById('pauseIcon');
+            const pauseText = document.getElementById('pauseText');
+            if (isPaused) {
+                clearTimeout(simulationTimer);
+                clearTimeout(autoAdvanceTimer);
+                pauseIcon.className = "fa-solid fa-play text-emerald-400";
+                pauseText.textContent = "Continuar";
+            } else {
+                pauseIcon.className = "fa-solid fa-pause text-emerald-400";
+                pauseText.textContent = "Pausar";
+                runStep(currentStep);
+            }
+        }
+
         window.addEventListener('message', (event) => {
             if (event.origin !== location.origin || event.source !== parent) return;
             if (event.data?.type === 'kliphub:advance' && waitingForScroll && !stepInProgress) {
+                clearTimeout(autoAdvanceTimer);
                 waitingForScroll = false;
                 runStep(currentStep);
             }
         });
 
-        // A wheel or swipe over the embedded laptop is forwarded to the page,
-        // which advances one message at a time and then releases normal scrolling.
         window.addEventListener('wheel', (event) => {
             event.preventDefault();
             if (event.deltaY !== 0) {
+                if (waitingForScroll && !stepInProgress) {
+                    clearTimeout(autoAdvanceTimer);
+                    waitingForScroll = false;
+                    runStep(currentStep);
+                }
                 parent.postMessage({ type: 'kliphub:frame-scroll', direction: event.deltaY > 0 ? 1 : event.deltaY }, location.origin);
             }
         }, { passive: false });
@@ -347,11 +446,15 @@
             const endY = event.changedTouches[0]?.clientY ?? touchStartY;
             const delta = touchStartY - endY;
             if (Math.abs(delta) > 30) {
+                if (waitingForScroll && !stepInProgress) {
+                    clearTimeout(autoAdvanceTimer);
+                    waitingForScroll = false;
+                    runStep(currentStep);
+                }
                 parent.postMessage({ type: 'kliphub:frame-scroll', direction: delta > 0 ? 1 : delta }, location.origin);
             }
         }, { passive: true });
 
-        // Start simulation on load
         window.onload = function() {
             runStep(0);
         };

@@ -3770,13 +3770,9 @@ body.kliphub-landing, .kliphub-landing * { box-sizing:border-box; }
   .kliphub-landing .hero-visual { width:100%; height:450px; min-height:450px; }
   .hero-animation-frame { max-width:560px; height:675px; }
 }
-@media(prefers-reduced-motion:reduce) {
-  .kliphub-landing .hero-copy > .eyebrow,.kliphub-landing .hero-copy > .hero-description,.kliphub-landing .hero-copy > .hero-buttons,.kliphub-landing .hero-copy > .hero-reassurance,.kliphub-landing .hero-copy > .hero-line { opacity:1; animation:none; transform:none; }
-  .kliphub-landing .hero-title-line { opacity:1; animation:none; transform:none; filter:none; }
-  .kliphub-landing .hero-title-line-first { -webkit-text-fill-color: initial; background: none; }
-  .kliphub-landing .hero-rotating-word { opacity:1 !important; transform:none !important; filter:none !important; }
-  .kliphub-landing .hero-title-line-second .highlight-word { animation:none; text-shadow:none; }
-  .kliphub-landing .hero-buttons .button::after,.kliphub-landing .hero h1 .highlight-word svg path,.kliphub-landing .hero-rotating-underline path { animation:none; stroke-dashoffset:0; }
+/* Suporte a navegacao fluida */
+.kliphub-landing .hero-rotating-word {
+  opacity: 1;
 }
 
 
