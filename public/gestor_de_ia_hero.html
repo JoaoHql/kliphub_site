@@ -101,8 +101,8 @@
       html, body.hero-embed, body.hero-embed * { scrollbar-width:none !important; }
       html::-webkit-scrollbar, body.hero-embed::-webkit-scrollbar, body.hero-embed *::-webkit-scrollbar { display:none !important; width:0 !important; height:0 !important; }
       body.hero-embed #chatFeed { overscroll-behavior:contain; scroll-behavior:smooth; }
-      @keyframes hero-chat-appear { from { opacity:0; transform:translateY(7px); } to { opacity:1; transform:translateY(0); } }
-      body.hero-embed .hero-chat-enter { animation:hero-chat-appear 220ms cubic-bezier(.2,.7,.25,1) both; }
+      @keyframes hero-chat-appear { from { opacity:.35; transform:translateY(13px) scale(.99); } to { opacity:1; transform:translateY(0) scale(1); } }
+      body.hero-embed .hero-chat-enter { animation:hero-chat-appear 520ms cubic-bezier(.16,1,.3,1) both; }
       @media(prefers-reduced-motion:reduce) { body.hero-embed .hero-chat-enter { animation:none; } }
       body.hero-embed .hero-laptop::after { display:none; }
       body.hero-embed .hero-laptop::before { display:none; }
