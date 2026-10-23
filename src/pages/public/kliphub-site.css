@@ -3653,25 +3653,9 @@ body.kliphub-landing, .kliphub-landing * { box-sizing:border-box; }
 .kliphub-landing .hero-copy > .hero-buttons { animation-delay:.48s; }
 .kliphub-landing .hero-copy > .hero-reassurance { animation-delay:.6s; }
 .kliphub-landing .hero-copy > .hero-line { animation-delay:.72s; }
-@keyframes hero-title-line-enter {
-  0% { opacity:0; transform:translate3d(0,48px,0) scale(.94); filter:blur(11px); }
-  62% { opacity:1; transform:translate3d(0,-3px,0) scale(1.01); filter:blur(0); }
-  100% { opacity:1; transform:translate3d(0,0,0) scale(1); filter:blur(0); }
-}
-@keyframes hero-title-shimmer {
-  0% { background-position: -200% 0; }
-  35%, 100% { background-position: 200% 0; }
-}
-.kliphub-landing .hero-title-line { display:inline-block; opacity:0; animation:hero-title-line-enter 1.65s cubic-bezier(.16,1,.3,1) both; }
-.kliphub-landing .hero-title-line-first {
-  animation-delay:.12s;
-  background: linear-gradient(90deg, #ffffff 0%, #ffffff 38%, #5eead4 50%, #ffffff 62%, #ffffff 100%);
-  background-size: 250% 100%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: hero-title-line-enter 1.65s cubic-bezier(.16,1,.3,1) both, hero-title-shimmer 7.5s ease-in-out infinite 2.5s;
-}
-.kliphub-landing .hero-title-line-second { animation-delay:.52s; }
+.kliphub-landing .hero-title-line { display:inline-block; opacity:1; }
+.kliphub-landing .hero-title-line-first { color:#ffffff; }
+.kliphub-landing .hero-title-line-second { color:#ffffff; }
 
 /* Eyebrow Chip com radar vivo */
 .kliphub-landing .hero-eyebrow-chip {
@@ -3714,27 +3698,28 @@ body.kliphub-landing, .kliphub-landing * { box-sizing:border-box; }
 }
 .kliphub-landing .hero-rotating-word {
   display: inline-block;
-  background: linear-gradient(135deg, #5eead4 0%, #14b8a6 50%, #2dd4bf 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 16px rgba(20, 184, 166, 0.45));
-  will-change: transform, opacity, filter;
-  transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.38s cubic-bezier(0.16, 1, 0.3, 1), filter 0.38s ease;
+  color: #2dd4bf;
+  text-shadow: 0 0 24px rgba(45, 212, 191, 0.5);
+  font-weight: 700;
+  opacity: 1;
+  transform: translateY(0);
+  transition: transform 0.28s ease, opacity 0.28s ease, filter 0.28s ease;
+  will-change: transform, opacity;
 }
 .kliphub-landing .hero-rotating-word.is-entering {
   opacity: 0;
-  transform: translateY(22px) scale(0.94);
-  filter: blur(8px);
+  transform: translateY(14px);
+  filter: blur(4px);
 }
 .kliphub-landing .hero-rotating-word.is-active {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: translateY(0);
   filter: blur(0);
 }
 .kliphub-landing .hero-rotating-word.is-exiting {
   opacity: 0;
-  transform: translateY(-18px) scale(0.94);
-  filter: blur(8px);
+  transform: translateY(-14px);
+  filter: blur(4px);
 }
 .kliphub-landing .hero-rotating-underline {
   position: absolute;

@@ -31,38 +31,24 @@ export default function KlipHubSitePage() {
   }, []);
 
   useEffect(() => {
-    
+    let t1: any;
+    let t2: any;
     const interval = setInterval(() => {
       setWordPhase('exit');
-      const timer1 = setTimeout(() => {
+      t1 = setTimeout(() => {
         setActiveWordIdx((prev) => (prev + 1) % HERO_ROTATING_WORDS.length);
         setWordPhase('enter');
-        const timer2 = setTimeout(() => {
+        t2 = setTimeout(() => {
           setWordPhase('active');
-        }, 50);
-      }, 350);
-    }, 3200);
+        }, 60);
+      }, 280);
+    }, 2800);
 
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const hero = document.querySelector<HTMLElement>('.kliphub-landing .hero');
-    const lines = Array.from(hero?.querySelectorAll<HTMLElement>('.hero-title-line') ?? []);
-    if (!hero || !lines.length) return;
-
-    const replayTitleEntrance = () => {
-      lines.forEach((line) => {
-        line.style.animation = 'none';
-        void line.offsetWidth;
-        line.style.removeProperty('animation');
-      });
+    return () => {
+      clearInterval(interval);
+      clearTimeout(t1);
+      clearTimeout(t2);
     };
-    const observer = new IntersectionObserver((entries) => {
-      if (entries.some((entry) => entry.isIntersecting)) replayTitleEntrance();
-    }, { threshold: 0.35 });
-    observer.observe(hero);
-    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
