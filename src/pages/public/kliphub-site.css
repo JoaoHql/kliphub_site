@@ -3658,9 +3658,9 @@ body.kliphub-landing, .kliphub-landing * { box-sizing:border-box; }
   62% { opacity:1; transform:translate3d(0,-3px,0) scale(1.01); filter:blur(0); }
   100% { opacity:1; transform:translate3d(0,0,0) scale(1); filter:blur(0); }
 }
-.kliphub-landing .hero-title-line { display:inline-block; opacity:0; animation:hero-title-line-enter 1.65s cubic-bezier(.16,1,.3,1) both; }
-.kliphub-landing .hero-title-line-first { animation-delay:.12s; }
-.kliphub-landing .hero-title-line-second { animation-delay:.52s; }
+.kliphub-landing .hero-title-line { display:inline-block; opacity:0; animation:hero-title-line-enter .6s cubic-bezier(.16,1,.3,1) both; }
+.kliphub-landing .hero-title-line-first { animation-delay:.04s; }
+.kliphub-landing .hero-title-line-second { animation-delay:.12s; }
 @keyframes hero-highlight-breathe {
   0%,100% { text-shadow:0 0 6px rgba(18,199,168,.28), 0 0 2px rgba(18,199,168,.2); }
   50% { text-shadow:0 0 26px rgba(18,199,168,.62), 0 0 8px rgba(18,199,168,.45); }
@@ -3674,11 +3674,13 @@ body.kliphub-landing, .kliphub-landing * { box-sizing:border-box; }
 .kliphub-landing .hero-buttons .button::after { content:''; position:absolute; z-index:-1; inset:-4px; border:1px solid rgba(232,163,109,.45); border-radius:inherit; pointer-events:none; animation:hero-cta-breathe 5s ease-in-out infinite; }
 .kliphub-landing .hero h1 .highlight-word svg path { stroke-dasharray:360; stroke-dashoffset:360; animation:hero-title-underline 1.1s .35s ease-out forwards; }
 @keyframes hero-title-underline { to { stroke-dashoffset:0; } }
-/* Rotacao do ultimo verbo do titulo: herda cor, peso e brilho do .highlight-word original */
-.kliphub-landing .hero-rotating-word { display:inline-block; transition:opacity .28s ease, transform .28s ease, filter .28s ease; will-change:opacity, transform; }
-.kliphub-landing .hero-rotating-word.is-entering { opacity:0; transform:translateY(.32em); filter:blur(4px); }
-.kliphub-landing .hero-rotating-word.is-active { opacity:1; transform:translateY(0); filter:blur(0); }
-.kliphub-landing .hero-rotating-word.is-exiting { opacity:0; transform:translateY(-.32em); filter:blur(4px); }
+/* Entrada do verbo vindo da esquerda para a posicao original */
+@keyframes hero-word-from-left {
+  0% { opacity:0; transform:translate3d(-48px,0,0); }
+  68% { opacity:1; transform:translate3d(3px,0,0); }
+  100% { opacity:1; transform:translate3d(0,0,0); }
+}
+.kliphub-landing .hero-rotating-word { display:inline-block; animation:hero-word-from-left .5s cubic-bezier(.16,1,.3,1) both; will-change:transform, opacity; }
 /* Simulador e apenas demonstrativo: o scroll do mouse/toque passa direto para a pagina */
 .kliphub-landing .hero-animation-iframe { pointer-events:none; }
 @media(max-width:760px) {

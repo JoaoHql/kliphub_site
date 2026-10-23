@@ -11,23 +11,19 @@ export default function KlipHubSitePage() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [activeWordIdx, setActiveWordIdx] = useState(0);
-  const [wordPhase, setWordPhase] = useState<'enter' | 'active' | 'exit'>('active');
 
   useEffect(() => {
-    let swapTimer: number | undefined;
-    let settleTimer: number | undefined;
-    const interval = window.setInterval(() => {
-      setWordPhase('exit');
-      swapTimer = window.setTimeout(() => {
+    let interval: number | undefined;
+    // Primeira troca em menos de 1 segundo (750ms) logo no inicio do site
+    const firstSwapTimer = window.setTimeout(() => {
+      setActiveWordIdx((prev) => (prev + 1) % HERO_ROTATING_WORDS.length);
+      interval = window.setInterval(() => {
         setActiveWordIdx((prev) => (prev + 1) % HERO_ROTATING_WORDS.length);
-        setWordPhase('enter');
-        settleTimer = window.setTimeout(() => setWordPhase('active'), 60);
-      }, 280);
-    }, 2800);
+      }, 2200);
+    }, 750);
     return () => {
+      window.clearTimeout(firstSwapTimer);
       window.clearInterval(interval);
-      window.clearTimeout(swapTimer);
-      window.clearTimeout(settleTimer);
     };
   }, []);
 
@@ -147,10 +143,7 @@ export default function KlipHubSitePage() {
             <h1>
               <span className="hero-title-line hero-title-line-first">Seu talento é cortar.</span><br />
               <span className="hero-title-line hero-title-line-second">O nosso é <span className="highlight-word">
-                <span
-                  key={activeWordIdx}
-                  className={`hero-rotating-word is-${wordPhase === 'exit' ? 'exiting' : wordPhase === 'enter' ? 'entering' : 'active'}`}
-                >
+                <span key={activeWordIdx} className="hero-rotating-word">
                   {HERO_ROTATING_WORDS[activeWordIdx]}
                 </span>
                 <svg aria-hidden="true" key={`underline-${activeWordIdx}`} viewBox="0 0 360 20">
@@ -186,7 +179,7 @@ export default function KlipHubSitePage() {
                 aria-label="Animação original de conversa do Gestor de IA"
                 className="hero-animation-iframe"
                 loading="eager"
-                src={`${import.meta.env.BASE_URL}gestor_de_ia_hero.html?v=20261023-0010`}
+                src={`${import.meta.env.BASE_URL}gestor_de_ia_hero.html?v=20261023-0011`}
                 title="Demonstração animada do Gestor de IA"
               />
             </div>
