@@ -25,18 +25,30 @@ export default function KlipHubSitePage() {
     if (!hero || !frame) return;
 
     let conversationComplete = false;
-    let lastAdvanceAt = 0;
+    let wheelGestureLocked = false;
+    let wheelGestureTimer: number | undefined;
     let touchStartY = 0;
-    let touchStartedInHero = false;
+    let touchStartedWhileHeroVisible = false;
+    let touchGestureUsed = false;
+
+    const heroIsVisible = () => {
+      const rect = hero.getBoundingClientRect();
+      return rect.bottom > 0 && rect.top < window.innerHeight;
+    };
+
+    const scrollToNextSection = () => {
+      document.querySelector('.kliphub-landing .benefit-ribbon')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
 
     const advanceOrContinue = () => {
+      if (wheelGestureLocked) return;
+      wheelGestureLocked = true;
+      window.clearTimeout(wheelGestureTimer);
+      wheelGestureTimer = window.setTimeout(() => { wheelGestureLocked = false; }, 180);
       if (conversationComplete) {
-        document.querySelector('.kliphub-landing .benefit-ribbon')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        scrollToNextSection();
         return;
       }
-      const now = Date.now();
-      if (now - lastAdvanceAt < 700) return;
-      lastAdvanceAt = now;
       frame.contentWindow?.postMessage({ type: 'kliphub:advance' }, window.location.origin);
     };
 
@@ -51,22 +63,23 @@ export default function KlipHubSitePage() {
     };
 
     const handlePageWheel = (event: WheelEvent) => {
-      if (event.deltaY <= 0 || !hero.contains(event.target as Node) || conversationComplete) return;
+      if (event.deltaY <= 0 || !heroIsVisible()) return;
       event.preventDefault();
       advanceOrContinue();
     };
 
     const handleTouchStart = (event: TouchEvent) => {
-      touchStartedInHero = hero.contains(event.target as Node);
+      touchStartedWhileHeroVisible = heroIsVisible();
+      touchGestureUsed = false;
       touchStartY = event.touches[0]?.clientY ?? 0;
     };
 
     const handleTouchMove = (event: TouchEvent) => {
-      if (!touchStartedInHero || conversationComplete || !event.touches[0]) return;
+      if (!touchStartedWhileHeroVisible || touchGestureUsed || !event.touches[0]) return;
       const currentY = event.touches[0].clientY;
       if (touchStartY - currentY > 36) {
         event.preventDefault();
-        touchStartY = currentY;
+        touchGestureUsed = true;
         advanceOrContinue();
       }
     };
@@ -80,6 +93,7 @@ export default function KlipHubSitePage() {
       window.removeEventListener('wheel', handlePageWheel, true);
       window.removeEventListener('touchstart', handleTouchStart, true);
       window.removeEventListener('touchmove', handleTouchMove, true);
+      window.clearTimeout(wheelGestureTimer);
     };
   }, []);
 

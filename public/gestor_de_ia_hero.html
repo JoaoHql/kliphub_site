@@ -91,8 +91,8 @@
       html, body.hero-embed { width:100%; height:100%; min-height:0; margin:0; padding:0; background:#070707 !important; }
       body.hero-embed { overflow:hidden; padding:0 !important; }
       body.hero-embed > div:nth-of-type(1), body.hero-embed > div:nth-of-type(2), body.hero-embed > div:nth-of-type(3) { display:none !important; }
-      body.hero-embed > div.hero-laptop { width:100%; max-width:560px; height:675px; margin:0 !important; padding:0 0 30px; box-sizing:border-box; position:relative; }
-      body.hero-embed .hero-laptop-screen { width:100%; height:645px !important; border-radius:14px; border-color:#363735; background:#111210; box-shadow:0 24px 55px #0008; }
+      body.hero-embed > div.hero-laptop { width:100%; max-width:560px; height:675px; margin:0 !important; padding:0; box-sizing:border-box; position:relative; }
+      body.hero-embed .hero-laptop-screen { width:100%; height:675px !important; border-radius:14px; border-color:#363735; background:#111210; box-shadow:0 24px 55px #0008; }
       body.hero-embed .hero-laptop-browser { display:none !important; }
       body.hero-embed .hero-laptop-appbar { min-height:62px; justify-content:space-between; background:#151614; border-bottom-color:#30312e; }
       body.hero-embed .hero-laptop-appbar > div:first-child { display:flex; }
@@ -101,7 +101,7 @@
       html, body.hero-embed, body.hero-embed * { scrollbar-width:none !important; }
       html::-webkit-scrollbar, body.hero-embed::-webkit-scrollbar, body.hero-embed *::-webkit-scrollbar { display:none !important; width:0 !important; height:0 !important; }
       body.hero-embed #chatFeed { overscroll-behavior:contain; }
-      body.hero-embed .hero-laptop::after { content:''; position:absolute; z-index:3; bottom:10px; left:-4%; width:108%; height:15px; border-radius:0 0 12px 12px; background:linear-gradient(180deg,#343532 0%,#252623 30%,#181917 72%,#10110f 100%); box-shadow:0 5px 8px #0007; clip-path:polygon(0 0,100% 0,97% 80%,92% 100%,8% 100%,3% 80%); }
+      body.hero-embed .hero-laptop::after { display:none; }
       body.hero-embed .hero-laptop::before { display:none; }
       body.hero-embed .hero-laptop-os-nav { display:none !important; }
       .hero-embed .hero-frame-glow { display:none !important; }
@@ -164,7 +164,7 @@
                 </div>
             </div>
 
-            <div id="chatFeed" class="flex-1 overflow-y-auto p-4 space-y-4 flex flex-col scroll-smooth">
+            <div id="chatFeed" class="flex-1 overflow-y-auto p-4 space-y-4 flex flex-col">
                 <!-- Messages and typing indicators will be dynamically inserted here -->
             </div>
 
@@ -198,110 +198,67 @@
 
         const steps = [
             {
-                delay: 350,
+                delay: 100,
                 action: (next) => {
                     chatFeed.innerHTML = '';
                     next();
                 }
             },
-            // Primeira pergunta e resposta entram automaticamente.
-            {
-                delay: 500,
-                action: (next) => {
-                    typeUserPrompt("Quais clientes estão na hora de voltar e ainda não agendaram?", () => {
-                        appendUserMessage("Quais clientes estão na hora de voltar e ainda não agendaram?");
-                        scrollToBottom();
-                        next();
-                    });
-                }
-            },
-            {
-                delay: 450,
-                action: (next) => {
-                    showTypingIndicator();
-                    scrollToBottom();
-                    setTimeout(() => {
-                        removeTypingIndicator();
-                        appendAIMessage("Identifiquei 18 clientes que passaram do intervalo habitual de retorno e ainda não agendaram. Juntos, eles representam R$ 900 em serviços potenciais.");
-                        scrollToBottom();
-                        next();
-                    }, 1100);
-                }
-            },
-            // Cada passo seguinte exige uma rolagem para baixo.
-            {
-                delay: 120,
-                action: (next) => {
-                    typeUserPrompt("Onde minha agenda está vazia nesta semana?", () => {
-                        appendUserMessage("Onde minha agenda está vazia nesta semana?");
-                        scrollToBottom();
-                        next();
-                    });
-                }
-            },
+            // A primeira pergunta e sua resposta entram automaticamente, sem efeito de digitação.
             {
                 delay: 180,
                 action: (next) => {
-                    showTypingIndicator();
+                    appendUserMessage("Quais clientes estão na hora de voltar e ainda não agendaram?");
                     scrollToBottom();
-                    setTimeout(() => {
-                        removeTypingIndicator();
-                        appendAIMessage("Sua agenda está com maior ociosidade na quinta-feira à tarde (14h às 17h) e sexta-feira pela manhã. Recomendo disparar lembretes promocionais para estes horários.");
-                        scrollToBottom();
-                        next();
-                    }, 1100);
+                    next();
                 }
             },
             {
-                delay: 120,
+                delay: 220,
                 action: (next) => {
-                    typeUserPrompt("Qual serviço teve maior demanda este mês?", () => {
-                        appendUserMessage("Qual serviço teve maior demanda este mês?");
-                        scrollToBottom();
-                        next();
-                    });
+                    appendAIMessage("Identifiquei 18 clientes que passaram do intervalo habitual de retorno e ainda não agendaram. Juntos, eles representam R$ 900 em serviços potenciais.");
+                    scrollToBottom();
+                    next();
+                }
+            },
+            // Cada scroll subsequente apresenta imediatamente um único balão.
+            {
+                delay: 0,
+                action: (next) => {
+                    appendUserMessage("Onde minha agenda está vazia nesta semana?");
+                    scrollToBottom();
+                    next();
                 }
             },
             {
-                delay: 180,
+                delay: 0,
                 action: (next) => {
-                    showTypingIndicator();
+                    appendAIMessage("Sua agenda está com maior ociosidade na quinta-feira à tarde (14h às 17h) e sexta-feira pela manhã. Recomendo disparar lembretes promocionais para estes horários.");
                     scrollToBottom();
-                    setTimeout(() => {
-                        removeTypingIndicator();
-                        appendAIMessage("O serviço mais procurado nos últimos 30 dias foi o Corte & Hidratação, gerando 42 atendimentos concluídos e R$ 4.200 em receita total registrada.");
-                        scrollToBottom();
-                        next();
-                    }, 1100);
+                    next();
+                }
+            },
+            {
+                delay: 0,
+                action: (next) => {
+                    appendUserMessage("Qual serviço teve maior demanda este mês?");
+                    scrollToBottom();
+                    next();
+                }
+            },
+            {
+                delay: 0,
+                action: (next) => {
+                    appendAIMessage("O serviço mais procurado nos últimos 30 dias foi o Corte & Hidratação, gerando 42 atendimentos concluídos e R$ 4.200 em receita total registrada.");
+                    scrollToBottom();
+                    next();
                 }
             }
         ];
 
-        function typeUserPrompt(text, callback) {
-            userInputMock.value = '';
-            let index = 0;
-            sendBtnMock.classList.replace('bg-emerald-600/20', 'bg-emerald-500');
-            sendBtnMock.classList.replace('text-emerald-400', 'text-black');
-
-            const interval = setInterval(() => {
-                if (isPaused) return;
-                userInputMock.value += text[index];
-                index++;
-                if (index >= text.length) {
-                    clearInterval(interval);
-                    setTimeout(() => {
-                        userInputMock.value = '';
-                        sendBtnMock.classList.replace('bg-emerald-500', 'bg-emerald-600/20');
-                        sendBtnMock.classList.replace('text-black', 'text-emerald-400');
-                        callback();
-                    }, 300);
-                }
-            }, 25);
-        }
-
         function appendUserMessage(text) {
             const div = document.createElement('div');
-            div.className = "flex flex-col items-end self-end max-w-[85%] animate-fadeInUp";
+            div.className = "flex flex-col items-end self-end max-w-[85%]";
             div.innerHTML = `
                 <div class="bg-gradient-to-r from-emerald-800 to-emerald-700 text-emerald-50 px-4 py-3 rounded-2xl rounded-tr-sm text-xs leading-relaxed border border-emerald-500/30 font-medium user-glow">
                     ${text}
@@ -315,7 +272,7 @@
 
         function appendAIMessage(text) {
             const div = document.createElement('div');
-            div.className = "flex flex-col items-start self-start max-w-[92%] animate-fadeInUp";
+            div.className = "flex flex-col items-start self-start max-w-[92%]";
             div.innerHTML = `
                 <div class="bg-gradient-to-b from-[#25252a] to-[#1c1c20] text-zinc-100 px-4 py-3.5 rounded-2xl rounded-tl-sm text-xs leading-relaxed border border-zinc-700/60 ai-glow">
                     ${text}
@@ -325,30 +282,8 @@
             chatFeed.appendChild(div);
         }
 
-        function showTypingIndicator() {
-            const div = document.createElement('div');
-            div.id = 'typingIndicator';
-            div.className = "flex flex-col items-start self-start animate-fadeInUp";
-            div.innerHTML = `
-                <div class="bg-zinc-800/70 border border-zinc-700/40 px-4 py-3 rounded-2xl rounded-tl-sm flex items-center gap-1.5">
-                    <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-dot1"></span>
-                    <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-dot2"></span>
-                    <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-dot3"></span>
-                </div>
-            `;
-            chatFeed.appendChild(div);
-        }
-
-        function removeTypingIndicator() {
-            const el = document.getElementById('typingIndicator');
-            if (el) el.remove();
-        }
-
         function scrollToBottom() {
-            chatFeed.scrollTo({
-                top: chatFeed.scrollHeight,
-                behavior: 'smooth'
-            });
+            chatFeed.scrollTop = chatFeed.scrollHeight;
         }
 
         let waitingForScroll = false;

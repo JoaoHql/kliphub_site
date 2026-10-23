@@ -3653,10 +3653,14 @@ body.kliphub-landing, .kliphub-landing * { box-sizing:border-box; }
 .kliphub-landing .hero-copy > .hero-buttons { animation-delay:.48s; }
 .kliphub-landing .hero-copy > .hero-reassurance { animation-delay:.6s; }
 .kliphub-landing .hero-copy > .hero-line { animation-delay:.72s; }
-@keyframes hero-title-line-enter { from { opacity:0; transform:translateY(22px); filter:blur(3px); } to { opacity:1; transform:translateY(0); filter:blur(0); } }
-.kliphub-landing .hero-title-line { display:inline-block; opacity:0; animation:hero-title-line-enter .95s cubic-bezier(.2,.7,.25,1) forwards; }
-.kliphub-landing .hero-title-line-first { animation-delay:.14s; }
-.kliphub-landing .hero-title-line-second { animation-delay:.42s; }
+@keyframes hero-title-line-enter {
+  0% { opacity:0; transform:translate3d(0,34px,0) scale(.96); filter:blur(8px); }
+  68% { opacity:1; transform:translate3d(0,-2px,0) scale(1.005); filter:blur(0); }
+  100% { opacity:1; transform:translate3d(0,0,0) scale(1); filter:blur(0); }
+}
+.kliphub-landing .hero-title-line { display:inline-block; opacity:0; animation:hero-title-line-enter 1.15s cubic-bezier(.2,.7,.25,1) both; }
+.kliphub-landing .hero-title-line-first { animation-delay:.08s; }
+.kliphub-landing .hero-title-line-second { animation-delay:.34s; }
 @keyframes hero-cta-breathe {
   0%, 72%, 100% { opacity:0; transform:scale(1); }
   82% { opacity:.7; transform:scale(1.035); }
