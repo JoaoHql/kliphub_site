@@ -1,0 +1,2186 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KlipHub | Agenda do Dia — Demonstração Interativa Fiel</title>
+<!-- Fontes oficiais do sistema -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Oswald:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg-base: #070707;
+  --bg-top: #0e0e0e;
+  --bg-card: #121212;
+  --bg-card-hover: #171717;
+  --bg-lane: #0d0d0d;
+  --line: rgba(255, 255, 255, 0.07);
+  --line-strong: rgba(255, 255, 255, 0.12);
+  --text-primary: #ffffff;
+  --text-soft: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-faint: #64748b;
+  --teal-accent: #14b8a6;
+  --emerald-accent: #10b981;
+  --emerald-glow: rgba(16, 185, 129, 0.28);
+  --st-confirmed: #10b981;
+  --st-pending: #f59e0b;
+  --st-completed: #3b82f6;
+  --st-cancelled: #ef4444;
+  --st-absent: #a855f7;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+svg {
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg-base);
+  color: var(--text-soft);
+  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+  font-size: 12px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.shell {
+  height: 100%;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  grid-template-rows: 52px 1fr;
+}
+
+/* ==================== SIDEBAR PRINCIPAL (ESQUERDA - FIEL AO SISTEMA) ==================== */
+.sidebar {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  background: #090909;
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 20;
+  padding: 8px 0;
+}
+.brand-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #31bbab;
+  box-shadow: 0 2px 10px rgba(20, 184, 166, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  flex-shrink: 0;
+}
+.brand-logo:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 14px rgba(20, 184, 166, 0.4);
+}
+.brand-logo img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+.side-chevron-btn {
+  width: 32px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  cursor: pointer;
+  transition: color 0.2s;
+  margin: 2px 0 6px;
+  flex-shrink: 0;
+}
+.side-chevron-btn:hover { color: #10b981; }
+.side-chevron-btn svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+.sideicons {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.sideicons::-webkit-scrollbar { display: none; }
+.ico {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+.ico:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+.ico svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  fill: none;
+}
+.ico.active {
+  background: rgba(16, 185, 129, 0.15);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+}
+.divider {
+  width: 24px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 4px 0;
+  flex-shrink: 0;
+}
+.user-badge {
+  margin: 4px 0 2px;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.user-badge:hover {
+  border-color: rgba(16, 185, 129, 0.5);
+  transform: scale(1.04);
+}
+
+/* ==================== TOPBAR ==================== */
+.topbar {
+  grid-column: 2;
+  grid-row: 1;
+  background: var(--bg-top);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 16px;
+  z-index: 10;
+}
+.search-box {
+  height: 34px;
+  width: 320px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #141414;
+  color: #8b929b;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  gap: 8px;
+  font-size: 12px;
+  transition: border-color 0.2s;
+}
+.search-box svg {
+  width: 15px;
+  height: 15px;
+  color: #6d747d;
+  flex-shrink: 0;
+}
+.topright {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.shop-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: #10b981;
+  padding: 5px 12px;
+  border-radius: 16px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.shop-status .live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 6px #10b981;
+  animation: pulseDot 2s infinite;
+}
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.85); }
+}
+.top-action-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  outline: none;
+}
+.top-action-btn svg {
+  width: 17px;
+  height: 17px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  transition: transform 0.2s ease;
+}
+.top-action-btn:hover svg {
+  transform: scale(1.08);
+}
+
+/* 1. Botão de Notificação: Esmeralda com dot luminoso */
+.top-action-btn.notif-btn {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.28);
+  color: #34d399;
+}
+.top-action-btn.notif-btn:hover {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.5);
+  color: #6ee7b7;
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.3);
+}
+.top-action-btn.notif-btn .badge-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #f43f5e;
+  box-shadow: 0 0 8px #f43f5e;
+  border: 1.5px solid #0d0d0d;
+}
+
+/* 2. Botão de Configurações: Vidro neutro com teal suave no hover */
+.top-action-btn.settings-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+}
+.top-action-btn.settings-btn:hover {
+  background: rgba(20, 184, 166, 0.14);
+  border-color: rgba(20, 184, 166, 0.4);
+  color: #2dd4bf;
+  box-shadow: 0 0 12px rgba(20, 184, 166, 0.2);
+}
+
+/* 3. Botão de Encerrar Sessão: Vermelho corporativo de alerta */
+.top-action-btn.logout-btn {
+  background: rgba(239, 68, 68, 0.09);
+  border: 1px solid rgba(239, 68, 68, 0.26);
+  color: #f87171;
+}
+.top-action-btn.logout-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.55);
+  color: #fca5a5;
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.35);
+}
+
+/* ==================== ÁREA DE CONTEÚDO ==================== */
+.content {
+  grid-column: 2;
+  grid-row: 2;
+  min-width: 0;
+  min-height: 0;
+  padding: 16px 20px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+}
+
+/* Header Oficial do Cockpit */
+.header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: none;
+}
+.title-block h1 {
+  font-family: 'Oswald', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  line-height: 1.15;
+}
+.title-block .subtitle-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 3px;
+}
+.title-block .glow-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.9);
+}
+.title-block p {
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+/* Controles de Data e Divulgação */
+.date-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.date-navigator {
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #111317;
+  border-radius: 14px;
+  padding: 3px 5px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  gap: 4px;
+}
+.date-nav-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.date-nav-btn:hover {
+  background: rgba(16, 185, 129, 0.18);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #34d399;
+}
+.date-nav-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor !important;
+  fill: none !important;
+  stroke-width: 2.2 !important;
+}
+.date-today-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  color: #f1f5f9;
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.date-today-btn:hover {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.45);
+  color: #6ee7b7;
+}
+.date-display-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  border-radius: 10px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.28);
+  color: #5eead4;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.date-display-btn:hover {
+  background: rgba(16, 185, 129, 0.18);
+  border-color: rgba(16, 185, 129, 0.5);
+  color: #ffffff;
+}
+.date-cal-badge {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: rgba(16, 185, 129, 0.22);
+  border: 1px solid rgba(16, 185, 129, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #34d399;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+  flex-shrink: 0;
+}
+.date-cal-badge svg {
+  width: 15px;
+  height: 15px;
+  stroke: #34d399 !important;
+  fill: none !important;
+  stroke-width: 2 !important;
+}
+.btn-divulgacao {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(20, 184, 166, 0.35);
+  background: rgba(20, 184, 166, 0.12);
+  color: #5eead4;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 10px rgba(20, 184, 166, 0.15);
+  white-space: nowrap;
+}
+.btn-divulgacao:hover {
+  background: rgba(20, 184, 166, 0.22);
+  border-color: rgba(20, 184, 166, 0.55);
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(20, 184, 166, 0.25);
+}
+.btn-divulgacao svg {
+  width: 15px;
+  height: 15px;
+  stroke: #2dd4bf !important;
+  fill: none !important;
+  stroke-width: 2 !important;
+}
+.btn-divulgacao svg { width: 14px; height: 14px; color: #2dd4bf; }
+
+/* ==================== TOOLBAR DA AGENDA ==================== */
+.agenda-toolbar {
+  height: 54px;
+  flex: none;
+  background: #111111;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  gap: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.agenda-toolbar::-webkit-scrollbar { display: none; }
+.tool-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.cal-box-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid rgba(16, 185, 129, 0.38);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #34d399;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+  flex-shrink: 0;
+}
+.cal-box-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke: #34d399 !important;
+  fill: none !important;
+  stroke-width: 2 !important;
+}
+.tool-title-group strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+}
+.tool-title-group small {
+  display: block;
+  font-size: 10px;
+  color: #94a3b8;
+  margin-top: 1px;
+  text-transform: capitalize;
+}
+.view-tabs {
+  display: flex;
+  background: #161616;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 2px;
+  flex-shrink: 0;
+}
+.view-tabs button {
+  background: transparent;
+  border: 0;
+  color: #94a3b8;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.view-tabs button.active {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+.status-legend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  font-size: 9px;
+  color: #94a3b8;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.legend-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.btn-action {
+  height: 33px;
+  padding: 0 11px;
+  border-radius: 9px;
+  background: #161616;
+  border: 1px solid var(--line);
+  color: #d1d5db;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.btn-action:hover {
+  background: #202020;
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.18);
+}
+.btn-action svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+.btn-action.play-anim {
+  background: rgba(20, 184, 166, 0.12);
+  border-color: rgba(20, 184, 166, 0.35);
+  color: #2dd4bf;
+}
+.btn-action.play-anim:hover {
+  background: rgba(20, 184, 166, 0.22);
+  color: #fff;
+}
+.btn-action.btn-primary {
+  background: #10b981;
+  border-color: #059669;
+  color: #042f2e;
+}
+.btn-action.btn-primary:hover {
+  background: #059669;
+  color: #ffffff;
+}
+.btn-action.btn-summary-toggle {
+  color: #2dd4bf;
+  border-color: rgba(20, 184, 166, 0.3);
+  background: rgba(20, 184, 166, 0.08);
+}
+
+/* ==================== WORKSPACE PRINCIPAL (GRADE + RESUMO) ==================== */
+.workspace {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  gap: 14px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Container da Grade */
+.grid-container {
+  flex: 1;
+  min-width: 0;
+  background: #0d0d0d;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+.grid-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: auto;
+  position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: #262626 #0f0f0f;
+  scroll-behavior: smooth;
+}
+.grid-scroll::-webkit-scrollbar { width: 6px; height: 8px; }
+.grid-scroll::-webkit-scrollbar-track { background: #0f0f0f; }
+.grid-scroll::-webkit-scrollbar-thumb { background: #262626; border-radius: 6px; }
+.grid-scroll::-webkit-scrollbar-thumb:hover { background: #14b8a6; }
+
+.grid-content-inner {
+  min-width: 1080px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Cabeçalho dos Barbeiros - SEMPRE OPACO E SOBREPOSTO AOS CARDS */
+.staff-header-row {
+  display: grid;
+  grid-template-columns: 65px repeat(6, minmax(165px, 1fr));
+  background: #141414 !important;
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 50 !important;
+  height: 50px;
+}
+.staff-col-time-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  color: #64748b;
+  letter-spacing: 0.1em;
+  border-right: 1px solid var(--line);
+  background: #141414 !important;
+  z-index: 50 !important;
+}
+.staff-card-header {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  gap: 8px;
+  border-right: 1px solid var(--line);
+  background: #141414 !important;
+  z-index: 50 !important;
+  min-width: 0;
+}
+.staff-avatar-box {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: #10b981;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.staff-avatar-box svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+.staff-meta {
+  min-width: 0;
+  overflow: hidden;
+  flex: 1;
+}
+.staff-meta strong {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.staff-meta small {
+  display: block;
+  font-size: 10px;
+  color: #94a3b8;
+  margin-top: 1px;
+}
+.staff-revenue {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: 800;
+  color: #10b981;
+  white-space: nowrap;
+}
+
+/* Corpo da Grade Horária */
+.schedule-body {
+  display: grid;
+  grid-template-columns: 65px repeat(6, minmax(165px, 1fr));
+  position: relative;
+  height: 840px; /* 12 horas x 70px */
+}
+.time-col {
+  position: relative;
+  background: #111111;
+  border-right: 1px solid var(--line);
+  z-index: 2;
+}
+.hour-tick {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: #64748b;
+  transform: translateY(-50%);
+  padding-right: 4px;
+}
+.barber-lane {
+  position: relative;
+  border-right: 1px solid rgba(255, 255, 255, 0.04);
+  background: linear-gradient(to bottom, #101010, #0c0c0c);
+}
+.hour-guide-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.04);
+}
+
+/* Card de Agendamento na Grade */
+.apt-card {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  border-radius: 10px;
+  background: #161616;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 6px 8px 6px 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+  animation: cardFadeIn 0.28s ease-out both;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 2;
+}
+@keyframes cardFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.apt-card:hover {
+  transform: scale(1.02);
+  border-color: rgba(16, 185, 129, 0.45);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  z-index: 5;
+}
+.apt-card-stripe {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: 10px 0 0 10px;
+}
+.apt-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+}
+.apt-client-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.apt-time {
+  font-size: 10px;
+  font-weight: 700;
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+.apt-service {
+  font-size: 10px;
+  color: #94a3b8;
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.apt-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-size: 10px;
+}
+.apt-value {
+  font-weight: 700;
+  color: #10b981;
+}
+.apt-status-text {
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+/* ==================== ANIMAÇÃO DISCRETA DE INSPEÇÃO ==================== */
+@keyframes cardInspectPulse {
+  0% {
+    transform: scale(1);
+    border-color: rgba(20, 184, 166, 0.4);
+    box-shadow: 0 0 0 1px rgba(20, 184, 166, 0.2);
+  }
+  50% {
+    transform: scale(1.025);
+    border-color: rgba(20, 184, 166, 0.95);
+    box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.4), 0 4px 16px rgba(20, 184, 166, 0.25);
+    background: #162420 !important;
+  }
+  100% {
+    transform: scale(1.015);
+    border-color: rgba(20, 184, 166, 0.7);
+    box-shadow: 0 0 0 1px rgba(20, 184, 166, 0.3);
+  }
+}
+.apt-card.inspecting {
+  animation: cardInspectPulse 0.72s ease-in-out infinite alternate;
+  z-index: 6;
+  border-color: rgba(20, 184, 166, 0.85) !important;
+}
+.apt-card.inspecting .apt-client-name {
+  color: #5eead4;
+}
+
+/* ==================== SIDEBAR DIREITA: RESUMO DO DIA ==================== */
+.summary-panel {
+  width: 360px;
+  flex: none;
+  background: #111111;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: width 0.3s ease, opacity 0.3s ease;
+}
+.summary-panel.collapsed {
+  width: 0;
+  opacity: 0;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  pointer-events: none;
+}
+.summary-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.summary-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.summary-icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid rgba(16, 185, 129, 0.38);
+  color: #34d399;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+  flex-shrink: 0;
+}
+.summary-icon-box svg {
+  width: 18px;
+  height: 18px;
+  stroke: #34d399 !important;
+  fill: none !important;
+  stroke-width: 2 !important;
+}
+.summary-header h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+}
+.summary-header p {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 2px;
+  text-transform: capitalize;
+}
+.summary-refresh-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #161616;
+  border: 1px solid var(--line);
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.summary-refresh-btn:hover {
+  background: #202020;
+  color: #fff;
+}
+.summary-refresh-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+
+/* Abas de Filtro do Resumo */
+.summary-tabs {
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.summary-tab-btn {
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid transparent;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+.summary-tab-btn.active {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+.summary-tab-btn:hover:not(.active) {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Lista de Cards do Resumo */
+.summary-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: #262626 transparent;
+  scroll-behavior: smooth;
+}
+.summary-list::-webkit-scrollbar { width: 4px; }
+.summary-list::-webkit-scrollbar-thumb { background: #262626; border-radius: 4px; }
+
+.summary-card {
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: #141414;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+}
+.summary-card:hover {
+  background: #181818;
+  border-color: rgba(16, 185, 129, 0.35);
+  transform: translateY(-1px);
+}
+.summary-card.inspecting {
+  border-color: rgba(20, 184, 166, 0.6) !important;
+  background: #16201e !important;
+  box-shadow: 0 0 16px rgba(20, 184, 166, 0.25);
+}
+.summary-card-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.summary-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #18181b;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
+}
+.summary-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  border-radius: 11px;
+  transition: transform 0.25s ease;
+}
+.summary-card:hover .summary-avatar-img {
+  transform: scale(1.08);
+}
+.summary-avatar-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(16, 185, 129, 0.16);
+  color: #34d399;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+.summary-info {
+  flex: 1;
+  min-width: 0;
+}
+.summary-row-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.summary-client {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.summary-time {
+  font-size: 12px;
+  font-weight: 700;
+  color: #10b981;
+}
+.summary-service {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.summary-barber-tag {
+  font-size: 10px;
+  color: #64748b;
+  margin-top: 1px;
+}
+.summary-row-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+.status-pill {
+  padding: 2px 8px;
+  border-radius: 16px;
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.status-pill.confirmed { background: rgba(16, 185, 129, 0.12); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.25); }
+.status-pill.pending { background: rgba(245, 158, 11, 0.12); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.25); }
+.status-pill.completed { background: rgba(59, 130, 246, 0.12); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.25); }
+.status-pill.cancelled { background: rgba(239, 68, 68, 0.12); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.25); }
+.status-pill.absent { background: rgba(168, 85, 247, 0.12); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.25); }
+
+.summary-value {
+  font-size: 11px;
+  font-weight: 700;
+  color: #cbd5e1;
+}
+.summary-plan-note {
+  font-size: 10px;
+  font-weight: 600;
+  color: #10b981;
+  margin-top: 6px;
+}
+.summary-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 10px;
+}
+.summary-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 8px;
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  background: transparent;
+  transition: all 0.15s;
+}
+.summary-btn.absent {
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  color: #d8b4fe;
+}
+.summary-btn.absent:hover { background: rgba(168, 85, 247, 0.12); }
+.summary-btn.cancel {
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #fca5a5;
+}
+.summary-btn.cancel:hover { background: rgba(239, 68, 68, 0.12); }
+.summary-btn.finish {
+  border: 1px solid rgba(16, 185, 129, 0.28);
+  background: rgba(16, 185, 129, 0.1);
+  color: #6ee7b7;
+}
+.summary-btn.finish:hover { background: rgba(16, 185, 129, 0.2); }
+.summary-btn svg { width: 11px; height: 11px; }
+
+.summary-footer {
+  padding: 12px 16px;
+  border-top: 1px solid var(--line);
+  font-size: 10px;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.summary-footer strong {
+  color: #ffffff;
+}
+
+/* ==================== ANIMAÇÃO DE TROCA DE DIA ==================== */
+.grid-content-inner.day-enter {
+  animation: daySlideIn 0.52s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.grid-content-inner.day-back {
+  animation: daySlideBack 0.52s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes daySlideIn {
+  0% { opacity: 0.1; transform: translateX(80px); filter: blur(2px); }
+  100% { opacity: 1; transform: translateX(0); filter: blur(0); }
+}
+@keyframes daySlideBack {
+  0% { opacity: 0.1; transform: translateX(-80px); filter: blur(2px); }
+  100% { opacity: 1; transform: translateX(0); filter: blur(0); }
+}
+
+
+
+/* Toast de feedback */
+.toast-msg {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translate(-50%, 12px);
+  background: #141414;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s ease;
+  z-index: 50;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+.toast-msg.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <!-- SIDEBAR LATERAL (ESQUERDA) -->
+  <aside class="sidebar">
+    <div class="brand-logo" title="KlipHub — Painel Principal">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAACl9JREFUeJztW2mwHUUV/s68vOme9/Iea9hSUgmk2EoSZLHYEQ1SiCEYrYgxBBAJiBQRKSAIlgmKRRRKUorKIgZQWZIyMQk8toRCw2IgxhCQEpAlkEARIvBu7u3Tc++d4487FyeTmblzl5AqfV/V1HvTfbY+M9Pn9Om+wBCGMIQh/B+D8hCJyDBr7QUichYRHQigN4kMwNtEtAzA9Uqp5zppaKswxuxNRIsBvKe1Hh/vb+gAEen3ff9BETmqCb1WRM73PO+OZoztNHzfPzQIgqUA9gSwRmt9SJxmWCMh1tqjAfw5vJrBGBHpJaJik3wdATOfEgTBfQCGA2AimrY97NguMMZ8g5l9Zpbw+nYabeonUCwW9+rq6voSEQ1vxxgReU4p9RARBe3IyamLmPlaIroy0rxEKTWRiCSJJ9EBpVLpSMdxHgSwQ4dsW6CUmpxmRCcgIoqZbyeiKZHmDb7vj+vv738vjS/RAdbap0TkyA7b+EWt9f0dlgkAEJGdrLULAZwQaQ5E5CTP85Zn8TopAg/tpIEAQESHd1omABhjRllrV2DLwUNE5jQaPJAeBdxOGBdFEATdnZZprR0rIg8AGBltF5FntNaz8shIfAMAvN+mbVuBiDoqk5lPFZEnEBs8gEEiOoOI/DxyEh1ARAvbNTCGMoDFnRLGzBcA+BNqMX4LiMiFWutX88pKdIDrut8RkXsAVFu28r9YT0STtdYvtysoDHPXAfgVgK54PxHd6Xne75uRmZkKi0gv2p8PBomoKiIeEZlWhYRhbh4RnZFC8opS6lAiKrSqY5uCmf9irb2iFV4R2ZmZH49kdvHL+r7fUpTJXAsw808BTEroei0IgnN6enreFBHPWvtzACemGD/e87zXAOwmIj+21r6qlJqf10BjzGhr7QMADsggu9p13Wfzyowi0wFENEJE9ok1L1VKTSOi95l5jLV2AYBxKSJWaa03Re4dEbmjVCq92dPT83Qj43zfPyIIgiUAds8ge0QpdUMjWWlIC4NJEABzwrz6fWaeAGAlUgZPRHcppY4josFYl+c4zhJmHpOljJlPDoJgGbIHv7FarZ7VzjojrwM2Avi81nomAIeZ56AWhnZKoDUick74lhgR2Wq2BrArgMUiksSPcPV2P4C+DJsEwNm9vb1v5xxDIho6QESeFZFPa60fLRQKI6y1AwAuR3IEecNxnBM8z5sXzg2/sdbumyL6QGvtIhFREV1kjJkF4BdICHMxzNVaP9DI/rbAzCeJiAsAxphjmXl9xky8SER2DPn2Z+a1Yft+Yds/k/istb+N6Ls0Q370Wh11XDvIfAO01o8Qkc/M04loOYC9EsiqIjJbKTWJiD5g5tMAPA3gk3kMEJGzrbVXA4BS6pcisrIBS4mIphCRzSO/ETIdICJ9xph7AdwMIGkxsxHAKZ7nzUJtbrgOwCIAOzZjhIhcY4yZSkQmCILTAazLoJ2hlHqxGflZyHSAtfYGIpqc0v1EtVo9RGv9SLFY3MtauxzAFchZaY6BiOhWY8yxvb29bxPRBABJGd18z/Nua0F+KjIdQERpafCNSqkTe3t7NxhjTujq6loF4Lg2bdFEtJCZx4Ql9a8CqET631BKTW9Tx1ZoJg8AgEK4sLkEQMVaezkRPQpgjwTaCoDLlFIvR+7jKAFYDYDD+10B3D84OLiL1noAwMV1XhGZSkQfNGlve7DWzovMvC9Yaw8AABHZgZkXZszSG4wxx8dkTYnRbGbm/QHA9/1xzFyK9D1en+WZ+QZr7Q8+1oFHjJ7HzGKM+YOIDA/bxjLzSxmDf7xYLO4J1CrL0WTHGHNPhG5VVBczPxsLj3eJCImIk5JMbXsw8y3MfFH93hgzjZmLKQMPmPl6ERkW0n6Gmd+p5wFArXjJzG+F9Mb3/XHAR07luMwwKdp+EJH+8K9i5l9nPPUPrbWTQlqy1l7BzOVoImStPRioJVehs4SZTfjkTZpTjTFnbj8PACiVSp+w1j6VMfgXrbUHATWHMfP8WH89E1yxefPm3cP/5+bM+ISZfWPM57bV+DKjADOPJ6K/p+0RENHvlFKHK6X+4fv+OGvtKgBfSRE3YtiwYTcDgFJqJoC8yUw3gPvqE2an0SgPmEpEOyd0VYhoplLqTCIqGmOmBkHwJIDMJS6AicaYc4nIOI7zdQC5KrehDQOFQmG3PPTNoNk8AADWOY5zjFJqjohoZr6FiO4C0JNA+2GlUtmiHkBEP2PmfVzXXU1Es5vQO9p13YUioluwORXNOuBh3/cPc113ZViqWgHgvBTa5wAcMXz48Hdi7esqlUoRAFzXnQNgLoAVAFL37+oQkaOZeZ6ItJJuN49IIlQ1xswWEQcAmPkLxphNaROXtfYOEdnijeDacnht1ms8ODi4CzPf2GhiNMZc26kxNjwgISL/JqKpnucNiEiXMeaHAK4ioqSnYAHMUErdDADGmHMBLPM873UAa8vl8rf6+vo2punq7+/fJCLftdaORPpkCiL6HjPvhFoKfjgABWAzgBcAPFoul+/O0pMbzHyxMWYUABQKhRHM/HDGk3m9XpquV4OiYbCZb1dEtLX2iSZCZVJeclWeokmub8n3/cOCIFgAYFQKyfJyufy1vr6+d40xewNYQERHhH37a61fyjXyCAYHB3dxXfdJAPs1JE7HY0qp0xMKsx+h4STIzBeFIW5UQndARLOUUif19fW9y8wTiGhNZPAto7+/fxOAU1ErurSKE33fH6in50nIfAOY+UIAl6Z0WwCXaK0fAgBjzDeJaGZcZmRjpCWUSqWjHMdZDiDpE3peRBYT0VsiMpKITgNwcJyIiL6vlPpRqzZsV4jIjgkLMJ+ZZ8TDoYg4xpjzeMsDUsLMNi36ZEaBTm6OtspsrZ2GrZOsy7TWc+O04QbJrcaYChHdHulyu7u7pwC4cSueJKUi0sfMtxHRl9G4Pt8I64noYqXUH1thZualqM0FdTyvlBqbdeAqXJGuAvCpSPNjWuvPxmkTJ0Hf9+eGxdBOFCJGisg9HKkLNIkDozcisrDRaTMiEhGJH8ganUSbdkjq9KZMbIxuABNaYaxvttRBRO/mZH09dp9Ut0wNg4l7du0gbR+wEeJni0QkcSBxOI4Tp0t0XJoDci1Tm4HjOOUWWV+J3hDRafU1SRaCIJgYa0oMxWmHpP6W27ycEJFnWmRdGrs/mJnPzWIId5niydiSJNpEB1Sr1UsAdLIGP18pNdAKY6VSWYDaQucjENFNxphzkpbF4eBviTX71Wr17iT5WYel9+zq6prUgcPSa5RSD7dziCFc2CRlcqvDg5KvOY6zRxAEE5PScBG5xvO8xL2Fj6ew0CbC1eGDiB2Hzcm7Umt9fNpuckMHGGOOdRznmBYUl5VSN3VqG7uVX64Q0V9d1z2ZiD5MpcmpeEBEjs6rGLWfzEz3PO/OJngaQkS6fd+/UkSuQnaKziLyE631dY3OJjbzo6nzRWQaER2EhCOqAAIAG8KDFNcrpdbmkd0KCoXCiO7u7qmoJVf7AhiBWk3xXwCWBEFwb09Pz/ptpX8IQxjCEP5n8B9H2pytKM6JrgAAAABJRU5ErkJggg==" alt="KlipHub Logo">
+    </div>
+
+    <div class="side-chevron-btn" title="Expandir menu">
+      <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+    </div>
+
+    <div class="sideicons">
+      <!-- 1. OPERAÇÃO -->
+      <div class="ico" title="Gerenciamento">
+        <svg viewBox="0 0 24 24"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+      </div>
+      <div class="ico active" title="Agenda do Dia">
+        <svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+      </div>
+      <div class="ico" title="PDV Balcão">
+        <svg viewBox="0 0 24 24"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 2. WHATSAPP & IA -->
+      <div class="ico" title="Atendimentos">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="8" x2="16" y1="9" y2="9"/><line x1="8" x2="14" y1="13" y2="13"/></svg>
+      </div>
+      <div class="ico" title="WhatsApp">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <div class="ico" title="Gestor de IA">
+        <svg viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+      </div>
+      <div class="ico" title="Radar de Retenção">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 3. CLIENTES & MARKETING -->
+      <div class="ico" title="Clientes">
+        <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <div class="ico" title="Planos & Clube">
+        <svg viewBox="0 0 24 24"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+      </div>
+      <div class="ico" title="Avaliações Google">
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 4. FINANCEIRO -->
+      <div class="ico" title="Relatórios">
+        <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+      </div>
+      <div class="ico" title="Comissões">
+        <svg viewBox="0 0 24 24"><line x1="19" x2="5" y1="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
+      </div>
+      <div class="ico" title="Despesas">
+        <svg viewBox="0 0 24 24"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1Z"/><path d="M14 8H8"/><path d="M16 12H8"/><path d="M13 16H8"/></svg>
+      </div>
+      <div class="ico" title="Formas de Pagamento">
+        <svg viewBox="0 0 24 24"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 5. CONFIGURAÇÕES -->
+      <div class="ico" title="Serviços">
+        <svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/><path d="m14.8 9.2 5.2-5.2"/><path d="m8.12 15.88 3.88-3.88"/></svg>
+      </div>
+    </div>
+
+    <div class="user-badge" title="Minha Conta (João Oliveira)">JO</div>
+  </aside>
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <span>Pesquisar clientes, agendamentos, serviços...</span>
+    </div>
+
+    <div class="topright">
+      <div class="shop-status">
+        <span class="live-dot"></span>
+        <span>Aberto até 12:00</span>
+      </div>
+
+      <button class="top-action-btn notif-btn" title="Notificações operacionais (3 novas)">
+        <svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+        <span class="badge-dot"></span>
+      </button>
+
+      <div style="height: 24px; width: 1px; background: rgba(255, 255, 255, 0.1);"></div>
+
+      <button class="top-action-btn settings-btn" title="Configurações gerais do sistema">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+
+      <button class="top-action-btn logout-btn" title="Encerrar sessão com segurança">
+        <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="content">
+    <!-- Cabeçalho Cockpit -->
+    <section class="header-bar">
+      <div class="title-block">
+        <h1>AGENDA DO DIA</h1>
+        <div class="subtitle-row">
+          <span class="glow-dot"></span>
+          <p>Organize horários e cadeiras</p>
+        </div>
+      </div>
+
+      <div class="date-actions">
+        <div class="date-navigator">
+          <button class="date-nav-btn" id="btnPrevDay" aria-label="Dia anterior" title="Dia anterior">
+            <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+          <button class="date-today-btn" id="btnToday">HOJE</button>
+          <button class="date-display-btn" id="btnPicker">
+            <span class="date-cal-badge">
+              <svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+            </span>
+            <span id="dateNavLabel">DOMINGO, 08 MAR</span>
+          </button>
+          <button class="date-nav-btn" id="btnNextDay" aria-label="Próximo dia" title="Próximo dia">
+            <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+        </div>
+
+        <button class="btn-divulgacao" title="Divulgação: link, canais, QR e desempenho">
+          <svg viewBox="0 0 24 24"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg>
+          <span>Divulgação</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Toolbar da Agenda -->
+    <section class="agenda-toolbar">
+      <div class="tool-title-group">
+        <div class="cal-box-icon">
+          <svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+        </div>
+        <div>
+          <strong>Agendamentos</strong>
+          <small id="subDateLabel">Domingo, 08 de Março de 2026</small>
+        </div>
+      </div>
+
+      <div class="view-tabs">
+        <button class="active">DIA</button>
+        <button>SEMANA</button>
+        <button>MÊS</button>
+      </div>
+
+      <div class="status-legend">
+        <span class="legend-item"><span class="legend-dot" style="background:var(--st-confirmed)"></span>Confirmado</span>
+        <span class="legend-item"><span class="legend-dot" style="background:var(--st-pending)"></span>Pendente</span>
+        <span class="legend-item"><span class="legend-dot" style="background:var(--st-completed)"></span>Concluído</span>
+        <span class="legend-item"><span class="legend-dot" style="background:var(--st-cancelled)"></span>Cancelado</span>
+        <span class="legend-item"><span class="legend-dot" style="background:var(--st-absent)"></span>Não compareceu</span>
+      </div>
+
+      <button class="btn-action play-anim" id="btnPlayPause" title="Espaço ou clique para reproduzir">
+        <svg viewBox="0 0 24 24" id="playIcon"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+        <span id="playLabel">Reproduzir semana</span>
+      </button>
+
+      <button class="btn-action btn-primary" title="Nova reserva">
+        <svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        <span>Nova reserva</span>
+      </button>
+
+      <button class="btn-action" id="btnRefresh" title="Atualizar dados">
+        <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+        <span>Atualizar</span>
+      </button>
+
+      <button class="btn-action btn-summary-toggle" id="btnToggleSummary" title="Alternar Resumo do Dia">
+        <svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M15 3v18"/><path d="m8 9 3 3-3 3"/></svg>
+        <span id="toggleSummaryLabel">Ocultar Painel</span>
+      </button>
+    </section>
+
+    <!-- Workspace Principal: Grade + Resumo -->
+    <section class="workspace">
+      <!-- Container da Grade Horária -->
+      <div class="grid-container">
+        <div class="grid-scroll" id="gridScroll">
+          <div class="grid-content-inner" id="gridInner">
+            <div class="staff-header-row" id="staffHeaderRow"></div>
+            <div class="schedule-body" id="scheduleBody"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Painel Lateral: Resumo do Dia (Expandido com dados 100% consistentes) -->
+      <aside class="summary-panel" id="summaryPanel">
+        <div class="summary-header">
+          <div class="summary-header-left">
+            <div class="summary-icon-box">
+              <svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+            </div>
+            <div>
+              <h3>Resumo do dia</h3>
+              <p id="summaryDateLabel">Dom., 08 De Mar.</p>
+            </div>
+          </div>
+
+          <button class="summary-refresh-btn" id="btnSummaryRefresh" title="Atualizar lista">
+            <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+          </button>
+        </div>
+
+        <div class="summary-tabs">
+          <button class="summary-tab-btn active" id="tabAppointments">
+            <span>Agendamentos (<span id="summaryCount">0</span>)</span>
+          </button>
+          <button class="summary-tab-btn" id="tabWaitlist">
+            <svg viewBox="0 0 24 24" style="width:12px;height:12px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>Fila de Encaixe (0)</span>
+          </button>
+        </div>
+
+        <!-- Lista de Cards no Resumo -->
+        <div class="summary-list" id="summaryList"></div>
+
+        <div class="summary-footer">
+          <span>Fonte de dados</span>
+          <strong><span id="footerRecordCount">0</span> registros</strong>
+        </div>
+      </aside>
+    </section>
+  </main>
+</div>
+
+<!-- Toast Notifier -->
+<div class="toast-msg" id="toastMsg"></div>
+
+<script>
+// ==================== ESTRUTURA DE PROFISSIONAIS ====================
+const staffList = [
+  { id: 'b1', name: 'Daniel Moraes', role: 'Barbeiro Master' },
+  { id: 'b2', name: 'Marco Polo', role: 'Especialista Barba' },
+  { id: 'b3', name: 'Ricardo Silva', role: 'Barbeiro Visagista' },
+  { id: 'b4', name: 'Alexandre de Morais', role: 'Barbeiro Tradicional' },
+  { id: 'b5', name: 'Carlos Eduardo', role: 'Barbeiro Clássico' },
+  { id: 'b6', name: 'Bruna Alves', role: 'Colorimetrista & Cortes' }
+];
+
+// Dias da semana e datas formatadas
+const weekDays = [
+  { name: 'DOMINGO', short: 'Dom.', dateNav: 'DOMINGO, 08 MAR', sub: 'Domingo, 08 de Março de 2026', summary: 'Dom., 08 De Mar.' },
+  { name: 'SEGUNDA', short: 'Seg.', dateNav: 'SEGUNDA, 09 MAR', sub: 'Segunda-feira, 09 de Março de 2026', summary: 'Seg., 09 De Mar.' },
+  { name: 'TERÇA', short: 'Ter.', dateNav: 'TERÇA, 10 MAR', sub: 'Terça-feira, 10 de Março de 2026', summary: 'Ter., 10 De Mar.' },
+  { name: 'QUARTA', short: 'Qua.', dateNav: 'QUARTA, 11 MAR', sub: 'Quarta-feira, 11 de Março de 2026', summary: 'Qua., 11 De Mar.' },
+  { name: 'QUINTA', short: 'Qui.', dateNav: 'QUINTA, 12 MAR', sub: 'Quinta-feira, 12 de Março de 2026', summary: 'Qui., 12 De Mar.' },
+  { name: 'SEXTA', short: 'Sex.', dateNav: 'SEXTA, 13 MAR', sub: 'Sexta-feira, 13 de Março de 2026', summary: 'Sex., 13 De Mar.' },
+  { name: 'SÁBADO', short: 'Sáb.', dateNav: 'SÁBADO, 14 MAR', sub: 'Sábado, 14 de Março de 2026', summary: 'Sáb., 14 De Mar.' }
+];
+
+// Horário da timeline: das 08:00 às 20:00 (12 horas, 70px por hora)
+const START_HOUR = 8;
+const END_HOUR = 20;
+const HOUR_HEIGHT = 70;
+
+// ==================== BASE DE DADOS COMPLETA E INTEGRADA ====================
+// Cada agendamento aqui alimenta TANTO a grade de horários QUANTO o Resumo do dia!
+// Todos os barbeiros têm agendamentos em todos os dias (sem colunas vazias).
+const weekScheduleData = [
+  // DIA 0: DOMINGO, 08 MAR (16 agendamentos)
+  [
+    { id: 'd0-1', client: 'Lucas Almeida', service: 'Corte Masculino', barberIdx: 0, time: '09:00', duration: 45, price: 'R$ 60,00', isPlan: false, planNote: '', status: 'completed', inspect: false },
+    { id: 'd0-2', client: 'Felipe Rocha', service: 'Corte Masculino', barberIdx: 1, time: '09:00', duration: 45, price: 'R$ 60,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd0-3', client: 'Vitor Carvalho', service: 'Corte Degradê', barberIdx: 2, time: '09:00', duration: 50, price: 'Plano', isPlan: true, planNote: 'Plano Básico: restam 8 de 8 neste mês', status: 'completed', inspect: false },
+    { id: 'd0-4', client: 'Eduardo Santos', service: 'Corte Infantil', barberIdx: 3, time: '09:00', duration: 40, price: 'R$ 55,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd0-5', client: 'Vitor Carvalho', service: 'Sobrancelha', barberIdx: 0, time: '09:30', duration: 30, price: 'Plano', isPlan: true, planNote: 'Plano Básico: restam 8 de 8 neste mês', status: 'cancelled', inspect: true },
+    { id: 'd0-6', client: 'Ana Clara', service: 'Hidratação Premium', barberIdx: 5, time: '09:30', duration: 55, price: 'R$ 85,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd0-7', client: 'Leonardo Alves', service: 'Corte Social', barberIdx: 4, time: '10:00', duration: 45, price: 'R$ 60,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd0-8', client: 'Caio Oliveira', service: 'Barba Tradicional', barberIdx: 1, time: '10:30', duration: 40, price: 'R$ 50,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd0-9', client: 'Vitor Carvalho', service: 'Corte Masculino', barberIdx: 1, time: '11:30', duration: 50, price: 'Plano', isPlan: true, planNote: 'Plano Básico: restam 8 de 8 neste mês', status: 'pending', inspect: true },
+    { id: 'd0-10', client: 'Thiago Lima', service: 'Corte Degradê', barberIdx: 2, time: '12:00', duration: 45, price: 'R$ 65,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd0-11', client: 'Marina Costa', service: 'Corte + Escova', barberIdx: 5, time: '12:30', duration: 60, price: 'R$ 110,00', isPlan: false, planNote: '', status: 'pending', inspect: false },
+    { id: 'd0-12', client: 'Bruno Costa', service: 'Sobrancelha', barberIdx: 0, time: '13:00', duration: 30, price: 'Plano', isPlan: true, planNote: 'Plano VIP: restam 4 de 6 neste mês', status: 'pending', inspect: false },
+    { id: 'd0-13', client: 'Alex Ferreira', service: 'Acabamento Pezinho', barberIdx: 3, time: '13:30', duration: 30, price: 'R$ 35,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd0-14', client: 'Samuel Ribeiro', service: 'Barba Terapia', barberIdx: 4, time: '14:30', duration: 45, price: 'R$ 65,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd0-15', client: 'Matheus Ferreira', service: 'Corte + Barba', barberIdx: 2, time: '15:30', duration: 60, price: 'R$ 95,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd0-16', client: 'Juliana Paes', service: 'Design Sobrancelha', barberIdx: 5, time: '16:30', duration: 35, price: 'R$ 50,00', isPlan: false, planNote: '', status: 'completed', inspect: false }
+  ],
+
+  // DIA 1: SEGUNDA, 09 MAR (17 agendamentos)
+  [
+    { id: 'd1-1', client: 'Marcos Vinicius', service: 'Barba + Acabamento', barberIdx: 0, time: '08:30', duration: 40, price: 'Plano', isPlan: true, planNote: 'Plano Barba Clube: restam 3 de 4', status: 'confirmed', inspect: false },
+    { id: 'd1-2', client: 'Pedro Henrique', service: 'Corte Degradê', barberIdx: 0, time: '10:00', duration: 45, price: 'R$ 65,00', isPlan: false, planNote: '', status: 'confirmed', inspect: true },
+    { id: 'd1-3', client: 'Felipe Rocha', service: 'Corte Masculino', barberIdx: 1, time: '09:00', duration: 45, price: 'R$ 60,00', isPlan: false, planNote: '', status: 'completed', inspect: false },
+    { id: 'd1-4', client: 'Caio Oliveira', service: 'Barba Tradicional', barberIdx: 1, time: '10:30', duration: 40, price: 'Plano', isPlan: true, planNote: 'Plano Básico: restam 5 de 8', status: 'confirmed', inspect: false },
+    { id: 'd1-5', client: 'Gustavo Nunes', service: 'Corte Masculino', barberIdx: 2, time: '09:30', duration: 45, price: 'R$ 60,00', isPlan: false, planNote: '', status: 'cancelled', inspect: false },
+    { id: 'd1-6', client: 'Matheus Ferreira', service: 'Corte + Barba', barberIdx: 2, time: '11:00', duration: 60, price: 'R$ 95,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd1-7', client: 'Eduardo Santos', service: 'Corte Infantil', barberIdx: 3, time: '09:00', duration: 40, price: 'R$ 55,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd1-8', client: 'Leonardo Alves', service: 'Corte Masculino', barberIdx: 3, time: '11:30', duration: 45, price: 'Plano', isPlan: true, planNote: 'Plano VIP: restam 2 de 4', status: 'pending', inspect: false },
+    { id: 'd1-9', client: 'Rafael Souza', service: 'Corte + Hidratação', barberIdx: 4, time: '10:00', duration: 55, price: 'R$ 85,00', isPlan: false, planNote: '', status: 'completed', inspect: false },
+    { id: 'd1-10', client: 'Samuel Ribeiro', service: 'Barba Tradicional', barberIdx: 4, time: '12:00', duration: 40, price: 'R$ 50,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd1-11', client: 'Ana Clara', service: 'Hidratação Premium', barberIdx: 5, time: '09:00', duration: 60, price: 'R$ 85,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd1-12', client: 'Marina Costa', service: 'Corte + Escova', barberIdx: 5, time: '11:00', duration: 60, price: 'Plano', isPlan: true, planNote: 'Plano Estilo: restam 4 de 6', status: 'pending', inspect: true },
+    { id: 'd1-13', client: 'Bruno Costa', service: 'Corte Masculino', barberIdx: 0, time: '13:00', duration: 45, price: 'Plano', isPlan: true, planNote: 'Plano Básico: restam 7 de 8', status: 'pending', inspect: false },
+    { id: 'd1-14', client: 'Thiago Lima', service: 'Corte Degradê', barberIdx: 1, time: '14:30', duration: 50, price: 'R$ 65,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd1-15', client: 'Rodrigo Mello', service: 'Barba Visagista', barberIdx: 2, time: '14:00', duration: 45, price: 'R$ 70,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd1-16', client: 'Diego Santana', service: 'Corte Clássico', barberIdx: 4, time: '15:30', duration: 45, price: 'R$ 60,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd1-17', client: 'Beatriz Ramos', service: 'Design de Barba', barberIdx: 5, time: '15:00', duration: 40, price: 'R$ 55,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false }
+  ],
+
+  // DIA 2: TERÇA, 10 MAR (18 agendamentos)
+  [
+    { id: 'd2-1', client: 'André Martins', service: 'Corte + Barba', barberIdx: 0, time: '09:00', duration: 60, price: 'Plano', isPlan: true, planNote: 'Plano Premium: restam 5 de 6', status: 'confirmed', inspect: true },
+    { id: 'd2-2', client: 'Felipe Rocha', service: 'Corte Masculino', barberIdx: 1, time: '08:30', duration: 45, price: 'Plano', isPlan: true, planNote: 'Plano Básico: restam 6 de 8', status: 'pending', inspect: false },
+    { id: 'd2-3', client: 'Thiago Lima', service: 'Corte Degradê', barberIdx: 1, time: '10:30', duration: 45, price: 'R$ 65,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd2-4', client: 'Vitor Carvalho', service: 'Corte Masculino', barberIdx: 2, time: '09:00', duration: 45, price: 'Plano', isPlan: true, planNote: 'Plano Básico: restam 6 de 8', status: 'pending', inspect: false },
+    { id: 'd2-5', client: 'Matheus Ferreira', service: 'Barba Tradicional', barberIdx: 2, time: '11:00', duration: 40, price: 'R$ 50,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd2-6', client: 'Leonardo Alves', service: 'Corte Masculino', barberIdx: 3, time: '09:30', duration: 45, price: 'Plano', isPlan: true, planNote: 'Plano VIP: restam 3 de 4', status: 'completed', inspect: false },
+    { id: 'd2-7', client: 'Eduardo Santos', service: 'Corte Infantil', barberIdx: 3, time: '11:00', duration: 40, price: 'R$ 55,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd2-8', client: 'Daniel Souza', service: 'Corte Social', barberIdx: 4, time: '09:00', duration: 45, price: 'R$ 60,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd2-9', client: 'Marco Silva', service: 'Barba Terapia', barberIdx: 4, time: '10:30', duration: 45, price: 'Plano', isPlan: true, planNote: 'Plano Barba: restam 2 de 4', status: 'confirmed', inspect: false },
+    { id: 'd2-10', client: 'Bia Fernandes', service: 'Corte + Escova', barberIdx: 5, time: '09:30', duration: 60, price: 'Plano', isPlan: true, planNote: 'Plano Estilo: restam 3 de 6', status: 'pending', inspect: true },
+    { id: 'd2-11', client: 'Ana Clara', service: 'Hidratação', barberIdx: 5, time: '11:30', duration: 50, price: 'R$ 80,00', isPlan: false, planNote: '', status: 'completed', inspect: false },
+    { id: 'd2-12', client: 'Bruno Costa', service: 'Corte Masculino', barberIdx: 0, time: '12:30', duration: 45, price: 'Plano', isPlan: true, planNote: 'Plano Básico: restam 5 de 8', status: 'pending', inspect: false },
+    { id: 'd2-13', client: 'Lucas Almeida', service: 'Barba Modelada', barberIdx: 0, time: '15:00', duration: 40, price: 'R$ 55,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd2-14', client: 'Caio Oliveira', service: 'Corte Degradê', barberIdx: 1, time: '15:00', duration: 45, price: 'R$ 65,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd2-15', client: 'Ricardo Santos', service: 'Corte + Barba', barberIdx: 2, time: '13:30', duration: 60, price: 'R$ 95,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd2-16', client: 'Alex Ferreira', service: 'Corte Infantil', barberIdx: 3, time: '14:30', duration: 40, price: 'Plano', isPlan: true, planNote: 'Plano Kids: restam 3 de 4', status: 'pending', inspect: false },
+    { id: 'd2-17', client: 'Gustavo Nunes', service: 'Corte Masculino', barberIdx: 4, time: '14:00', duration: 45, price: 'R$ 60,00', isPlan: false, planNote: '', status: 'cancelled', inspect: false },
+    { id: 'd2-18', client: 'Juliana Paes', service: 'Design Sobrancelha', barberIdx: 5, time: '14:30', duration: 35, price: 'R$ 50,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false }
+  ],
+
+  // DIA 3: QUARTA, 11 MAR (19 agendamentos - todos os barbeiros bem distribuídos!)
+  [
+    { id: 'd3-1', client: 'Samuel Ribeiro', service: 'Barba Tradicional', barberIdx: 0, time: '09:00', duration: 40, price: 'Plano', isPlan: true, planNote: 'Plano Barba: restam 4 de 4', status: 'confirmed', inspect: false },
+    { id: 'd3-2', client: 'Pedro Henrique', service: 'Corte Degradê', barberIdx: 0, time: '11:00', duration: 45, price: 'R$ 65,00', isPlan: false, planNote: '', status: 'confirmed', inspect: true },
+    { id: 'd3-3', client: 'Bruno Costa', service: 'Corte Masculino', barberIdx: 0, time: '14:30', duration: 45, price: 'Plano', isPlan: true, planNote: 'Plano Básico: restam 4 de 8', status: 'pending', inspect: false },
+    { id: 'd3-4', client: 'João Pedro', service: 'Corte Masculino', barberIdx: 1, time: '09:30', duration: 45, price: 'Plano', isPlan: true, planNote: 'Plano Básico: restam 5 de 8', status: 'completed', inspect: false },
+    { id: 'd3-5', client: 'Thiago Lima', service: 'Barba + Acabamento', barberIdx: 1, time: '11:30', duration: 40, price: 'R$ 55,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd3-6', client: 'Caio Alves', service: 'Corte Degradê', barberIdx: 1, time: '14:00', duration: 45, price: 'R$ 65,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd3-7', client: 'Matheus Lima', service: 'Corte + Barba', barberIdx: 2, time: '09:00', duration: 60, price: 'Plano', isPlan: true, planNote: 'Plano Premium: restam 3 de 6', status: 'confirmed', inspect: false },
+    { id: 'd3-8', client: 'Vitor Carvalho', service: 'Sobrancelha', barberIdx: 2, time: '11:30', duration: 30, price: 'Plano', isPlan: true, planNote: 'Plano Básico: restam 5 de 8', status: 'pending', inspect: false },
+    { id: 'd3-9', client: 'Felipe Rocha', service: 'Corte Degradê', barberIdx: 2, time: '15:00', duration: 50, price: 'R$ 65,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd3-10', client: 'Alex Ferreira', service: 'Corte Infantil', barberIdx: 3, time: '10:00', duration: 40, price: 'R$ 55,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd3-11', client: 'Leonardo Alves', service: 'Barba Visagista', barberIdx: 3, time: '12:00', duration: 45, price: 'Plano', isPlan: true, planNote: 'Plano VIP: restam 1 de 4', status: 'confirmed', inspect: false },
+    { id: 'd3-12', client: 'Eduardo Santos', service: 'Corte Social', barberIdx: 3, time: '15:30', duration: 45, price: 'R$ 60,00', isPlan: false, planNote: '', status: 'completed', inspect: false },
+    { id: 'd3-13', client: 'Pedro Lima', service: 'Corte + Barba', barberIdx: 4, time: '08:30', duration: 60, price: 'Plano', isPlan: true, planNote: 'Plano Premium: restam 2 de 4', status: 'pending', inspect: true },
+    { id: 'd3-14', client: 'Gustavo Nunes', service: 'Corte Masculino', barberIdx: 4, time: '11:00', duration: 45, price: 'R$ 60,00', isPlan: false, planNote: '', status: 'cancelled', inspect: false },
+    { id: 'd3-15', client: 'Carlos Alberto', service: 'Barba Tradicional', barberIdx: 4, time: '14:00', duration: 40, price: 'R$ 50,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd3-16', client: 'Ana Clara', service: 'Hidratação Premium', barberIdx: 5, time: '09:00', duration: 60, price: 'R$ 85,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd3-17', client: 'Marina Costa', service: 'Corte + Escova', barberIdx: 5, time: '11:00', duration: 60, price: 'Plano', isPlan: true, planNote: 'Plano Estilo: restam 2 de 6', status: 'pending', inspect: false },
+    { id: 'd3-18', client: 'Bia Fernandes', service: 'Design Sobrancelha', barberIdx: 5, time: '13:30', duration: 35, price: 'R$ 50,00', isPlan: false, planNote: '', status: 'completed', inspect: false },
+    { id: 'd3-19', client: 'Juliana Paes', service: 'Hidratação Capilar', barberIdx: 5, time: '16:00', duration: 50, price: 'R$ 75,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false }
+  ],
+
+  // DIA 4: QUINTA, 12 MAR (20 agendamentos)
+  [
+    { id: 'd4-1', client: 'Isabela Rocha', service: 'Corte + Finalização', barberIdx: 0, time: '08:30', duration: 55, price: 'Plano', isPlan: true, planNote: 'Plano VIP: restam 4 de 6', status: 'confirmed', inspect: false },
+    { id: 'd4-2', client: 'Miguel Alves', service: 'Corte Degradê', barberIdx: 0, time: '10:30', duration: 45, price: 'Plano', isPlan: true, planNote: 'Plano Básico: restam 6 de 8', status: 'completed', inspect: true },
+    { id: 'd4-3', client: 'Pedro Lima', service: 'Corte + Barba', barberIdx: 0, time: '15:00', duration: 60, price: 'Plano', isPlan: true, planNote: 'Plano Premium: restam 3 de 6', status: 'confirmed', inspect: false },
+    { id: 'd4-4', client: 'Bia Fernandes', service: 'Corte + Escova', barberIdx: 1, time: '10:00', duration: 60, price: 'Plano', isPlan: true, planNote: 'Plano Estilo: restam 3 de 6', status: 'pending', inspect: false },
+    { id: 'd4-5', client: 'Thiago Lima', service: 'Barba Visagista', barberIdx: 1, time: '13:00', duration: 45, price: 'R$ 70,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd4-6', client: 'Felipe Rocha', service: 'Corte Masculino', barberIdx: 1, time: '15:30', duration: 45, price: 'R$ 60,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd4-7', client: 'Ana Clara', service: 'Hidratação', barberIdx: 2, time: '09:30', duration: 50, price: 'Plano', isPlan: true, planNote: 'Plano VIP: restam 2 de 4', status: 'pending', inspect: false },
+    { id: 'd4-8', client: 'Matheus Ferreira', service: 'Corte Degradê', barberIdx: 2, time: '12:00', duration: 45, price: 'R$ 65,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd4-9', client: 'Vitor Carvalho', service: 'Corte Masculino', barberIdx: 2, time: '14:30', duration: 45, price: 'Plano', isPlan: true, planNote: 'Plano Básico: restam 4 de 8', status: 'confirmed', inspect: true },
+    { id: 'd4-10', client: 'Eduardo Santos', service: 'Corte Infantil', barberIdx: 3, time: '09:00', duration: 40, price: 'R$ 55,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd4-11', client: 'Leonardo Alves', service: 'Acabamento Pezinho', barberIdx: 3, time: '11:00', duration: 30, price: 'R$ 35,00', isPlan: false, planNote: '', status: 'completed', inspect: false },
+    { id: 'd4-12', client: 'Alex Ferreira', service: 'Corte Social', barberIdx: 3, time: '13:30', duration: 45, price: 'R$ 60,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd4-13', client: 'Rafael Souza', service: 'Corte + Barba', barberIdx: 4, time: '09:30', duration: 60, price: 'R$ 95,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd4-14', client: 'Samuel Ribeiro', service: 'Barba Tradicional', barberIdx: 4, time: '11:30', duration: 40, price: 'R$ 50,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd4-15', client: 'Diego Santana', service: 'Corte Degradê', barberIdx: 4, time: '15:00', duration: 45, price: 'R$ 65,00', isPlan: false, planNote: '', status: 'pending', inspect: false },
+    { id: 'd4-16', client: 'Juliana Paes', service: 'Corte Feminino', barberIdx: 5, time: '09:00', duration: 55, price: 'R$ 90,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd4-17', client: 'Marina Costa', service: 'Coloração Raiz', barberIdx: 5, time: '11:00', duration: 75, price: 'R$ 130,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd4-18', client: 'Carla Dias', service: 'Design Sobrancelha', barberIdx: 5, time: '14:00', duration: 35, price: 'R$ 50,00', isPlan: false, planNote: '', status: 'completed', inspect: false },
+    { id: 'd4-19', client: 'Vanessa Lopes', service: 'Hidratação Premium', barberIdx: 5, time: '16:00', duration: 50, price: 'R$ 85,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd4-20', client: 'Caio Oliveira', service: 'Barba Tradicional', barberIdx: 1, time: '16:45', duration: 40, price: 'R$ 50,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false }
+  ],
+
+  // DIA 5: SEXTA, 13 MAR (24 agendamentos - movimento alto de fim de semana!)
+  [
+    { id: 'd5-1', client: 'Rafael Mendes', service: 'Corte Masculino', barberIdx: 0, time: '09:00', duration: 45, price: 'Plano', isPlan: true, planNote: 'Plano Básico: restam 3 de 8', status: 'confirmed', inspect: false },
+    { id: 'd5-2', client: 'Lucas Almeida', service: 'Corte + Barba', barberIdx: 0, time: '10:30', duration: 60, price: 'R$ 95,00', isPlan: false, planNote: '', status: 'confirmed', inspect: true },
+    { id: 'd5-3', client: 'Pedro Henrique', service: 'Corte Degradê', barberIdx: 0, time: '13:30', duration: 45, price: 'Plano', isPlan: true, planNote: 'Plano VIP: restam 3 de 6', status: 'completed', inspect: false },
+    { id: 'd5-4', client: 'Bruno Costa', service: 'Sobrancelha', barberIdx: 0, time: '16:00', duration: 30, price: 'Plano', isPlan: true, planNote: 'Plano Básico: restam 3 de 8', status: 'pending', inspect: false },
+    { id: 'd5-5', client: 'Bia Fernandes', service: 'Corte + Escova', barberIdx: 1, time: '09:00', duration: 60, price: 'Plano', isPlan: true, planNote: 'Plano Estilo: restam 2 de 6', status: 'pending', inspect: false },
+    { id: 'd5-6', client: 'Caio Oliveira', service: 'Barba Visagista', barberIdx: 1, time: '11:00', duration: 45, price: 'R$ 70,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd5-7', client: 'Felipe Rocha', service: 'Corte Masculino', barberIdx: 1, time: '13:00', duration: 45, price: 'Plano', isPlan: true, planNote: 'Plano Básico: restam 4 de 8', status: 'confirmed', inspect: false },
+    { id: 'd5-8', client: 'Thiago Lima', service: 'Corte Degradê', barberIdx: 1, time: '15:30', duration: 50, price: 'R$ 65,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd5-9', client: 'Vitor Carvalho', service: 'Corte + Barba', barberIdx: 2, time: '09:30', duration: 60, price: 'Plano', isPlan: true, planNote: 'Plano Básico: restam 3 de 8', status: 'confirmed', inspect: true },
+    { id: 'd5-10', client: 'Matheus Ferreira', service: 'Corte Social', barberIdx: 2, time: '11:30', duration: 45, price: 'R$ 60,00', isPlan: false, planNote: '', status: 'completed', inspect: false },
+    { id: 'd5-11', client: 'Rodrigo Mello', service: 'Barba Tradicional', barberIdx: 2, time: '14:00', duration: 40, price: 'R$ 50,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd5-12', client: 'Gustavo Nunes', service: 'Corte Degradê', barberIdx: 2, time: '16:00', duration: 45, price: 'R$ 65,00', isPlan: false, planNote: '', status: 'cancelled', inspect: false },
+    { id: 'd5-13', client: 'Eduardo Santos', service: 'Corte Infantil', barberIdx: 3, time: '09:00', duration: 40, price: 'R$ 55,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd5-14', client: 'Leonardo Alves', service: 'Corte Masculino', barberIdx: 3, time: '11:00', duration: 45, price: 'Plano', isPlan: true, planNote: 'Plano VIP: restam 1 de 4', status: 'confirmed', inspect: false },
+    { id: 'd5-15', client: 'Alex Ferreira', service: 'Acabamento Pezinho', barberIdx: 3, time: '13:00', duration: 30, price: 'R$ 35,00', isPlan: false, planNote: '', status: 'completed', inspect: false },
+    { id: 'd5-16', client: 'Marcos Silva', service: 'Corte Social', barberIdx: 3, time: '15:00', duration: 45, price: 'R$ 60,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd5-17', client: 'Samuel Ribeiro', service: 'Barba Terapia', barberIdx: 4, time: '09:30', duration: 45, price: 'R$ 65,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd5-18', client: 'Rafael Souza', service: 'Corte Masculino', barberIdx: 4, time: '11:30', duration: 45, price: 'R$ 60,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd5-19', client: 'Diego Santana', service: 'Corte + Barba', barberIdx: 4, time: '14:30', duration: 60, price: 'R$ 95,00', isPlan: false, planNote: '', status: 'pending', inspect: false },
+    { id: 'd5-20', client: 'Carlos Alberto', service: 'Corte Degradê', barberIdx: 4, time: '16:30', duration: 45, price: 'R$ 65,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd5-21', client: 'Ana Clara', service: 'Hidratação Premium', barberIdx: 5, time: '09:00', duration: 60, price: 'R$ 85,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd5-22', client: 'Marina Costa', service: 'Corte + Escova', barberIdx: 5, time: '11:00', duration: 60, price: 'Plano', isPlan: true, planNote: 'Plano Estilo: restam 1 de 6', status: 'pending', inspect: false },
+    { id: 'd5-23', client: 'Juliana Paes', service: 'Design Sobrancelha', barberIdx: 5, time: '13:30', duration: 35, price: 'R$ 50,00', isPlan: false, planNote: '', status: 'completed', inspect: false },
+    { id: 'd5-24', client: 'Vanessa Lopes', service: 'Corte Feminino', barberIdx: 5, time: '15:30', duration: 55, price: 'R$ 90,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false }
+  ],
+
+  // DIA 6: SÁBADO, 14 MAR (27 agendamentos - pico de sábado, agenda lotada!)
+  [
+    { id: 'd6-1', client: 'Lucas Almeida', service: 'Corte + Barba Completa', barberIdx: 0, time: '08:30', duration: 60, price: 'R$ 105,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd6-2', client: 'Pedro Henrique', service: 'Corte Degradê', barberIdx: 0, time: '10:00', duration: 45, price: 'Plano', isPlan: true, planNote: 'Plano VIP: restam 2 de 6', status: 'confirmed', inspect: true },
+    { id: 'd6-3', client: 'Vitor Carvalho', service: 'Sobrancelha', barberIdx: 0, time: '11:30', duration: 30, price: 'Plano', isPlan: true, planNote: 'Plano Básico: restam 2 de 8', status: 'completed', inspect: false },
+    { id: 'd6-4', client: 'Bruno Costa', service: 'Corte Masculino', barberIdx: 0, time: '13:00', duration: 45, price: 'Plano', isPlan: true, planNote: 'Plano Básico: restam 2 de 8', status: 'pending', inspect: false },
+    { id: 'd6-5', client: 'André Martins', service: 'Barba Visagista', barberIdx: 0, time: '15:00', duration: 45, price: 'R$ 70,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd6-6', client: 'Felipe Rocha', service: 'Corte Degradê', barberIdx: 1, time: '08:30', duration: 45, price: 'R$ 65,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd6-7', client: 'Caio Oliveira', service: 'Barba Tradicional', barberIdx: 1, time: '10:00', duration: 40, price: 'Plano', isPlan: true, planNote: 'Plano Barba: restam 2 de 4', status: 'completed', inspect: false },
+    { id: 'd6-8', client: 'Thiago Lima', service: 'Corte Masculino', barberIdx: 1, time: '11:30', duration: 45, price: 'R$ 60,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd6-9', client: 'Bia Fernandes', service: 'Corte + Escova', barberIdx: 1, time: '13:30', duration: 60, price: 'Plano', isPlan: true, planNote: 'Plano Estilo: restam 1 de 6', status: 'pending', inspect: false },
+    { id: 'd6-10', client: 'João Pedro', service: 'Corte Degradê', barberIdx: 1, time: '15:30', duration: 45, price: 'R$ 65,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd6-11', client: 'Vitor Carvalho', service: 'Corte Degradê', barberIdx: 2, time: '09:00', duration: 45, price: 'Plano', isPlan: true, planNote: 'Plano Básico: restam 1 de 8', status: 'confirmed', inspect: true },
+    { id: 'd6-12', client: 'Matheus Ferreira', service: 'Corte + Barba', barberIdx: 2, time: '10:30', duration: 60, price: 'R$ 95,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd6-13', client: 'Rodrigo Mello', service: 'Barba Terapia', barberIdx: 2, time: '12:30', duration: 45, price: 'R$ 65,00', isPlan: false, planNote: '', status: 'completed', inspect: false },
+    { id: 'd6-14', client: 'Gustavo Nunes', service: 'Corte Masculino', barberIdx: 2, time: '14:30', duration: 45, price: 'R$ 60,00', isPlan: false, planNote: '', status: 'cancelled', inspect: false },
+    { id: 'd6-15', client: 'Ricardo Santos', service: 'Corte Degradê', barberIdx: 2, time: '16:00', duration: 45, price: 'R$ 65,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd6-16', client: 'Eduardo Santos', service: 'Corte Infantil', barberIdx: 3, time: '09:00', duration: 40, price: 'R$ 55,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd6-17', client: 'Leonardo Alves', service: 'Corte Social', barberIdx: 3, time: '10:30', duration: 45, price: 'Plano', isPlan: true, planNote: 'Plano VIP: restam 1 de 4', status: 'completed', inspect: false },
+    { id: 'd6-18', client: 'Alex Ferreira', service: 'Corte + Barba', barberIdx: 3, time: '12:30', duration: 60, price: 'R$ 95,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd6-19', client: 'Marcos Silva', service: 'Acabamento Pezinho', barberIdx: 3, time: '14:30', duration: 30, price: 'R$ 35,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd6-20', client: 'Samuel Ribeiro', service: 'Barba Tradicional', barberIdx: 4, time: '09:00', duration: 40, price: 'R$ 50,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd6-21', client: 'Rafael Souza', service: 'Corte + Barba', barberIdx: 4, time: '10:30', duration: 60, price: 'R$ 95,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd6-22', client: 'Diego Santana', service: 'Corte Masculino', barberIdx: 4, time: '13:00', duration: 45, price: 'Plano', isPlan: true, planNote: 'Plano Básico: restam 3 de 6', status: 'pending', inspect: false },
+    { id: 'd6-23', client: 'Carlos Alberto', service: 'Barba Visagista', barberIdx: 4, time: '15:00', duration: 45, price: 'R$ 70,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd6-24', client: 'Ana Clara', service: 'Hidratação Premium', barberIdx: 5, time: '09:00', duration: 60, price: 'R$ 85,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd6-25', client: 'Marina Costa', service: 'Corte + Coloração', barberIdx: 5, time: '10:45', duration: 80, price: 'R$ 150,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false },
+    { id: 'd6-26', client: 'Juliana Paes', service: 'Design Sobrancelha', barberIdx: 5, time: '13:30', duration: 35, price: 'R$ 50,00', isPlan: false, planNote: '', status: 'completed', inspect: false },
+    { id: 'd6-27', client: 'Vanessa Lopes', service: 'Corte + Escova', barberIdx: 5, time: '15:00', duration: 60, price: 'R$ 110,00', isPlan: false, planNote: '', status: 'confirmed', inspect: false }
+  ]
+];
+
+// Mapas de status oficiais do sistema
+const statusConfig = {
+  confirmed: { label: 'Confirmado', short: 'CONF', color: 'var(--st-confirmed)' },
+  pending: { label: 'Pendente', short: 'PEND', color: 'var(--st-pending)' },
+  completed: { label: 'Concluído', short: 'CONC', color: 'var(--st-completed)' },
+  cancelled: { label: 'Cancelado', short: 'CANC', color: 'var(--st-cancelled)' },
+  absent: { label: 'Não compareceu', short: 'FALTA', color: 'var(--st-absent)' }
+};
+
+// Ícone do barbeiro
+const staffIconSvg = `<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>`;
+const scissorsSvg = `<svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/><path d="m14.8 9.2 5.2-5.2"/><path d="m8.12 15.88 3.88-3.88"/></svg>`;
+
+// ==================== ESTADO E CONTROLES ====================
+let currentDayIdx = 0;
+let isPlaying = false;
+let cycleTimeouts = [];
+let scrollAnimFrame = null;
+let isSummaryOpen = true;
+
+const $ = id => document.getElementById(id);
+
+// Converte string "HH:MM" em minutos desde as 00:00
+function timeToMinutes(tStr) {
+  const [h, m] = tStr.split(':').map(Number);
+  return h * 60 + m;
+}
+
+// ==================== RENDERIZAÇÃO PRINCIPAL ====================
+function render() {
+  const currentDayInfo = weekDays[currentDayIdx];
+  const dayAppointments = weekScheduleData[currentDayIdx];
+
+  // Atualiza controles de data
+  $('dateNavLabel').textContent = currentDayInfo.dateNav;
+  $('subDateLabel').textContent = currentDayInfo.sub;
+  $('summaryDateLabel').textContent = currentDayInfo.summary;
+
+  // Calcula totais por barbeiro
+  const barberTotals = staffList.map((_, bIdx) => {
+    const list = dayAppointments.filter(a => a.barberIdx === bIdx);
+    const count = list.length;
+    let rev = 0;
+    list.forEach(a => {
+      if (a.price.startsWith('R$')) {
+        const val = parseFloat(a.price.replace('R$', '').replace('.', '').replace(',', '.').trim()) || 0;
+        rev += val;
+      } else {
+        rev += 60; // valor médio de plano
+      }
+    });
+    return {
+      count,
+      revenueStr: `R$ ${rev.toFixed(2).replace('.', ',')}`
+    };
+  });
+
+  // Renderiza cabeçalho dos barbeiros na grade
+  $('staffHeaderRow').innerHTML = `
+    <div class="staff-col-time-label">HORA</div>
+    ${staffList.map((staff, i) => `
+      <div class="staff-card-header">
+        <div class="staff-avatar-box">${staffIconSvg}</div>
+        <div class="staff-meta">
+          <strong>${staff.name}</strong>
+          <small>${barberTotals[i].count} atend.</small>
+        </div>
+        <span class="staff-revenue">${barberTotals[i].revenueStr}</span>
+      </div>
+    `).join('')}
+  `;
+
+  // Renderiza corpo da grade de horários
+  const totalHours = END_HOUR - START_HOUR;
+  const hourTicks = Array.from({ length: totalHours + 1 }, (_, i) => {
+    const h = START_HOUR + i;
+    const topPx = i * HOUR_HEIGHT;
+    return `<div class="hour-tick" style="top:${topPx}px">${String(h).padStart(2, '0')}:00</div>`;
+  }).join('');
+
+  const hourGuides = Array.from({ length: totalHours + 1 }, (_, i) => {
+    const topPx = i * HOUR_HEIGHT;
+    return `<div class="hour-guide-line" style="top:${topPx}px"></div>`;
+  }).join('');
+
+  // Agrupa cards por barbeiro
+  const lanesHtml = staffList.map((_, bIdx) => {
+    const barberApts = dayAppointments.filter(a => a.barberIdx === bIdx);
+    const cardsHtml = barberApts.map(apt => {
+      const startMin = timeToMinutes(apt.time);
+      const topPx = ((startMin - START_HOUR * 60) / 60) * HOUR_HEIGHT;
+      const heightPx = Math.max((apt.duration / 60) * HOUR_HEIGHT - 3, 38);
+      const st = statusConfig[apt.status] || statusConfig.confirmed;
+
+      return `
+        <div class="apt-card ${apt.inspect ? 'inspect-candidate' : ''}" id="grid-apt-${apt.id}" style="top:${topPx + 2}px;height:${heightPx}px" data-apt-id="${apt.id}">
+          <div class="apt-card-stripe" style="background:${st.color}"></div>
+          <div class="apt-header">
+            <span class="apt-client-name">${apt.client}</span>
+            <span class="apt-time">${apt.time}</span>
+          </div>
+          ${heightPx >= 48 ? `<div class="apt-service">${apt.service}</div>` : ''}
+          ${heightPx >= 62 ? `
+            <div class="apt-footer">
+              <span class="apt-value">${apt.price}</span>
+              <span class="apt-status-text" style="color:${st.color}">${st.short}</span>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div class="barber-lane">
+        ${hourGuides}
+        ${cardsHtml}
+      </div>
+    `;
+  }).join('');
+
+  $('scheduleBody').innerHTML = `
+    <div class="time-col">
+      ${hourTicks}
+    </div>
+    ${lanesHtml}
+  `;
+
+  // Renderiza Resumo do Dia (100% fiel e consistente com a grade!)
+  renderSummary(dayAppointments);
+}
+
+// ==================== FOTOS DOS CLIENTES (ALTA DEFINIÇÃO - RETRATOS REAIS) ====================
+function getInitials(name) {
+  if (!name) return 'CL';
+  const parts = name.trim().split(/\s+/);
+  if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+  return name.slice(0, 2).toUpperCase();
+}
+
+const clientAvatarMap = {
+  'Lucas Almeida': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Felipe Rocha': 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Vitor Carvalho': 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Eduardo Santos': 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Ana Clara': 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Leonardo Alves': 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Caio Oliveira': 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Thiago Lima': 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Marina Costa': 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Bruno Costa': 'https://images.unsplash.com/photo-1528892952291-009c663ce843?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Alex Ferreira': 'https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Samuel Ribeiro': 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Matheus Ferreira': 'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Juliana Paes': 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Marcos Vinicius': 'https://images.unsplash.com/photo-1517070208541-6ddc4d3efbcb?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Pedro Henrique': 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Gustavo Nunes': 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Rafael Souza': 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Rodrigo Mello': 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Diego Santana': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Beatriz Ramos': 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Gabriel Martins': 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Renan Barbosa': 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Otávio Ramos': 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Camila Nogueira': 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Enzo Gabriel': 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Fábio Silveira': 'https://images.unsplash.com/photo-1528892952291-009c663ce843?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Igor Moreira': 'https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Larissa Monteiro': 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Guilherme Prado': 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Arthur Bernardes': 'https://images.unsplash.com/photo-1517070208541-6ddc4d3efbcb?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Vanessa Toledo': 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Marcelo Dias': 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Vinicius Castro': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Patrícia Lima': 'https://images.unsplash.com/photo-1548142813-c348350df52b?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Douglas Souza': 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Carolina Mendes': 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Danilo Silva': 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'João Pedro': 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200&h=200&fit=crop&crop=faces&auto=format&q=80',
+  'Henrique Vasconcelos': 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=faces&auto=format&q=80'
+};
+
+const avatarPoolList = Object.values(clientAvatarMap);
+
+function getClientAvatar(clientName) {
+  if (clientAvatarMap[clientName]) return clientAvatarMap[clientName];
+  let hash = 0;
+  for (let i = 0; i < clientName.length; i++) {
+    hash = (hash * 31 + clientName.charCodeAt(i)) % avatarPoolList.length;
+  }
+  return avatarPoolList[Math.abs(hash)];
+}
+
+// Renderiza a lista do Resumo do Dia
+function renderSummary(appointments) {
+  // Ordena cronologicamente por horário
+  const sorted = [...appointments].sort((a, b) => timeToMinutes(a.time) - timeToMinutes(b.time));
+
+  $('summaryCount').textContent = sorted.length;
+  $('footerRecordCount').textContent = sorted.length;
+
+  if (sorted.length === 0) {
+    $('summaryList').innerHTML = `
+      <div style="text-align:center;padding:32px 16px;color:#64748b">
+        <p style="font-size:12px;font-weight:700">Nenhum agendamento para este dia</p>
+      </div>
+    `;
+    return;
+  }
+
+  $('summaryList').innerHTML = sorted.map(apt => {
+    const st = statusConfig[apt.status] || statusConfig.confirmed;
+    const barber = staffList[apt.barberIdx]?.name || 'Barbeiro';
+    const avatarUrl = getClientAvatar(apt.client);
+    const initials = getInitials(apt.client);
+
+    return `
+      <article class="summary-card ${apt.inspect ? 'inspect-candidate-summary' : ''}" id="summary-apt-${apt.id}" data-apt-id="${apt.id}">
+        <div class="summary-card-inner">
+          <div class="summary-avatar" title="${apt.client}">
+            <img src="${avatarUrl}" class="summary-avatar-img" alt="${apt.client}" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'summary-avatar-fallback\\'>${initials}</div>';" />
+          </div>
+          <div class="summary-info">
+            <div class="summary-row-top">
+              <span class="summary-client">${apt.client}</span>
+              <span class="summary-time">${apt.time}</span>
+            </div>
+            <div class="summary-service">${apt.service}</div>
+            <div class="summary-barber-tag">Profissional: ${barber}</div>
+
+            <div class="summary-row-status">
+              <span class="status-pill ${apt.status}">${st.label}</span>
+              <span class="summary-value">${apt.price}</span>
+            </div>
+
+            ${apt.isPlan && apt.planNote ? `
+              <div class="summary-plan-note">${apt.planNote}</div>
+            ` : ''}
+
+            ${(apt.status === 'pending' || apt.status === 'confirmed') ? `
+              <div class="summary-actions">
+                <button class="summary-btn absent" title="Marcar falta">
+                  <svg viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
+                  <span>Falta</span>
+                </button>
+                <button class="summary-btn cancel" title="Cancelar reserva">
+                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" x2="19.07" y1="4.93" y2="19.07"/></svg>
+                  <span>Cancelar</span>
+                </button>
+                <button class="summary-btn finish" title="Concluir atendimento">
+                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                  <span>Concluir</span>
+                </button>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      </article>
+    `;
+  }).join('');
+}
+
+// ==================== ORQUESTRADOR DE ANIMAÇÃO SEQUENCIAL ====================
+function clearAllCycleTimeouts() {
+  cycleTimeouts.forEach(t => clearTimeout(t));
+  cycleTimeouts = [];
+  if (scrollAnimFrame) {
+    cancelAnimationFrame(scrollAnimFrame);
+    scrollAnimFrame = null;
+  }
+}
+
+function removeAllInspections() {
+  document.querySelectorAll('.apt-card.inspecting, .summary-card.inspecting').forEach(el => {
+    el.classList.remove('inspecting');
+  });
+}
+
+function animateVerticalScroll(targetScroll, duration = 1280) {
+  if (scrollAnimFrame) cancelAnimationFrame(scrollAnimFrame);
+  const gridEl = $('gridScroll');
+  const summaryEl = $('summaryList');
+  if (!gridEl || !summaryEl) return;
+
+  const startGrid = gridEl.scrollTop;
+  const changeGrid = targetScroll - startGrid;
+  const startSummary = summaryEl.scrollTop;
+  const maxSummary = Math.max(0, summaryEl.scrollHeight - summaryEl.clientHeight);
+  const targetSummary = Math.min(targetScroll * 0.75, maxSummary);
+  const changeSummary = targetSummary - startSummary;
+  const startTime = performance.now();
+
+  function step(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    // Easing suave (easeInOutQuad)
+    const ease = progress < 0.5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+    gridEl.scrollTop = startGrid + changeGrid * ease;
+    summaryEl.scrollTop = startSummary + changeSummary * ease;
+
+    if (progress < 1) {
+      scrollAnimFrame = requestAnimationFrame(step);
+    }
+  }
+  scrollAnimFrame = requestAnimationFrame(step);
+}
+
+// Inicia o ciclo rigoroso do dia:
+// 1. Início: scroll no topo (0)
+// 2. Destaque/piscar discreto nos 1-2 atendimentos-chave
+// 3. Fim do destaque: cards 100% limpos e normais
+// 4. Rolagem vertical suave (sem nenhum destaque ativo)
+// 5. Visualização da tarde e transição para o próximo dia
+function startDayCycle() {
+  clearAllCycleTimeouts();
+  removeAllInspections();
+
+  // Garante scroll no topo
+  const gridEl = $('gridScroll');
+  const summaryEl = $('summaryList');
+  if (gridEl) gridEl.scrollTop = 0;
+  if (summaryEl) summaryEl.scrollTop = 0;
+
+  // 1. ANTES DA ROLAGEM: ativa piscar/destaque discreto nos atendimentos selecionados
+  const t1 = setTimeout(() => {
+    const dayAppointments = weekScheduleData[currentDayIdx];
+    const highlightedApts = dayAppointments.filter(a => a.inspect);
+    highlightedApts.forEach(apt => {
+      const gridCard = $(`grid-apt-${apt.id}`);
+      const summaryCard = $(`summary-apt-${apt.id}`);
+      if (gridCard) gridCard.classList.add('inspecting');
+      if (summaryCard) summaryCard.classList.add('inspecting');
+    });
+  }, 320);
+
+  // 2. PARA COMPLETAMENTE O PISCAR: remove todas as classes de destaque
+  const t2 = setTimeout(() => {
+    removeAllInspections();
+  }, 1160);
+
+  // 3. APÓS PARAR O DESTAQUE: inicia a rolagem vertical suave com cards normais
+  const t3 = setTimeout(() => {
+    animateVerticalScroll(220, 1280);
+  }, 1400);
+
+  // 4. Se estiver em reprodução automática, avança para o próximo dia após a visualização da tarde
+  if (isPlaying) {
+    const t4 = setTimeout(() => {
+      navigateToDay(currentDayIdx + 1, false);
+    }, 3840);
+    cycleTimeouts.push(t4);
+  }
+
+  cycleTimeouts.push(t1, t2, t3);
+}
+
+// ==================== NAVEGAÇÃO E TRANSIÇÃO ENTRE DIAS ====================
+function navigateToDay(targetIdx, userTriggered = true) {
+  clearAllCycleTimeouts();
+  removeAllInspections();
+
+  const nextIdx = (targetIdx + 7) % 7;
+  const isForward = nextIdx >= currentDayIdx;
+  currentDayIdx = nextIdx;
+
+  // Reseta rolagem para o topo no novo dia
+  const gridEl = $('gridScroll');
+  const summaryEl = $('summaryList');
+  if (gridEl) gridEl.scrollTop = 0;
+  if (summaryEl) summaryEl.scrollTop = 0;
+
+  render();
+
+  // Executa animação horizontal de entrada do dia
+  const inner = $('gridInner');
+  inner.classList.remove('day-enter', 'day-back');
+  void inner.offsetWidth; // trigger reflow
+  inner.classList.add(isForward ? 'day-enter' : 'day-back');
+
+  if (isPlaying) {
+    showToast(`Agenda: ${weekDays[currentDayIdx].sub}`);
+  }
+
+  // Inicia o ciclo rigoroso do novo dia
+  startDayCycle();
+}
+
+// Toast de aviso
+let toastTimer = null;
+function showToast(text) {
+  const toast = $('toastMsg');
+  if (!toast) return;
+  toast.textContent = text;
+  toast.classList.add('show');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 960);
+}
+
+// ==================== CONTROLE DE REPRODUÇÃO ====================
+function startPlayback() {
+  if (isPlaying) return;
+  isPlaying = true;
+  $('playLabel').textContent = 'Pausar animação';
+  $('btnPlayPause').classList.add('play-anim');
+  $('playIcon').innerHTML = `<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>`;
+  startDayCycle();
+}
+
+function stopPlayback() {
+  if (!isPlaying) return;
+  isPlaying = false;
+  clearAllCycleTimeouts();
+  removeAllInspections();
+  $('playLabel').textContent = 'Reproduzir semana';
+  $('btnPlayPause').classList.remove('play-anim');
+  $('playIcon').innerHTML = `<polygon points="6 3 20 12 6 21 6 3"/>`;
+  showToast('Animação pausada');
+}
+
+function togglePlayback() {
+  if (isPlaying) {
+    stopPlayback();
+  } else {
+    startPlayback();
+    showToast('Reproduzindo semana...');
+  }
+}
+
+// ==================== EVENT LISTENERS ====================
+$('btnPrevDay').onclick = () => navigateToDay(currentDayIdx - 1);
+$('btnNextDay').onclick = () => navigateToDay(currentDayIdx + 1);
+$('btnToday').onclick = () => navigateToDay(0);
+$('btnPicker').onclick = () => navigateToDay(currentDayIdx + 1);
+$('btnPlayPause').onclick = togglePlayback;
+$('btnRefresh').onclick = () => {
+  render();
+  startDayCycle();
+  showToast('Agenda atualizada com sucesso');
+};
+$('btnSummaryRefresh').onclick = () => {
+  renderSummary(weekScheduleData[currentDayIdx]);
+  showToast('Resumo sincronizado');
+};
+
+// Alternar Resumo do Dia (expandir/ocultar)
+$('btnToggleSummary').onclick = () => {
+  isSummaryOpen = !isSummaryOpen;
+  if (isSummaryOpen) {
+    $('summaryPanel').classList.remove('collapsed');
+    $('toggleSummaryLabel').textContent = 'Ocultar Painel';
+    $('btnToggleSummary').classList.add('btn-summary-toggle');
+  } else {
+    $('summaryPanel').classList.add('collapsed');
+    $('toggleSummaryLabel').textContent = 'Ver Resumo';
+    $('btnToggleSummary').classList.remove('btn-summary-toggle');
+  }
+};
+
+// Teclado: Setas e Espaço
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') {
+    navigateToDay(currentDayIdx + 1);
+  } else if (e.key === 'ArrowLeft') {
+    navigateToDay(currentDayIdx - 1);
+  } else if (e.code === 'Space') {
+    e.preventDefault();
+    togglePlayback();
+  }
+});
+
+// Inicialização inicial da tela
+render();
+// Inicia reprodução automática sequencial (acelerada em 20%)
+setTimeout(startPlayback, 480);
+</script>
+
+</body>
+</html>

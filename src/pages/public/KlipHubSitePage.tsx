@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './kliphub-site.css';
 import { EcosystemSection, FeatureShowcase } from './KlipHubShowcases';
+import { KlipHubFeaturesMarquee } from './KlipHubFeaturesMarquee';
 
 const PUBLIC_BASE = import.meta.env.BASE_URL;
 
@@ -179,23 +180,15 @@ export default function KlipHubSitePage() {
                 aria-label="Animação original de conversa do Gestor de IA"
                 className="hero-animation-iframe"
                 loading="eager"
-                src={`${import.meta.env.BASE_URL}gestor_de_ia_hero.html?v=20261023-0012`}
+                src={`${import.meta.env.BASE_URL}gestor_de_ia_hero.html?v=20261024-v3`}
                 title="Demonstração animada do Gestor de IA"
               />
             </div>
           </div>
         </section>
 
-        {/* BENEFIT RIBBON */}
-        <section aria-label="Principais recursos" className="benefit-ribbon">
-          <div className="container ribbon-inner">
-            <span><svg><use href={`${PUBLIC_BASE}icons.svg#calendar`}></use></svg>Agenda online</span>
-            <span><svg><use href={`${PUBLIC_BASE}icons.svg#wallet`}></use></svg>Caixa e comissões</span>
-            <span><svg><use href={`${PUBLIC_BASE}icons.svg#users`}></use></svg>Clientes e equipe</span>
-            <span><svg><use href={`${PUBLIC_BASE}icons.svg#message`}></use></svg>WhatsApp com IA</span>
-            <span><svg><use href={`${PUBLIC_BASE}icons.svg#chart`}></use></svg>Financeiro claro</span>
-          </div>
-        </section>
+        {/* BARRA FLUTUANTE DE RECURSOS E DIFERENCIAIS */}
+        <KlipHubFeaturesMarquee />
 
         {/* FUNCIONALIDADES · FEATURE SHOWCASE INTERATIVO */}
         <FeatureShowcase onExplore={() => setDialogOpen(true)} />
@@ -207,32 +200,92 @@ export default function KlipHubSitePage() {
               <div className="eyebrow">UM OLHAR PARA SUA NOVA ROTINA</div>
               <h2>O dia fica mais leve<br />quando tudo está no lugar.</h2>
               <p>A agenda real do KlipHub, desenvolvida especialmente para a rotina da sua barbearia.</p>
+
+              {/* BARRA DE DESTAQUES RÁPIDOS (GUIA VISUAL PRÉ-AGENDA) */}
+              <div className="agenda-pill-strip">
+                <div className="agenda-pill-item">
+                  <div className="api-icon">
+                    <svg fill="none" height="15" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="15"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                  </div>
+                  <div className="api-text">
+                    <strong>Visão Multiprofissional</strong>
+                    <span>Grade individual por cadeira</span>
+                  </div>
+                </div>
+
+                <div className="agenda-pill-divider" aria-hidden="true" />
+
+                <div className="agenda-pill-item">
+                  <div className="api-icon">
+                    <svg fill="none" height="15" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="15"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                  </div>
+                  <div className="api-text">
+                    <strong>Status em Tempo Real</strong>
+                    <span>Sincronizado com WhatsApp</span>
+                  </div>
+                </div>
+
+                <div className="agenda-pill-divider" aria-hidden="true" />
+
+                <div className="agenda-pill-item">
+                  <div className="api-icon">
+                    <svg fill="none" height="15" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="15"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  </div>
+                  <div className="api-text">
+                    <strong>Fechamento Automático</strong>
+                    <span>Comissões e caixa apurados na hora</span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <figure className="agenda-product-shot">
-              <a
-                aria-label="Abrir a captura da agenda do KlipHub em tamanho original"
-                className="agenda-product-image-link"
-                href={`${PUBLIC_BASE}agenda-kliphub.webp`}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                <img
-                  alt="Captura da agenda real do KlipHub em tema escuro, com horários organizados em colunas por barbeiro, cartões de agendamento e resumo dos atendimentos do dia."
-                  className="agenda-product-image"
-                  decoding="async"
-                  height="1152"
+
+            {/* MOCKUP INTERATIVO DA JANELA DA AGENDA */}
+            <div className="agenda-window-mockup">
+              <div className="agenda-window-header">
+                <div className="window-dots" aria-hidden="true">
+                  <span className="dot red"></span>
+                  <span className="dot yellow"></span>
+                  <span className="dot green"></span>
+                </div>
+                <div className="window-title">
+                  <span className="status-live-dot pulse"></span>
+                  <span className="window-brand">KlipHub Agenda</span>
+                  <span className="window-sub">· Simulação interativa em tempo real</span>
+                </div>
+                <div className="window-actions">
+                  <a
+                    className="window-btn-expand"
+                    href={`${PUBLIC_BASE}agenda_demo_v2.html`}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    title="Abrir simulação completa em tela cheia"
+                  >
+                    <span>Tela cheia</span>
+                    <svg aria-hidden="true" fill="none" height="13" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="13"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>
+                  </a>
+                </div>
+              </div>
+
+              <div className="agenda-iframe-container">
+                <iframe
+                  aria-label="Demonstração interativa e animada da agenda do KlipHub"
+                  className="agenda-demo-iframe"
                   loading="lazy"
-                  src={`${PUBLIC_BASE}agenda-kliphub.webp`}
-                  width="2048"
+                  src={`${PUBLIC_BASE}agenda_demo_v2.html?v=20261028-v2`}
+                  title="Demonstração animada da Agenda KlipHub"
                 />
-                <span className="image-zoom-hint">Abrir imagem em tamanho original <span aria-hidden="true">↗</span></span>
-              </a>
-              <figcaption>
-                <span className="shot-label">AGENDA REAL DO KLIPHUB</span>
-                <span>Visual do sistema em uso · Proporção original 16:9 · Sem recortes</span>
-                <span className="shot-mobile-note">Toque na imagem para ampliar no celular.</span>
-              </figcaption>
-            </figure>
+              </div>
+
+              <div className="agenda-window-footer">
+                <div className="agenda-footer-hint">
+                  <span className="hint-pill">Ao vivo</span>
+                  <span>A animação avança os dias da semana automaticamente. Você também pode pausar e interagir diretamente.</span>
+                </div>
+                <div className="agenda-footer-meta">
+                  <span>Visual fiel do sistema · Proporção original sem cortes</span>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 

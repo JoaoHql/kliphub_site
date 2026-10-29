@@ -684,7 +684,7 @@ h2 {
   height:92px;
 }
 .benefit-ribbon {
-  border-block:1px solid var(--line);
+  border: none !important;
 }
 .ribbon-inner {
   display:flex;
@@ -3413,7 +3413,7 @@ body.kliphub-landing, .kliphub-landing * { box-sizing:border-box; }
 .kliphub-landing .avatar-orange,.kliphub-landing .avatar-green,.kliphub-landing .avatar-blue { background:#111b19; color:#5eead4; }
 .kliphub-landing .confirmed { color:#5eead4; font-size:.7rem; }
 .kliphub-landing .float-footer { margin:1rem -1.5rem -1.5rem; padding:1rem 1.5rem; border-color:var(--line); color:var(--muted); font-size:.75rem; }
-.kliphub-landing .benefit-ribbon { border-color:var(--line); }
+.kliphub-landing .benefit-ribbon { border: none !important; }
 .kliphub-landing .ribbon-inner { flex-wrap:wrap; padding-block:1.25rem; }
 .kliphub-landing .ribbon-inner span { color:var(--ink-2); font-size:.8125rem; }
 .kliphub-landing .ribbon-inner svg { color:var(--orange); }
@@ -3622,19 +3622,10 @@ body.kliphub-landing, .kliphub-landing * { box-sizing:border-box; }
 
 
 
-/* Encaixe responsivo do HTML original da animação na Hero */
-.kliphub-landing .hero-visual { padding:0; }
-.hero-animation-frame { width:100%; max-width:390px; height:450px; margin-inline:auto; overflow:hidden; background:#070707; }
-.hero-animation-iframe { display:block; width:100%; height:100%; border:0; background:#050508; }
-@media(max-width:760px) {
-  .kliphub-landing .hero-visual { width:100%; }
-  .hero-animation-frame { max-width:390px; height:450px; }
-}
-
-/* Encaixe responsivo do HTML original da animação na Hero */
-.kliphub-landing .hero-visual { width:min(100%,35rem); height:450px; min-height:450px; margin:0; padding:0; }
-.hero-animation-frame { position:absolute; z-index:1; top:50%; left:50%; width:100%; max-width:560px; height:675px; margin:0; overflow:hidden; background:#070707; transform:translate(-50%,-50%); }
-.hero-animation-iframe { display:block; width:100%; height:100%; border:0; background:#070707; }
+/* Encaixe responsivo do simulador do Gestor de IA na Hero */
+.kliphub-landing .hero-visual { width:min(100%,36rem); height:540px; min-height:540px; margin:0; padding:0; position:relative; }
+.hero-animation-frame { position:relative; width:100%; height:100%; max-width:100%; margin:0 auto; overflow:hidden; background:#070707; border-radius:18px; box-shadow:0 25px 60px -12px rgba(0,0,0,.85), 0 0 45px rgba(16,185,129,.12); }
+.hero-animation-iframe { display:block; width:100%; height:100%; border:0; background:#070707; pointer-events:none; }
 @keyframes hero-copy-enter { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
 .kliphub-landing .hero-copy > .eyebrow,
 .kliphub-landing .hero-copy > .hero-description,
@@ -3674,11 +3665,9 @@ body.kliphub-landing, .kliphub-landing * { box-sizing:border-box; }
   100% { opacity:1; transform:translate3d(0,0,0); }
 }
 .kliphub-landing .hero-rotating-word { display:inline-block; animation:hero-word-from-left .55s cubic-bezier(.16,1,.3,1) both !important; will-change:transform, opacity; }
-/* Simulador e apenas demonstrativo: o scroll do mouse/toque passa direto para a pagina */
-.kliphub-landing .hero-animation-iframe { pointer-events:none; }
 @media(max-width:760px) {
-  .kliphub-landing .hero-visual { width:100%; height:450px; min-height:450px; }
-  .hero-animation-frame { max-width:560px; height:675px; }
+  .kliphub-landing .hero-visual { width:100%; height:510px; min-height:510px; }
+  .hero-animation-frame { width:100%; height:100%; max-width:100%; }
 }
 
 
@@ -3916,4 +3905,505 @@ body.kliphub-landing, .kliphub-landing * { box-sizing:border-box; }
   .kliphub-landing .ecosystem-node strong,.kliphub-landing .ecosystem-node small { align-self:end; }
   .kliphub-landing .ecosystem-node small { align-self:start; }
   .kliphub-landing .ecosystem-disclaimer { margin-top:.7rem; text-align:left; }
+}
+
+/* BENEFIT RIBBON COM SCROLL INFINITO (MARQUEE) FLUTUANTE */
+.benefit-ribbon,
+.kliphub-landing .benefit-ribbon {
+  border: none !important;
+  border-block: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  background: transparent !important;
+  padding-block: 2.5rem 2rem;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+/* MASCARA DE FADE NAS PONTAS (ENTERPRISE PRODUCT FINISH) */
+.benefit-ribbon-marquee {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+}
+
+/* VELOCIDADE CALIBRADA E SUAVE (SEM BORRAO) */
+.benefit-ribbon-track {
+  display: flex;
+  width: max-content;
+  animation: ribbonMarquee 88s linear infinite;
+  will-change: transform;
+}
+
+/* PAUSA NO HOVER, NO CLIQUE E NO TOQUE MOBILE */
+.benefit-ribbon-track:hover,
+.benefit-ribbon-track:active,
+.benefit-ribbon-track.is-paused {
+  animation-play-state: paused !important;
+}
+
+.benefit-ribbon-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-right: 1rem;
+  flex-shrink: 0;
+}
+
+/* CARTOES DE ALTA PRECISAO E ALTO CONTRASTE */
+.feature-ticker-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.75rem 1.25rem;
+  background: #0d0f15;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  white-space: nowrap;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.feature-ticker-card:hover {
+  border-color: rgba(16, 185, 129, 0.4);
+  background: #11141c;
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.75), 0 0 25px rgba(16, 185, 129, 0.12);
+  transform: translateY(-2px);
+}
+
+.feature-ticker-icon-box {
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 8px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.22);
+  color: #34d399;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.25s ease;
+}
+
+.feature-ticker-card:hover .feature-ticker-icon-box {
+  background: rgba(16, 185, 129, 0.16);
+  border-color: rgba(16, 185, 129, 0.45);
+  color: #6ee7b7;
+  transform: scale(1.05);
+}
+
+.feature-ticker-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+}
+
+.feature-ticker-header {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+/* TITULO EM BRANCO NITIDO */
+.feature-ticker-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  transition: color 0.2s ease;
+}
+
+/* TAG MICRO-MONO */
+.feature-ticker-tag {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.26);
+  padding: 0.1rem 0.45rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+/* TEXTO SECUNDARIO COM LUMINANCIA ELEVADA (ZINC-300 / #D4D4D8) */
+.feature-ticker-desc {
+  font-size: 0.76rem;
+  color: #d4d4d8;
+  font-weight: 400;
+  margin: 0;
+  line-height: 1.35;
+  transition: color 0.2s ease;
+}
+
+.feature-ticker-card:hover .feature-ticker-desc {
+  color: #ffffff;
+}
+
+@keyframes ribbonMarquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* MOBILE RESPONSIVO */
+@media (max-width: 760px) {
+  .benefit-ribbon,
+  .kliphub-landing .benefit-ribbon {
+    padding-block: 2rem 1.6rem;
+  }
+  .benefit-ribbon-group {
+    gap: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  .feature-ticker-card {
+    padding: 0.65rem 1rem;
+    gap: 0.75rem;
+    border-radius: 10px;
+  }
+  .feature-ticker-icon-box {
+    width: 2.1rem;
+    height: 2.1rem;
+  }
+  .feature-ticker-icon-box svg {
+    width: 16px;
+    height: 16px;
+  }
+  .feature-ticker-title {
+    font-size: 0.8125rem;
+  }
+  .feature-ticker-desc {
+    font-size: 0.71rem;
+    color: #e4e4e7;
+  }
+  .feature-ticker-tag {
+    font-size: 0.52rem;
+    padding: 0.08rem 0.38rem;
+  }
+  .benefit-ribbon-track {
+    animation-duration: 72s;
+  }
+}
+
+
+/* ==========================================================================
+   SEÇÃO 3 · MOCKUP INTERATIVO DA AGENDA KLIPHUB & PILARES OPERACIONAIS
+   ========================================================================== */
+.agenda-window-mockup {
+  position: relative;
+  max-width: 1200px;
+  margin: 36px auto 0;
+  background: #090909;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 25px 65px -15px rgba(0, 0, 0, 0.9), 0 0 55px rgba(16, 185, 129, 0.12);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.agenda-window-mockup:hover {
+  border-color: rgba(20, 184, 166, 0.3);
+  box-shadow: 0 30px 75px -15px rgba(0, 0, 0, 0.95), 0 0 65px rgba(16, 185, 129, 0.18);
+}
+
+.agenda-window-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  background: #111111;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  user-select: none;
+}
+
+.window-dots {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 70px;
+}
+
+.window-dots .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.window-dots .dot.red { background: #ef4444; }
+.window-dots .dot.yellow { background: #f59e0b; }
+.window-dots .dot.green { background: #10b981; }
+
+.agenda-window-mockup:hover .window-dots .dot {
+  opacity: 1;
+}
+
+.window-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.window-brand {
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.window-sub {
+  color: #94a3b8;
+  font-weight: 500;
+  font-size: 11.5px;
+}
+
+.status-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  display: inline-block;
+  box-shadow: 0 0 8px #10b981;
+  position: relative;
+}
+
+.status-live-dot.pulse::after {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  border-radius: 50%;
+  border: 1.5px solid #10b981;
+  animation: liveDotPulse 2s infinite ease-out;
+}
+
+@keyframes liveDotPulse {
+  0% { transform: scale(0.8); opacity: 0.9; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+.window-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100px;
+}
+
+.window-btn-expand {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.2s ease;
+}
+
+.window-btn-expand:hover {
+  color: #fff;
+  background: rgba(20, 184, 166, 0.15);
+  border-color: rgba(20, 184, 166, 0.4);
+  transform: translateY(-1px);
+}
+
+.window-btn-expand svg {
+  stroke-width: 2.2;
+}
+
+.agenda-iframe-container {
+  position: relative;
+  width: 100%;
+  height: 680px;
+  max-height: 78vh;
+  background: #070707;
+  overflow: hidden;
+}
+
+.agenda-demo-iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #070707;
+}
+
+.agenda-window-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 18px;
+  background: #0f0f0f;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.agenda-footer-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.hint-pill {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(16, 185, 129, 0.14);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34d399;
+  font-size: 9.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 7px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.agenda-footer-meta {
+  color: #64748b;
+  font-size: 10.5px;
+  flex-shrink: 0;
+}
+
+/* BARRA DE DESTAQUES RÁPIDOS PRÉ-AGENDA (PILL STRIP ELEGANTE) */
+.agenda-pill-strip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 28px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 9999px;
+  padding: 6px 14px;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  max-width: 100%;
+}
+
+.agenda-pill-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.agenda-pill-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.api-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.28);
+  color: #10b981;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.agenda-pill-item:hover .api-icon {
+  background: rgba(16, 185, 129, 0.22);
+  transform: scale(1.08);
+}
+
+.api-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  line-height: 1.25;
+}
+
+.api-text strong {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.api-text span {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.agenda-pill-divider {
+  width: 1px;
+  height: 22px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+/* RESPONSIVIDADE DA SEÇÃO DA AGENDA */
+@media (max-width: 1024px) {
+  .agenda-iframe-container {
+    height: 560px;
+  }
+}
+
+@media (max-width: 860px) {
+  .agenda-pill-strip {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    border-radius: 14px;
+    padding: 10px;
+    gap: 8px;
+    margin-top: 20px;
+  }
+  .agenda-pill-item {
+    padding: 6px 8px;
+  }
+  .agenda-pill-divider {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .agenda-window-mockup {
+    margin-top: 22px;
+    border-radius: 12px;
+  }
+  .agenda-iframe-container {
+    height: 460px;
+  }
+  .window-sub {
+    display: none;
+  }
+  .agenda-window-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px 14px;
+  }
 }
