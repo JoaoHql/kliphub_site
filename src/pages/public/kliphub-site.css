@@ -4777,3 +4777,140 @@ body.kliphub-landing, .kliphub-landing * { box-sizing:border-box; }
   .kliphub-landing .module-card { height:24rem; }
   .kliphub-landing .module-media { height:10.5rem; }
 }
+
+/* Planos e preços */
+.kliphub-landing .pricing-section {
+  padding-block:clamp(4.5rem,8vw,7rem);
+  border-top:1px solid var(--line);
+}
+.kliphub-landing .pricing-heading {
+  max-width:48rem;
+  margin:0 auto 2.75rem;
+  text-align:center;
+}
+.kliphub-landing .pricing-heading .eyebrow { margin-bottom:.85rem; }
+.kliphub-landing .pricing-heading h2 { margin:0 auto 1rem; }
+.kliphub-landing .pricing-heading>p {
+  max-width:42rem;
+  margin:0 auto;
+  color:var(--muted);
+  font-size:.95rem;
+}
+.kliphub-landing .pricing-grid {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  align-items:stretch;
+  gap:1rem;
+}
+.kliphub-landing .pricing-card {
+  position:relative;
+  display:flex;
+  min-width:0;
+  flex-direction:column;
+  padding:2rem 1.75rem 1.5rem;
+  border:1px solid var(--line);
+  border-radius:1rem;
+  background:#0f0f0f;
+}
+.kliphub-landing .pricing-card-featured {
+  border-color:rgba(20,184,166,.62);
+  background:linear-gradient(160deg,rgba(20,184,166,.09),#0f0f0f 42%);
+}
+.kliphub-landing .pricing-badge {
+  align-self:flex-start;
+  margin-bottom:.8rem;
+  padding:.35rem .6rem;
+  border:1px solid rgba(20,184,166,.35);
+  border-radius:999px;
+  color:#5eead4;
+  background:rgba(20,184,166,.1);
+  font-size:.7rem;
+  font-weight:700;
+  letter-spacing:.04em;
+}
+.kliphub-landing .pricing-card h3 {
+  margin:0;
+  font-size:1.55rem;
+  line-height:1.25;
+}
+.kliphub-landing .pricing-price {
+  display:flex;
+  align-items:baseline;
+  gap:.3rem;
+  margin:1.15rem 0 1.5rem;
+  color:var(--ink);
+  font-size:clamp(2rem,3vw,2.65rem);
+  font-weight:700;
+  letter-spacing:-.045em;
+  line-height:1;
+  font-variant-numeric:tabular-nums;
+}
+.kliphub-landing .pricing-currency,
+.kliphub-landing .pricing-period {
+  color:var(--muted);
+  font-size:.9rem;
+  font-weight:500;
+  letter-spacing:0;
+}
+.kliphub-landing .pricing-limits {
+  display:grid;
+  gap:.8rem;
+  margin:0;
+  padding:1.1rem 0;
+  border-block:1px solid var(--line);
+}
+.kliphub-landing .pricing-limits>div { display:flex; flex-direction:column; gap:.2rem; }
+.kliphub-landing .pricing-limits dt {
+  color:var(--muted);
+  font-size:.72rem;
+  font-weight:600;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.kliphub-landing .pricing-limits dd {
+  margin:0;
+  color:var(--ink);
+  font-size:.9rem;
+  font-weight:600;
+}
+.kliphub-landing .pricing-benefits-heading {
+  margin:1.15rem 0 .7rem;
+  color:var(--ink-2);
+  font-size:.78rem;
+  font-weight:700;
+}
+.kliphub-landing .pricing-benefits {
+  display:grid;
+  gap:.7rem;
+  margin:0 0 1.5rem;
+  padding:0;
+  color:var(--muted);
+  font-size:.82rem;
+  list-style:none;
+}
+.kliphub-landing .pricing-benefits li { display:flex; align-items:flex-start; gap:.55rem; }
+.kliphub-landing .pricing-benefits svg {
+  width:1rem;
+  height:1rem;
+  flex:none;
+  margin-top:.08rem;
+  color:#5eead4;
+}
+.kliphub-landing .pricing-cta {
+  width:100%;
+  justify-content:center;
+  margin-top:auto;
+  font-size:.82rem;
+}
+.kliphub-landing .pricing-cta svg { width:1rem; height:1rem; }
+@media(max-width:60rem) {
+  .kliphub-landing .pricing-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .kliphub-landing .pricing-card:last-child { grid-column:1/-1; width:min(100%,30rem); justify-self:center; }
+}
+@media(max-width:39.99rem) {
+  .kliphub-landing .pricing-heading { margin-bottom:2rem; text-align:left; }
+  .kliphub-landing .pricing-grid { grid-template-columns:1fr; gap:.85rem; }
+  .kliphub-landing .pricing-card:last-child { grid-column:auto; width:100%; }
+  .kliphub-landing .pricing-card { padding:1.5rem; }
+  .kliphub-landing .pricing-price { font-size:2.35rem; }
+}
