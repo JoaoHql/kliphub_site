@@ -296,39 +296,58 @@ export default function KlipHubSitePage() {
         {/* PLANOS E PREÇOS */}
         <section className="section container pricing-section" id="precos" aria-labelledby="pricing-title">
           <div className="pricing-heading">
-            <div className="eyebrow">PLANOS KLIPHUB</div>
-            <h2 id="pricing-title">O plano certo para o ritmo da sua barbearia.</h2>
-            <p>Compare a capacidade da equipe e dos agendamentos. Os recursos essenciais acompanham todos os planos.</p>
+            <div className="eyebrow">PLANOS KLIPHUB <span aria-hidden="true">/</span> PREÇOS CLAROS</div>
+            <h2 id="pricing-title">A estrutura certa para a sua equipe.</h2>
+            <p>Compare o tamanho da equipe e o volume de agendamentos. O essencial para organizar a operação está incluído em todos os planos.</p>
           </div>
 
           <div className="pricing-grid">
             {[
-              { name: 'Solo', price: '24,90', team: '1 profissional', appointments: '100 agendamentos por mês' },
-              { name: 'Essencial', price: '49,90', team: '2 profissionais', appointments: '200 agendamentos por mês', featured: true },
-              { name: 'Gestão', price: '89,90', team: 'Profissionais ilimitados', appointments: 'Agendamentos ilimitados' },
+              { number: '01', name: 'Solo', description: 'Para quem atende por conta própria.', price: '24,90', team: '1 profissional', appointments: '100 por mês' },
+              { number: '02', name: 'Essencial', description: 'Para uma equipe de até dois profissionais.', price: '49,90', team: '2 profissionais', appointments: '200 por mês', featured: true },
+              { number: '03', name: 'Gestão', description: 'Para equipes sem limite de profissionais.', price: '89,90', team: 'Profissionais ilimitados', appointments: 'Ilimitados' },
             ].map((plan) => (
               <article key={plan.name} className={`pricing-card${plan.featured ? ' pricing-card-featured' : ''}`}>
-                {plan.featured && <span className="pricing-badge">Mais indicado</span>}
+                <div className="pricing-card-meta">
+                  <span className="pricing-index">{plan.number}</span>
+                  {plan.featured && <span className="pricing-badge">Mais indicado</span>}
+                </div>
                 <h3>{plan.name}</h3>
-                <p className="pricing-price"><span className="pricing-currency">R$</span>{plan.price}<span className="pricing-period">/mês</span></p>
+                <p className="pricing-description">{plan.description}</p>
+                <p className="pricing-price">
+                  <span className="pricing-currency">R$</span>
+                  <strong>{plan.price}</strong>
+                  <span className="pricing-period">/mês</span>
+                </p>
 
                 <dl className="pricing-limits">
-                  <div><dt>Equipe</dt><dd>{plan.team}</dd></div>
-                  <div><dt>Agendamentos</dt><dd>{plan.appointments}</dd></div>
+                  <div>
+                    <dt>Equipe</dt>
+                    <dd>{plan.team}</dd>
+                  </div>
+                  <div>
+                    <dt>Agendamentos</dt>
+                    <dd>{plan.appointments}</dd>
+                  </div>
                 </dl>
 
-                <div className="pricing-benefits-heading">Em todos os planos</div>
-                <ul className="pricing-benefits">
-                  <li><svg aria-hidden="true"><use href={`${PUBLIC_BASE}icons.svg#check-circle`}></use></svg>Agendamento online</li>
-                  <li><svg aria-hidden="true"><use href={`${PUBLIC_BASE}icons.svg#check-circle`}></use></svg>Serviços ilimitados</li>
-                  <li><svg aria-hidden="true"><use href={`${PUBLIC_BASE}icons.svg#check-circle`}></use></svg>Acesso aos módulos de gestão</li>
-                </ul>
-
                 <a className={`button pricing-cta${plan.featured ? '' : ' button-dark'}`} href="https://kliphub.com.br/" aria-label={`Acessar o KlipHub para contratar o plano ${plan.name}`}>
-                  Escolher {plan.name}<svg aria-hidden="true"><use href={`${PUBLIC_BASE}icons.svg#arrow`}></use></svg>
+                  Escolher plano<svg aria-hidden="true"><use href={`${PUBLIC_BASE}icons.svg#arrow`}></use></svg>
                 </a>
               </article>
             ))}
+          </div>
+
+          <div className="pricing-includes">
+            <div className="pricing-includes-copy">
+              <span>EM TODOS OS PLANOS</span>
+              <strong>O essencial já está incluído.</strong>
+            </div>
+            <ul className="pricing-benefits">
+              <li><svg aria-hidden="true"><use href={`${PUBLIC_BASE}icons.svg#check-circle`}></use></svg>Agendamento online</li>
+              <li><svg aria-hidden="true"><use href={`${PUBLIC_BASE}icons.svg#check-circle`}></use></svg>Serviços ilimitados</li>
+              <li><svg aria-hidden="true"><use href={`${PUBLIC_BASE}icons.svg#check-circle`}></use></svg>Acesso aos módulos de gestão</li>
+            </ul>
           </div>
         </section>
 
