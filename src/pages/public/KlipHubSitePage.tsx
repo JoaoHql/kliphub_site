@@ -11,6 +11,7 @@ const HERO_ROTATING_WORDS = ['organizar.', 'automatizar.', 'lotar a agenda.', 'g
 export default function KlipHubSitePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [activeWordIdx, setActiveWordIdx] = useState(0);
 
   useEffect(() => {
@@ -66,6 +67,10 @@ export default function KlipHubSitePage() {
     }
   };
 
+  const toggleFaq = (index: number) => {
+    setOpenFaq(prev => (prev === index ? null : index));
+  };
+
   return (
     <div className="kliphub-landing-wrapper kliphub-landing min-h-screen bg-[#070707] text-[#f5f5f5]">
       <a className="skip-link" href="#inicio">Ir para o conteúdo</a>
@@ -95,7 +100,8 @@ export default function KlipHubSitePage() {
             <a href="#funcionalidades" onClick={(e) => { e.preventDefault(); scrollToSection('funcionalidades'); }}>Funcionalidades</a>
             <a href="#agendamento" onClick={(e) => { e.preventDefault(); scrollToSection('agendamento'); }}>Agendamento online</a>
             <a href="#planos" onClick={(e) => { e.preventDefault(); scrollToSection('planos'); }}>Planos e clube</a>
-            <a href="#planos" onClick={(e) => { e.preventDefault(); scrollToSection('planos'); }}>Preços</a>
+            <a href="#precos" onClick={(e) => { e.preventDefault(); scrollToSection('precos'); }}>Preços</a>
+            <a href="#duvidas" onClick={(e) => { e.preventDefault(); scrollToSection('duvidas'); }}>Dúvidas</a>
           </nav>
 
           <div className="header-actions">
@@ -124,7 +130,8 @@ export default function KlipHubSitePage() {
             <a href="#funcionalidades" onClick={(e) => { e.preventDefault(); scrollToSection('funcionalidades'); }}>Funcionalidades</a>
             <a href="#agendamento" onClick={(e) => { e.preventDefault(); scrollToSection('agendamento'); }}>Agendamento online</a>
             <a href="#planos" onClick={(e) => { e.preventDefault(); scrollToSection('planos'); }}>Planos e clube</a>
-            <a href="#planos" onClick={(e) => { e.preventDefault(); scrollToSection('planos'); }}>Preços</a>
+            <a href="#precos" onClick={(e) => { e.preventDefault(); scrollToSection('precos'); }}>Preços</a>
+            <a href="#duvidas" onClick={(e) => { e.preventDefault(); scrollToSection('duvidas'); }}>Dúvidas</a>
             <a href="https://kliphub.com.br/" onClick={() => setMobileMenuOpen(false)}>Acessar sistema</a>
           </nav>
         )}
@@ -292,7 +299,7 @@ export default function KlipHubSitePage() {
         <EcosystemSection />
 
         {/* PLANOS E PREÇOS */}
-        <section className="section container pricing-section" id="planos" aria-labelledby="pricing-title">
+        <section className="section container pricing-section" id="precos" aria-labelledby="pricing-title">
           <div className="pricing-heading">
             <div className="eyebrow">PLANOS KLIPHUB</div>
             <h2 id="pricing-title">O plano certo para o ritmo da sua barbearia.</h2>
@@ -326,6 +333,69 @@ export default function KlipHubSitePage() {
                   Escolher {plan.name}<svg aria-hidden="true"><use href={`${PUBLIC_BASE}icons.svg#arrow`}></use></svg>
                 </a>
               </article>
+            ))}
+          </div>
+        </section>
+
+        {/* FAQ SECTION */}
+        <section className="section container faq-section" id="duvidas">
+          <div className="faq-intro">
+            <div className="eyebrow">SEM PONTAS SOLTAS</div>
+            <h2>É normal<br />ter perguntas.</h2>
+            <p>Vamos deixar a gestão mais simples,<br />começando por aqui.</p>
+            <button className="text-button" onClick={() => setDialogOpen(true)}>
+              Conhecer o sistema <svg><use href={`${PUBLIC_BASE}icons.svg#arrow`}></use></svg>
+            </button>
+          </div>
+
+          <div className="faq-list">
+            {[
+              {
+                q: "O KlipHub serve para barbearias pequenas?",
+                a: "Sim. O sistema atende desde o barbeiro que trabalha sozinho até barbearias com equipe ampla. Você usa os recursos que fazem sentido para sua rotina."
+              },
+              {
+                q: "Como funciona o agendamento online?",
+                a: "O cliente acessa a vitrine da sua barbearia, consulta os serviços, escolhe o profissional e um horário disponível e confirma o agendamento. Na área do cliente, ele acompanha o histórico e os próximos atendimentos."
+              },
+              {
+                q: "Consigo vender produtos e acompanhar comissões?",
+                a: "Sim. Cadastre produtos com preço e custo e venda pelo PDV com baixa automática no estoque. As vendas e os atendimentos se integram ao caixa e ao cálculo de comissões por profissional."
+              },
+              {
+                q: "A assinatura do KlipHub é o plano que vendo aos clientes?",
+                a: "Não. A assinatura do KlipHub é a contratação do software pela sua barbearia. O clube reúne os planos e pacotes que você cria e oferece aos seus próprios clientes."
+              },
+              {
+                q: "O que o agente de IA pode fazer no WhatsApp?",
+                a: "O Agente de IA responde dúvidas e auxilia em ações de agendamento dentro das regras configuradas por você, centralizando conversas e lembretes."
+              },
+              {
+                q: "E o Gestor de IA, como ajuda na operação?",
+                a: "Ele entrega resumos executivos e orientações operacionais diárias para apoiar suas decisões e o crescimento do seu negócio."
+              },
+              {
+                q: "Como posso começar a usar o KlipHub?",
+                a: "Você pode criar a conta da sua barbearia em poucos minutos diretamente pelo sistema e configurar sua equipe, serviços e horários."
+              }
+            ].map((faq, i) => (
+              <details
+                key={i}
+                className="faq-item"
+                open={openFaq === i}
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleFaq(i);
+                }}
+              >
+                <summary>
+                  {faq.q}
+                  <svg style={{ transform: openFaq === i ? 'rotate(45deg)' : 'none', transition: 'transform 0.2s' }}>
+                    <use href={`${PUBLIC_BASE}icons.svg#plus`}></use>
+                  </svg>
+                </summary>
+                <p>{faq.a}</p>
+              </details>
             ))}
           </div>
         </section>
@@ -392,7 +462,8 @@ export default function KlipHubSitePage() {
             <div>
               <strong>Para sua barbearia</strong>
               <a href="#planos" onClick={(e) => { e.preventDefault(); scrollToSection('planos'); }}>Planos e clube</a>
-              <a href="#planos" onClick={(e) => { e.preventDefault(); scrollToSection('planos'); }}>Planos e preços</a>
+              <a href="#precos" onClick={(e) => { e.preventDefault(); scrollToSection('precos'); }}>Planos e preços</a>
+              <a href="#duvidas" onClick={(e) => { e.preventDefault(); scrollToSection('duvidas'); }}>Perguntas frequentes</a>
               <a href="#contato" onClick={(e) => { e.preventDefault(); scrollToSection('contato'); }}>Conhecer o KlipHub</a>
             </div>
             <div>
