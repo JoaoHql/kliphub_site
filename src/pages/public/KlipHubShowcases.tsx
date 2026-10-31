@@ -85,8 +85,8 @@ const featureItems: Array<{
     id: 'financeiro',
     number: '03',
     label: 'Financeiro',
-    title: 'Saiba o que entra\ne o que fica no caixa.',
-    description: 'Receitas, despesas fixas e repasses descontados para você enxergar o lucro real da semana e do mês.',
+    title: 'O financeiro\ndo seu negócio\nna palma da mão.',
+    description: 'Sem planilhas confusas: entradas, custos e lucro real calculados na hora para você decidir sem errar.',
   },
   {
     id: 'operacao',
@@ -275,49 +275,40 @@ function FeatureMainPreview({ id }: { id: FeatureId }) {
   }
 
   if (id === 'financeiro') {
-    const bars = [
-      { day: 'Ter', val: 'R$ 920', h: 50 },
-      { day: 'Qua', val: 'R$ 1.100', h: 62 },
-      { day: 'Qui', val: 'R$ 1.280', h: 74 },
-      { day: 'Sex', val: 'R$ 1.640', h: 90 },
-      { day: 'Sáb', val: 'R$ 1.980', h: 100 },
-      { day: 'Dom', val: 'R$ 540', h: 32 },
-    ];
     return (
       <div className="kh-surface-body anim-fade-in">
         <div className="kh-surface-head">
-          <span>RESUMO DA SEMANA · TERÇA A DOMINGO</span>
-          <span className="kh-meta-tag">Margem líquida 52%</span>
+          <span>RESUMO DA SEMANA <span className="kh-head-range">· TERÇA A DOMINGO</span></span>
+          <span className="kh-meta-tag">Semana atual</span>
         </div>
 
-        <div className="kh-fin-numbers">
-          <div>
-            <small>Entradas</small>
-            <strong>R$ 7.460</strong>
-          </div>
-          <div>
-            <small>Comissões e custos</small>
-            <strong className="kh-text-muted">R$ 3.580</strong>
-          </div>
-          <div>
-            <small>Saldo no caixa</small>
-            <strong className="kh-text-accent">R$ 3.880</strong>
-          </div>
-        </div>
-
-        <div className="kh-bars-stage">
-          {bars.map((item, index) => (
-            <div className="kh-bar-item" key={item.day}>
-              <span className="kh-bar-amount">{item.val}</span>
-              <div className="kh-bar-well">
-                <i
-                  className="bar-anim"
-                  style={{ height: `${item.h}%`, animationDelay: `${index * 0.05}s` }}
-                ></i>
-              </div>
-              <small>{item.day}</small>
+        <div className="kh-fin-panel">
+          <div className="kh-fin-split">
+            <div className="kh-fin-cell">
+              <span className="kh-fin-label">Entradas da semana</span>
+              <strong className="kh-fin-value">R$ 7.460</strong>
+              <span className="kh-fin-note">Faturamento bruto dos atendimentos</span>
             </div>
-          ))}
+
+            <div className="kh-fin-cell">
+              <span className="kh-fin-label">Custos e repasses</span>
+              <strong className="kh-fin-value kh-fin-value-cost">R$ 3.580</strong>
+              <span className="kh-fin-note">Comissões, despesas e custos fixos</span>
+            </div>
+          </div>
+
+          <div className="kh-fin-profit">
+            <div className="kh-fin-profit-main">
+              <span className="kh-fin-label">Lucro líquido no bolso</span>
+              <strong className="kh-fin-value">R$ 3.880</strong>
+              <span className="kh-fin-note">O que sobra depois de todos os custos</span>
+            </div>
+
+            <div className="kh-fin-margin">
+              <strong>52%</strong>
+              <small>Margem de lucro</small>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -399,8 +390,7 @@ function FeatureFooterMetrics({ id }: { id: FeatureId }) {
       { label: 'Líquido da barbearia', value: 'R$ 1.104' },
     ],
     financeiro: [
-      { label: 'Faturamento acumulado no mês', value: 'R$ 38.450' },
-      { label: 'Margem líquida real', value: '44%' },
+      { label: 'Faturamento do mês', value: 'R$ 38.450' },
       { label: 'Custos fixos cobertos no', value: 'Dia 11' },
     ],
     operacao: [
@@ -421,7 +411,7 @@ function FeatureFooterMetrics({ id }: { id: FeatureId }) {
   };
 
   return (
-    <div className="kh-surface-footer">
+    <div className={`kh-surface-footer${id === 'financeiro' ? ' is-finance' : ''}`}>
       {metrics[id].map((m) => (
         <div className="kh-footer-stat" key={m.label}>
           <small>{m.label}</small>
@@ -693,6 +683,8 @@ export function FeatureShowcase({ onExplore = () => {} }: { onExplore?: () => vo
           font-weight: 500;
           letter-spacing: 0;
           color: var(--orange-deep, #2dd4bf);
+          white-space: nowrap;
+          flex-shrink: 0;
         }
 
         /* MÓDULO 01: AGENDA */
@@ -873,73 +865,120 @@ export function FeatureShowcase({ onExplore = () => {} }: { onExplore?: () => vo
         }
 
         /* MÓDULO 03: FINANCEIRO */
-        .kh-fin-numbers {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 1rem;
-          margin-bottom: 1.5rem;
-        }
-
-        .kh-fin-numbers small {
-          display: block;
-          font-size: 0.72rem;
-          color: #808080;
-          margin-bottom: 0.25rem;
-        }
-
-        .kh-fin-numbers strong {
-          font-family: var(--font-display, 'Oswald', sans-serif);
-          font-size: 1.55rem;
-          font-weight: 600;
-          color: #f5f5f5;
-          letter-spacing: -0.02em;
-        }
-
-        .kh-bars-stage {
-          display: flex;
-          align-items: flex-end;
-          justify-content: space-between;
-          gap: 1rem;
-          height: 120px;
-          padding-top: 1rem;
-          border-bottom: 1px solid #222;
-        }
-
-        .kh-bar-item {
-          flex: 1;
-          height: 100%;
+        .kh-fin-panel {
           display: flex;
           flex-direction: column;
-          align-items: center;
-          justify-content: flex-end;
-          gap: 0.35rem;
+          border: 1px solid #202020;
+          border-radius: 8px;
+          background: #0d0d0d;
+          overflow: hidden;
         }
 
-        .kh-bar-amount {
-          font-size: 0.65rem;
-          color: #777;
+        .kh-fin-split {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .kh-fin-cell {
+          display: flex;
+          flex-direction: column;
+          gap: 0.45rem;
+          padding: 1.15rem 1.25rem 1.2rem;
+          min-width: 0;
+        }
+
+        .kh-fin-cell + .kh-fin-cell {
+          border-left: 1px solid #1e1e1e;
+        }
+
+        .kh-fin-label {
+          font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+          font-size: 0.64rem;
+          font-weight: 600;
+          letter-spacing: 0.11em;
+          text-transform: uppercase;
+          color: #969696;
+        }
+
+        .kh-fin-value {
+          font-family: var(--font-display, 'Oswald', sans-serif);
+          font-size: clamp(1.55rem, 2.2vw, 1.9rem);
+          font-weight: 600;
+          line-height: 1.05;
+          letter-spacing: -0.02em;
+          color: #f5f5f5;
           font-variant-numeric: tabular-nums;
         }
 
-        .kh-bar-well {
-          width: 100%;
-          max-width: 28px;
-          flex: 1;
+        .kh-fin-value-cost {
+          color: #bdbdbd;
+        }
+
+        .kh-fin-note {
+          font-size: 0.72rem;
+          line-height: 1.5;
+          color: #808080;
+        }
+
+        .kh-fin-profit {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) auto;
+          align-items: center;
+          gap: 1.5rem;
+          padding: 1.2rem 1.25rem;
+          border-top: 1px solid rgba(4, 33, 29, 0.18);
+          background: linear-gradient(135deg, #17c6b4 0%, #0d9c8f 100%);
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+        }
+
+        .kh-fin-profit-main {
           display: flex;
+          flex-direction: column;
+          gap: 0.35rem;
+          min-width: 0;
+        }
+
+        .kh-fin-profit .kh-fin-label {
+          color: rgba(4, 33, 29, 0.74);
+        }
+
+        .kh-fin-profit .kh-fin-value {
+          font-size: clamp(2rem, 3.1vw, 2.5rem);
+          color: #04211d;
+        }
+
+        .kh-fin-profit .kh-fin-note {
+          color: rgba(4, 33, 29, 0.72);
+        }
+
+        .kh-fin-margin {
+          display: flex;
+          flex-direction: column;
           align-items: flex-end;
+          gap: 0.2rem;
+          padding-left: 1.35rem;
+          border-left: 1px solid rgba(4, 33, 29, 0.22);
+          text-align: right;
         }
 
-        .kh-bar-well i {
-          display: block;
-          width: 100%;
-          background: var(--orange, #14b8a6);
-          opacity: 0.85;
+        .kh-fin-margin strong {
+          font-family: var(--font-display, 'Oswald', sans-serif);
+          font-size: clamp(1.7rem, 2.5vw, 2.1rem);
+          font-weight: 600;
+          line-height: 1;
+          letter-spacing: -0.02em;
+          color: #04211d;
+          font-variant-numeric: tabular-nums;
         }
 
-        .kh-bar-item small {
-          font-size: 0.7rem;
-          color: #888;
-          padding-bottom: 0.4rem;
+        .kh-fin-margin small {
+          font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+          font-size: 0.6rem;
+          font-weight: 600;
+          letter-spacing: 0.09em;
+          text-transform: uppercase;
+          color: rgba(4, 33, 29, 0.78);
+          white-space: nowrap;
         }
 
         /* MÓDULO 04: OPERAÇÃO */
@@ -1109,6 +1148,10 @@ export function FeatureShowcase({ onExplore = () => {} }: { onExplore?: () => vo
           background: #090909;
         }
 
+        .kh-surface-footer.is-finance {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
         .kh-footer-stat {
           padding: 0.95rem 1.35rem;
           border-right: 1px solid #191919;
@@ -1142,12 +1185,10 @@ export function FeatureShowcase({ onExplore = () => {} }: { onExplore?: () => vo
           0% {
             opacity: 0;
             transform: translate3d(0, 10px, 0);
-            filter: blur(3px);
           }
           100% {
             opacity: 1;
-            transform: translate3d(0, 0, 0);
-            filter: blur(0);
+            transform: none;
           }
         }
 
@@ -1155,12 +1196,10 @@ export function FeatureShowcase({ onExplore = () => {} }: { onExplore?: () => vo
           0% {
             opacity: 0;
             transform: translate3d(12px, 0, 0);
-            filter: blur(3px);
           }
           100% {
             opacity: 1;
-            transform: translate3d(0, 0, 0);
-            filter: blur(0);
+            transform: none;
           }
         }
 
@@ -1171,7 +1210,7 @@ export function FeatureShowcase({ onExplore = () => {} }: { onExplore?: () => vo
           }
           100% {
             opacity: 1;
-            transform: translate3d(0, 0, 0);
+            transform: none;
           }
         }
 
@@ -1190,7 +1229,6 @@ export function FeatureShowcase({ onExplore = () => {} }: { onExplore?: () => vo
 
         .anim-fade-in {
           animation: khSurfaceEnter 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
-          will-change: transform, opacity, filter;
         }
 
         .kh-slot-row:nth-child(2),
@@ -1223,9 +1261,6 @@ export function FeatureShowcase({ onExplore = () => {} }: { onExplore?: () => vo
         .anim-pop-2 { animation: khItemGlide 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both; }
         .anim-pop-3 { animation: khItemGlide 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both; }
         .anim-pop-4 { animation: khItemGlide 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.28s both; }
-
-        .bar-anim { animation: barGrow 0.65s cubic-bezier(0.22, 1, 0.36, 1) both; }
-        @keyframes barGrow { from { height: 0% !important; opacity: 0; } to { opacity: 0.85; } }
 
         /* Responsividade */
         @media (max-width: 960px) {
@@ -1260,8 +1295,32 @@ export function FeatureShowcase({ onExplore = () => {} }: { onExplore?: () => vo
           }
           .kh-agenda-cols,
           .kh-ops-grid,
-          .kh-surface-footer {
+          .kh-fin-split,
+          .kh-surface-footer,
+          .kh-surface-footer.is-finance {
             grid-template-columns: 1fr;
+          }
+          .kh-fin-cell + .kh-fin-cell {
+            border-left: 0;
+            border-top: 1px solid #1e1e1e;
+          }
+          .kh-fin-profit {
+            grid-template-columns: 1fr;
+            gap: 0.85rem;
+            padding: 1.15rem 1.15rem 1.2rem;
+          }
+          .kh-head-range {
+            display: none;
+          }
+          .kh-fin-margin {
+            flex-direction: row;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 0.8rem 0 0;
+            border-left: 0;
+            border-top: 1px solid rgba(4, 33, 29, 0.22);
+            text-align: left;
           }
           .kh-footer-stat {
             border-right: 0;

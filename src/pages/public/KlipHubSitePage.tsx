@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './kliphub-site.css';
 import { EcosystemSection, FeatureShowcase } from './KlipHubShowcases';
 import { KlipHubFeaturesMarquee } from './KlipHubFeaturesMarquee';
+import KlipHubModulesSection from './KlipHubModulesSection';
 
 const PUBLIC_BASE = import.meta.env.BASE_URL;
 
@@ -177,11 +178,11 @@ export default function KlipHubSitePage() {
           <div className="hero-visual">
             <div className="hero-animation-frame">
               <iframe
-                aria-label="Animação original de conversa do Gestor de IA"
+                aria-label="Animação de conversa do KlipHub Gestor de IA"
                 className="hero-animation-iframe"
                 loading="eager"
-                src={`${import.meta.env.BASE_URL}gestor_de_ia_hero.html?v=20261024-v3`}
-                title="Demonstração animada do Gestor de IA"
+                src={`${import.meta.env.BASE_URL}gestor_de_ia_hero.html?v=20261030-v4`}
+                title="Demonstração animada do KlipHub Gestor de IA"
               />
             </div>
           </div>
@@ -289,82 +290,8 @@ export default function KlipHubSitePage() {
           </div>
         </section>
 
-        {/* AGENDAMENTO ONLINE / VITRINE */}
-        <section className="section container booking-section" id="agendamento">
-          <div className="booking-visual">
-            <span className="floating-caption"><svg><use href={`${PUBLIC_BASE}icons.svg#globe`}></use></svg>Sua barbearia, aberta para agendar.</span>
-            <div className="phone-frame">
-              <div className="phone-camera"></div>
-              <div className="phone-browser"><svg><use href={`${PUBLIC_BASE}icons.svg#lock`}></use></svg>Vitrine da sua barbearia</div>
-              <div className="shop-cover">
-                <svg><use href={`${PUBLIC_BASE}icons.svg#scissors`}></use></svg>
-                <span>STUDIO DO CORTE</span>
-                <small>Seu estilo. Seu momento.</small>
-              </div>
-              <div className="phone-content">
-                <span className="tiny-label">AGENDE SEU PRÓXIMO CORTE</span>
-                <h4>Como você quer<br />cuidar do seu estilo?</h4>
-                <div className="service-preview selected">
-                  <svg><use href={`${PUBLIC_BASE}icons.svg#scissors`}></use></svg>
-                  <div>
-                    <strong>Corte masculino</strong>
-                    <span>Serviço da barbearia</span>
-                  </div>
-                  <svg><use href={`${PUBLIC_BASE}icons.svg#check-circle`}></use></svg>
-                </div>
-                <div className="service-preview">
-                  <svg><use href={`${PUBLIC_BASE}icons.svg#scissors`}></use></svg>
-                  <div>
-                    <strong>Corte + barba</strong>
-                    <span>Serviço da barbearia</span>
-                  </div>
-                  <span className="radio-empty"></span>
-                </div>
-                <div className="phone-steps">
-                  <span>1. Serviço</span><span>2. Profissional</span><span>3. Horário</span>
-                </div>
-                <span className="phone-cta">Escolher profissional <svg><use href={`${PUBLIC_BASE}icons.svg#arrow`}></use></svg></span>
-                <small className="phone-disclaimer">Exemplo ilustrativo de vitrine</small>
-              </div>
-            </div>
-            <span className="floating-note">
-              <svg><use href={`${PUBLIC_BASE}icons.svg#check-circle`}></use></svg>
-              O cliente escolhe.<br /><strong>Você recebe o agendamento.</strong>
-            </span>
-          </div>
-
-          <div className="booking-copy">
-            <div className="eyebrow">O PRÓXIMO HORÁRIO COMEÇA ONLINE</div>
-            <h2>A sua barbearia.<br />A um clique<br />do próximo cliente.</h2>
-            <p>Uma vitrine digital com a sua identidade. Seu cliente conhece os serviços, escolhe o profissional e encontra um horário disponível, a qualquer hora.</p>
-            <ol className="booking-steps">
-              <li>
-                <span>01</span>
-                <div>
-                  <strong>Apresente sua barbearia</strong>
-                  <p>Serviços, preços, duração e equipe em uma página personalizada.</p>
-                </div>
-              </li>
-              <li>
-                <span>02</span>
-                <div>
-                  <strong>Deixe o cliente escolher</strong>
-                  <p>Serviço, profissional e horário, com acesso ao histórico e à própria área do cliente.</p>
-                </div>
-              </li>
-              <li>
-                <span>03</span>
-                <div>
-                  <strong>Leve a relação adiante</strong>
-                  <p>Divulgue seu clube e disponibilize produtos para reserva e retirada na barbearia.</p>
-                </div>
-              </li>
-            </ol>
-            <button className="text-button" onClick={() => setDialogOpen(true)}>
-              Quero conhecer a vitrine <svg><use href={`${PUBLIC_BASE}icons.svg#arrow`}></use></svg>
-            </button>
-          </div>
-        </section>
+        {/* MÓDULOS DO KLIPHUB · CARDS INTERATIVOS */}
+        <KlipHubModulesSection />
 
         {/* ECOSSISTEMA · SOFTWARE, CLUBE E WHATSAPP */}
         <EcosystemSection />
