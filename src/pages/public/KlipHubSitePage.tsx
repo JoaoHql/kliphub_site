@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './kliphub-site.css';
-import { EcosystemSection, FeatureShowcase } from './KlipHubShowcases';
+import { FeatureShowcase } from './KlipHubShowcases';
 import { KlipHubFeaturesMarquee } from './KlipHubFeaturesMarquee';
 import KlipHubModulesSection from './KlipHubModulesSection';
 
@@ -99,8 +99,7 @@ export default function KlipHubSitePage() {
           <nav aria-label="Navegação principal" className="desktop-nav">
             <a href="#funcionalidades" onClick={(e) => { e.preventDefault(); scrollToSection('funcionalidades'); }}>Funcionalidades</a>
             <a href="#agendamento" onClick={(e) => { e.preventDefault(); scrollToSection('agendamento'); }}>Agendamento online</a>
-            <a href="#planos" onClick={(e) => { e.preventDefault(); scrollToSection('planos'); }}>Planos e clube</a>
-            <a href="#precos" onClick={(e) => { e.preventDefault(); scrollToSection('precos'); }}>Preços</a>
+            <a href="#precos" onClick={(e) => { e.preventDefault(); scrollToSection('precos'); }}>Planos e preços</a>
             <a href="#duvidas" onClick={(e) => { e.preventDefault(); scrollToSection('duvidas'); }}>Dúvidas</a>
           </nav>
 
@@ -129,8 +128,7 @@ export default function KlipHubSitePage() {
           <nav aria-label="Navegação móvel" className="mobile-nav" id="mobile-nav" style={{ display: 'flex' }}>
             <a href="#funcionalidades" onClick={(e) => { e.preventDefault(); scrollToSection('funcionalidades'); }}>Funcionalidades</a>
             <a href="#agendamento" onClick={(e) => { e.preventDefault(); scrollToSection('agendamento'); }}>Agendamento online</a>
-            <a href="#planos" onClick={(e) => { e.preventDefault(); scrollToSection('planos'); }}>Planos e clube</a>
-            <a href="#precos" onClick={(e) => { e.preventDefault(); scrollToSection('precos'); }}>Preços</a>
+            <a href="#precos" onClick={(e) => { e.preventDefault(); scrollToSection('precos'); }}>Planos e preços</a>
             <a href="#duvidas" onClick={(e) => { e.preventDefault(); scrollToSection('duvidas'); }}>Dúvidas</a>
             <a href="https://kliphub.com.br/" onClick={() => setMobileMenuOpen(false)}>Acessar sistema</a>
           </nav>
@@ -295,9 +293,6 @@ export default function KlipHubSitePage() {
         {/* MÓDULOS DO KLIPHUB · CARDS INTERATIVOS */}
         <KlipHubModulesSection />
 
-        {/* ECOSSISTEMA · SOFTWARE, CLUBE E WHATSAPP */}
-        <EcosystemSection />
-
         {/* PLANOS E PREÇOS */}
         <section className="section container pricing-section" id="precos" aria-labelledby="pricing-title">
           <div className="pricing-heading">
@@ -461,7 +456,6 @@ export default function KlipHubSitePage() {
             </div>
             <div>
               <strong>Para sua barbearia</strong>
-              <a href="#planos" onClick={(e) => { e.preventDefault(); scrollToSection('planos'); }}>Planos e clube</a>
               <a href="#precos" onClick={(e) => { e.preventDefault(); scrollToSection('precos'); }}>Planos e preços</a>
               <a href="#duvidas" onClick={(e) => { e.preventDefault(); scrollToSection('duvidas'); }}>Perguntas frequentes</a>
               <a href="#contato" onClick={(e) => { e.preventDefault(); scrollToSection('contato'); }}>Conhecer o KlipHub</a>
